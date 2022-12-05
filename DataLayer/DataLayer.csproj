@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <Compile Remove="ConvertersDataAccess\**" />
+    <EmbeddedResource Remove="ConvertersDataAccess\**" />
+    <None Remove="ConvertersDataAccess\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ConvertersDataAccess\" />
+    <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
 </Project>

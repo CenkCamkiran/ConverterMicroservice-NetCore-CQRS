@@ -1,17 +1,27 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models.ConvertersModels;
+using ServiceLayer.Interfaces;
+using System.Net.Mime;
 
 namespace APILayer.Converters
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/main/[controller]")]
     [ApiController]
     public class ConverterController : ControllerBase
     {
+        private IConverterService _converterService;
+
+        public ConverterController(IConverterService converterService)
+        {
+            _converterService = converterService;
+        }
 
         [HttpPost]
-        public UploadMp4Response UploadMP4Video()
+        //[Consumes(MediaTypeNames.)]
+        public UploadMp4Response UploadMP4Video([FromForm] IFormFile mp4File) //[FromForm] List<UploadMp4Request> list
         {
+
             UploadMp4Response response = new UploadMp4Response();
             response.Message = "test";
             response.ResponseCode = 200;

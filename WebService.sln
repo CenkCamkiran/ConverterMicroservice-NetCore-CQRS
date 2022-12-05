@@ -5,13 +5,15 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService", "WebService\WebService.csproj", "{AB2071F2-48D0-4065-9FFD-D063680FBC24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APILayer", "APILayer\APILayer.csproj", "{3029855D-D899-4A5A-BD42-E6FE64080A69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APILayer", "APILayer\APILayer.csproj", "{3029855D-D899-4A5A-BD42-E6FE64080A69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{C693CEED-C0CD-4C51-9F3A-989C45EEC863}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{C693CEED-C0CD-4C51-9F3A-989C45EEC863}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{1C069F07-8969-461A-B6AB-045E58680AD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{1C069F07-8969-461A-B6AB-045E58680AD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{A687E2EC-007E-46BE-BFCE-00521FC181A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{A687E2EC-007E-46BE-BFCE-00521FC181A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A687E2EC-007E-46BE-BFCE-00521FC181A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A687E2EC-007E-46BE-BFCE-00521FC181A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A687E2EC-007E-46BE-BFCE-00521FC181A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
