@@ -6,7 +6,7 @@ using ServiceLayer.Services;
 
 namespace APILayer.Health
 {
-    [Route("api/v1/main/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class HealthController : ControllerBase
     {

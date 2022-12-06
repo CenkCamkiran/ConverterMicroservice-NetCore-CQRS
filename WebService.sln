@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\Data
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "ServiceLayer\ServiceLayer.csproj", "{A687E2EC-007E-46BE-BFCE-00521FC181A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helpers", "Helpers\Helpers.csproj", "{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Middleware", "Middleware\Middleware.csproj", "{C3A34AB6-C47B-4CD0-82A1-357E5D5D47EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CD986DA-35E5-4FAA-A5C1-8C4B66731BF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3A34AB6-C47B-4CD0-82A1-357E5D5D47EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3A34AB6-C47B-4CD0-82A1-357E5D5D47EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3A34AB6-C47B-4CD0-82A1-357E5D5D47EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3A34AB6-C47B-4CD0-82A1-357E5D5D47EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

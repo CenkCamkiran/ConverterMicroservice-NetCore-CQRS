@@ -2,6 +2,7 @@ using Elasticsearch.Net;
 using Helpers.Interfaces;
 using Helpers.PingHelper;
 using Microsoft.Extensions.DependencyInjection;
+using Middleware;
 using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
@@ -52,6 +53,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+//app.UseLoggingMiddleware(); //If exception will happen, it wont enter ErrorHandlerMiddleware.
+
+app.UseErrorHandlerMiddleware();
+
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v1/main"), appBuilder =>  // The path must be started with '/'
+{
+    appBuilder.UseUploadFileMiddleware();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -19,14 +19,17 @@ namespace APILayer.Converters
 
         [HttpPost]
         //[Consumes(MediaTypeNames.)]
-        public UploadMp4Response UploadMP4Video([FromForm] IFormFile mp4File) //[FromForm] List<UploadMp4Request> list
+        public UploadMp4Response UploadMP4Video([FromForm] IFormFile file)
         {
-
             UploadMp4Response response = new UploadMp4Response();
             response.Message = "test";
             response.ResponseCode = 200;
 
             return response;
         }
+    }
+
+    public class cenk{
+        public IFormFile File { get; set; } 
     }
 }
