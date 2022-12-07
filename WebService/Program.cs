@@ -13,12 +13,15 @@ using ServiceLayer;
 using System.Data;
 using IConnection = RabbitMQ.Client.IConnection;
 using Minio;
+using DataLayer.Interfaces;
+using DataLayer.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IConverterService, ConverterService>();
+builder.Services.AddScoped<IConverterRepository, ConverterRepository>();
 builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
 

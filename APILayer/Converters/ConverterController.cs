@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.ConvertersModels;
 using ServiceLayer.Interfaces;
+using ServiceLayer.Services;
 using System.Net.Mime;
 
 namespace APILayer.Converters
@@ -18,10 +19,10 @@ namespace APILayer.Converters
         }
 
         [HttpPost]
-        //[Consumes(MediaTypeNames.)]
-        public UploadMp4Response UploadMP4Video([FromForm] IFormFile file)
+        public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file)
         {
-
+            bool objStorageResult = await _converterService.StoreFileAsync();
+            bool queueResult = await _converterService.QueueMessageAsync();
 
             UploadMp4Response response = new UploadMp4Response();
             response.Message = "test";
