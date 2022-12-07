@@ -16,8 +16,9 @@ namespace Middleware
 
         public async Task Invoke(HttpContext httpContext)
         {
-
             await _next(httpContext);
+
+            //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }
     }
 

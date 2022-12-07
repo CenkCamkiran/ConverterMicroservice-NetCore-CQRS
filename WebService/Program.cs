@@ -15,6 +15,7 @@ using IConnection = RabbitMQ.Client.IConnection;
 using Minio;
 using DataLayer.Interfaces;
 using DataLayer.DataAccess;
+using WebService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -71,7 +72,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-//app.UseLoggingMiddleware(); //If exception will happen, it wont enter ErrorHandlerMiddleware.
+app.UseReadableResponseStreamMiddleware();
+
+app.UseLoggingMiddleware(); //If exception will happen, it wont enter ErrorHandlerMiddleware.
 
 app.UseErrorHandlerMiddleware();
 
