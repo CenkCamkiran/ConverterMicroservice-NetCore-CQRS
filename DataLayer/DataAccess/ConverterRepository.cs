@@ -10,6 +10,7 @@ using Helpers.ErrorHelper;
 using Models.Errors;
 using Newtonsoft.Json;
 using System.Net;
+using RabbitMQ.Client;
 
 namespace DataLayer.DataAccess
 {
@@ -17,17 +18,41 @@ namespace DataLayer.DataAccess
     {
 
         private readonly IMinioClient _minioClient;
+        private readonly IConnection _rabbitConnection;
 
         public ConverterRepository(IMinioClient minioClient)
         {
             _minioClient = minioClient;
         }
 
-        public async Task<bool> QueueMessageDirectAsync(string message, string queue, string exchange, string routingKey)
+        public ConverterRepository(IConnection rabbitConnection)
         {
-            throw new NotImplementedException();
+            _rabbitConnection = rabbitConnection;
         }
 
+        //KODU DÜZENLE!
+        public async Task<bool> QueueMessageDirectAsync(string message, string queue, string exchange, string routingKey)
+        {
+            using (var channel = _rabbitConnection.CreateModel())
+            {
+                channel.QueueDeclare(queue: queue,
+                                     durable: true,
+                                     exclusive: false,
+                                     autoDelete: false,
+                                     arguments: null);
+
+                var body = Encoding.UTF8.GetBytes(message);
+
+                channel.BasicPublish(exchange: exchange,
+                                     routingKey: routingKey,
+                                     basicProperties: null,
+                                     body: body);
+            }
+
+            return true;    
+        }
+
+        //KODU DÜZENLE!
         public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string fileName, string fileContent, string contentType)
         {
             try
