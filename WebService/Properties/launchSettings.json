@@ -5,7 +5,14 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RABBITMQ_HOST": "34.89.179.82:15672",
+        "RABBITMQ_USERNAME": "rabbitmq_admin",
+        "RABBITMQ_PASSWORD": "eXHdZbgQWRa7Tw#Vp5",
+        "MINIO_HOST": "34.89.179.82:9000",
+        "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
+        "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F",
+        "RABBITMQ_PORT": "5672"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7149;http://localhost:5120"

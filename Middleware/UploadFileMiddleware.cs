@@ -45,10 +45,19 @@ namespace Middleware
 
             IFormFile file = formData.Files.GetFile("file");
 
-            if (file.ContentType != "text/plain" || file.Length == 0)
+            if (file.Length == 0)
             {
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = "File must be exists!";
+                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            }
+
+            if(file.ContentType != "video/mp4")
+            {
+                WebServiceErrors error = new WebServiceErrors();
+                error.ErrorMessage = "File format must be mp4!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));

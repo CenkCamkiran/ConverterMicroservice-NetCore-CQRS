@@ -7,7 +7,12 @@ using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
+//using MongoDB.Driver;
+using ServiceLayer;
+//using StackExchange.Redis;
+using System.Data;
 using IConnection = RabbitMQ.Client.IConnection;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,12 +22,15 @@ builder.Services.AddScoped<IConverterService, ConverterService>();
 builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
 
+string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
+string? rabbitmqUsername = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+string? rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+string? minioHost = Environment.GetEnvironmentVariable("MINIO_HOST");
+string? minioAccessKey = Environment.GetEnvironmentVariable("MINIO_ACCESSKEY");
+string? minioSecretKey = Environment.GetEnvironmentVariable("MINIO_SECRETKEY");
+
 //string? elkConn = Environment.GetEnvironmentVariable("elkConn");
-//string? rabbitHost = Environment.GetEnvironmentVariable("rabbitHost");
-//string? rabbitPort = Environment.GetEnvironmentVariable("rabbitPort");
-//string? rabbitUsername = Environment.GetEnvironmentVariable("rabbitUsername");
-//string? rabbitPassword = Environment.GetEnvironmentVariable("rabbitPassword");
-//string? storageConn = Environment.GetEnvironmentVariable("storageConn");
 //string? defaultIndex = Environment.GetEnvironmentVariable("default_index");
 //string? elkUsername = Environment.GetEnvironmentVariable("elkUsername");
 //string? elkPassword = Environment.GetEnvironmentVariable("elkPassword");
@@ -38,16 +46,22 @@ builder.Services.AddScoped<IPingHelper, PingHelper>();
 //ElasticClient? elasticClient = new ElasticClient(connection);
 //builder.Services.AddSingleton<IElasticClient>(elasticClient);
 
-//var connectionFactory = new ConnectionFactory
-//{
-//	HostName = rabbitHost,
-//	Port = Convert.ToInt32(rabbitPort),
-//	UserName = rabbitUsername,
-//	Password = rabbitPassword
-//};
+var connectionFactory = new ConnectionFactory
+{
+	HostName = rabbitmqHost,
+	Port = Convert.ToInt32(rabbitmqPort),
+	UserName = rabbitmqUsername,
+	Password = rabbitmqPassword
+};
+var rabbitConnection = connectionFactory.CreateConnection();
+builder.Services.AddSingleton<IConnection>(rabbitConnection);
 
-//var rabbitConnection = connectionFactory.CreateConnection();
-//builder.Services.AddSingleton<IConnection>(rabbitConnection);
+MinioClient minioClient = new MinioClient()
+                                    .WithEndpoint(minioHost)
+                                    .WithCredentials(minioAccessKey, minioSecretKey)
+                                    .WithSSL(false)
+                                    .Build();
+builder.Services.AddSingleton<IMinioClient>(minioClient);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
