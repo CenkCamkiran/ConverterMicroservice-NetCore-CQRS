@@ -24,8 +24,8 @@ builder.Services.AddScoped<IConverterService, ConverterService>();
 builder.Services.AddScoped<IConverterRepository, ConverterRepository>();
 builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
-builder.Services.AddScoped<ILoggingService<>, LoggingRepository<> >();
-builder.Services.AddScoped<ILoggingRepository<object>, LoggingRepository<object> >();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
+builder.Services.AddScoped<ILoggingRepository, LoggingRepository>();
 
 string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
@@ -74,15 +74,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseReadableResponseStreamMiddleware();
-
-app.UseLoggingMiddleware(); //If exception will happen, it wont enter ErrorHandlerMiddleware.
+app.UseLoggingMiddleware();
 
 app.UseErrorHandlerMiddleware();
 
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v1/main"), appBuilder =>  // The path must be started with '/'
 {
-    appBuilder.UseUploadFileMiddleware();
+    appBuilder.UseRequestValidationMiddleware();
 });
 
 // Configure the HTTP request pipeline.

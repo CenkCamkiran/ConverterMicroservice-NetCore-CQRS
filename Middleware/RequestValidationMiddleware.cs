@@ -5,16 +5,17 @@ using Microsoft.Extensions.Primitives;
 using Models;
 using Newtonsoft.Json;
 using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace Middleware
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
-    public class UploadFileMiddleware
+    public class RequestValidationMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public UploadFileMiddleware(RequestDelegate next)
+        public RequestValidationMiddleware(RequestDelegate next)
         {
             _next = next;
         }
@@ -63,16 +64,42 @@ namespace Middleware
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
+            //formData.Keys
+            List<string> keys = formData.Keys.ToList();
+
+            //string trimmedEmail = keys[];
+
+            //MailAddress EmailAddress;
+            //bool IsEmailValid = false;
+
+            //if (trimmedEmail.StartsWith("."))
+            //{
+            //    IsEmailValid = false;
+            //}
+            //else
+            //{
+            //    IsEmailValid = MailAddress.TryCreate(email, out EmailAddress);
+            //}
+
+            //if (!IsEmailValid)
+            //{
+            //    WebServiceErrors error = new WebServiceErrors();
+            //    error.ErrorMessage = "Email is not valid!";
+            //    error.ErrorCode = (int)HttpStatusCode.BadRequest;
+
+            //    throw new WebServiceException(JsonConvert.SerializeObject(error));
+            //}
+
             await _next(httpContext);
         }
     }
 
     // Extension method used to add the middleware to the HTTP request pipeline.
-    public static class UploadFileMiddlewareExtensions
+    public static class RequestValidationMiddlewareExtensions
     {
-        public static IApplicationBuilder UseUploadFileMiddleware(this IApplicationBuilder builder)
+        public static IApplicationBuilder UseRequestValidationMiddleware(this IApplicationBuilder builder)
         {
-            return builder.UseMiddleware<UploadFileMiddleware>();
+            return builder.UseMiddleware<RequestValidationMiddleware>();
         }
     }
 }

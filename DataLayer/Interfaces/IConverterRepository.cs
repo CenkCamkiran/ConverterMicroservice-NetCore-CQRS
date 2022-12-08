@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace DataLayer.Interfaces
 {
     public interface IConverterRepository
     {
-        void QueueMessageDirect(string message, string queue, string exchange, string routingKey);
+        void QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey);
         Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType);
     }
 }

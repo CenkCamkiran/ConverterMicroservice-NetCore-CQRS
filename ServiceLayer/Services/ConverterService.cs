@@ -1,4 +1,5 @@
 ﻿using DataLayer.Interfaces;
+using Models;
 using ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,14 @@ namespace ServiceLayer.Services
             _converterRepository = converterRepository;
         }
 
-        public void QueueMessageDirect(string message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey)
         {
              _converterRepository.QueueMessageDirect(message, queue, exchange, routingKey);   
         }
 
-        public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
+        public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
         {
-            return await _converterRepository.StoreFileAsync(bucketName, objectName, fileStream, contentType);  
+            await _converterRepository.StoreFileAsync(bucketName, objectName, fileStream, contentType);  
         }
     }
 }

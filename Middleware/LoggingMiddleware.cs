@@ -16,14 +16,14 @@ namespace Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, ILoggingService<object> loggingService)
+        public async Task Invoke(HttpContext httpContext, ILoggingService loggingService)
         {
             await _next(httpContext);
 
             HttpRequest request = httpContext.Request;
             HttpResponse response = httpContext.Response;
 
-            loggingService.Log(request, response);
+            await loggingService.Log("webservice_requestresponse_logs", request, response);
             //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }
     }

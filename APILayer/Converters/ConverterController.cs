@@ -20,16 +20,24 @@ namespace APILayer.Converters
         }
 
         [HttpPost]
-        public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file)
+        public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file, [FromForm] string email)
         {
             string guid = Guid.NewGuid().ToString("N").ToUpper();
             UploadMp4Response response = new UploadMp4Response();
+
+            QueueMessage message = new QueueMessage()
+            {
+                email = email,
+                fileGuid = guid
+            };
+
+            _converterService.QueueMessageDirect(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
 
             using (MemoryStream stream = new MemoryStream())
             {
                 await file.CopyToAsync(stream);
 
-                bool objStorageResult = await _converterService.StoreFileAsync("videoBucket", guid, stream, file.ContentType);
+                await _converterService.StoreFileAsync("videos", guid, stream, file.ContentType);
             }
 
             response.Message = "test";

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataLayer.Interfaces
 {
-    public interface ILoggingRepository<TLogModel>
+    public interface ILoggingRepository
     {
-        Task<bool> IndexReqResAsync(string indexName, TLogModel model);
+        Task<bool> IndexReqResAsync(string indexName, RequestResponseLogModel model);
 
     }
 }

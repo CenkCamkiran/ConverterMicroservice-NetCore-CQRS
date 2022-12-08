@@ -6,14 +6,14 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "RABBITMQ_HOST": "34.89.179.82:15672",
+        "RABBITMQ_HOST": "34.89.179.82",
         "RABBITMQ_USERNAME": "rabbitmq_admin",
         "RABBITMQ_PASSWORD": "eXHdZbgQWRa7Tw#Vp5",
         "MINIO_HOST": "34.89.179.82:9000",
         "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
         "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F",
         "RABBITMQ_PORT": "5672",
-        "ELK_HOST": "34.89.179.82:9200",
+        "ELK_HOST": "http://34.89.179.82:9200/",
         "ELK_USERNAME": "elastic",
         "ELK_PASSWORD": "EXh5xa*5lXMxO*9ffX*k",
         "ELK_DEFAULT_INDEX": "webservice_requestresponse_logs"

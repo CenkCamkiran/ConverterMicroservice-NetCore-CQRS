@@ -26,7 +26,7 @@ namespace DataLayer.DataAccess
             _rabbitConnection = rabbitConnection;
         }
 
-        public void QueueMessageDirect(string message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -38,7 +38,8 @@ namespace DataLayer.DataAccess
                                      autoDelete: false,
                                      arguments: null);
 
-                var body = Encoding.UTF8.GetBytes(message);
+                string serializedObj = JsonConvert.SerializeObject(message);
+                var body = Encoding.UTF8.GetBytes(serializedObj);
 
                 channel.BasicPublish(exchange: exchange,
                                      routingKey: routingKey,
@@ -56,7 +57,6 @@ namespace DataLayer.DataAccess
             } 
         }
 
-        //KODU DÜZENLE!
         public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
         {
 
@@ -76,13 +76,23 @@ namespace DataLayer.DataAccess
                     .WithBucket(bucketName)
                     .WithObject(objectName)
                     .WithContentType(contentType)
-                    .WithStreamData(fileStream);
+                    .WithStreamData(fileStream)
+                    .WithObjectSize(fileStream.Length)
+                    .WithMatchETag("video");
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
 
             }
             catch (MinioException exception)
             {
                 WebServiceErrors error = new WebServiceErrors();
+                error.ErrorMessage = exception.Message.ToString();
+                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            }
+            catch (Exception exception)
+            {
+                                WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
