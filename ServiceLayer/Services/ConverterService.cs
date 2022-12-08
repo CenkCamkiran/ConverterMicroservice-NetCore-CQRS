@@ -22,9 +22,9 @@ namespace ServiceLayer.Services
              _converterRepository.QueueMessageDirect(message, queue, exchange, routingKey);   
         }
 
-        public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string fileName, string fileContent, string contentType)
+        public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
         {
-            return await _converterRepository.StoreFileAsync(bucketName, location, objectName, fileName, fileContent, contentType);  
+            return await _converterRepository.StoreFileAsync(bucketName, objectName, fileStream, contentType);  
         }
     }
 }

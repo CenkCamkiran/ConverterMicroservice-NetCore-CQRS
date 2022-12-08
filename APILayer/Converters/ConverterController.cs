@@ -4,6 +4,7 @@ using Models.ConvertersModels;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
 using System.Net.Mime;
+using System.IO;
 
 namespace APILayer.Converters
 {
@@ -22,12 +23,15 @@ namespace APILayer.Converters
         public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file)
         {
             string guid = Guid.NewGuid().ToString("N").ToUpper();
-            File().Create();
-
-            bool objStorageResult = await _converterService.StoreFileAsync("", "", guid, "", "", "");
-            //bool queueResult = await _converterService.QueueMessageDirectAsync("", "", "", "");
-
             UploadMp4Response response = new UploadMp4Response();
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                await file.CopyToAsync(stream);
+
+                bool objStorageResult = await _converterService.StoreFileAsync("videoBucket", guid, stream, file.ContentType);
+            }
+
             response.Message = "test";
             response.ResponseCode = 200;
 

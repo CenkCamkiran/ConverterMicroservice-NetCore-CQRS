@@ -57,7 +57,7 @@ namespace DataLayer.DataAccess
         }
 
         //KODU DÜZENLE!
-        public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string filePath, string fileContent, string contentType)
+        public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
         {
 
             try
@@ -75,10 +75,10 @@ namespace DataLayer.DataAccess
                 var putObjectArgs = new PutObjectArgs()
                     .WithBucket(bucketName)
                     .WithObject(objectName)
-                    .WithFileName()
-                    .WithContentType(contentType);
-                await minio.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
-                Console.WriteLine("Successfully uploaded " + objectName);
+                    .WithContentType(contentType)
+                    .WithStreamData(fileStream);
+                await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+
             }
             catch (MinioException exception)
             {
