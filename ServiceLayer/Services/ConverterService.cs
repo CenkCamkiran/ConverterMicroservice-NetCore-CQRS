@@ -17,9 +17,9 @@ namespace ServiceLayer.Services
             _converterRepository = converterRepository;
         }
 
-        public async Task<bool> QueueMessageDirectAsync(string message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(string message, string queue, string exchange, string routingKey)
         {
-            return await _converterRepository.QueueMessageDirectAsync(message, queue, exchange, routingKey);   
+             _converterRepository.QueueMessageDirect(message, queue, exchange, routingKey);   
         }
 
         public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string fileName, string fileContent, string contentType)

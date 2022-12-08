@@ -15,7 +15,6 @@ using IConnection = RabbitMQ.Client.IConnection;
 using Minio;
 using DataLayer.Interfaces;
 using DataLayer.DataAccess;
-using WebService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,25 +29,26 @@ string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
 string? rabbitmqUsername = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
 string? rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+
 string? minioHost = Environment.GetEnvironmentVariable("MINIO_HOST");
 string? minioAccessKey = Environment.GetEnvironmentVariable("MINIO_ACCESSKEY");
 string? minioSecretKey = Environment.GetEnvironmentVariable("MINIO_SECRETKEY");
 
-//string? elkConn = Environment.GetEnvironmentVariable("elkConn");
-//string? defaultIndex = Environment.GetEnvironmentVariable("default_index");
-//string? elkUsername = Environment.GetEnvironmentVariable("elkUsername");
-//string? elkPassword = Environment.GetEnvironmentVariable("elkPassword");
+string? elkHost = Environment.GetEnvironmentVariable("ELK_HOST");
+string? elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX");
+string? elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
+string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
 
-//ConnectionSettings? connection = new ConnectionSettings(new Uri(elkConn)).
-//   DefaultIndex(defaultIndex).
-//   ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-//   ThrowExceptions(true).
-//   PrettyJson().
-//   RequestTimeout(TimeSpan.FromSeconds(300)).
-//   BasicAuthentication(elkUsername, elkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
+ConnectionSettings? connection = new ConnectionSettings(new Uri(elkHost)).
+   DefaultIndex(elkDefaultIndex).
+   ServerCertificateValidationCallback(CertificateValidations.AllowAll).
+   ThrowExceptions(true).
+   PrettyJson().
+   RequestTimeout(TimeSpan.FromSeconds(300)).
+   BasicAuthentication(elkUsername, elkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
 
-//ElasticClient? elasticClient = new ElasticClient(connection);
-//builder.Services.AddSingleton<IElasticClient>(elasticClient);
+ElasticClient? elasticClient = new ElasticClient(connection);
+builder.Services.AddSingleton<IElasticClient>(elasticClient);
 
 var connectionFactory = new ConnectionFactory
 {

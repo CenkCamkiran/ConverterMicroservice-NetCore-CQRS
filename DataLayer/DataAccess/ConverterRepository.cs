@@ -20,21 +20,18 @@ namespace DataLayer.DataAccess
         private readonly IMinioClient _minioClient;
         private readonly IConnection _rabbitConnection;
 
-        public ConverterRepository(IMinioClient minioClient)
+        public ConverterRepository(IMinioClient minioClient, IConnection rabbitConnection)
         {
             _minioClient = minioClient;
-        }
-
-        public ConverterRepository(IConnection rabbitConnection)
-        {
             _rabbitConnection = rabbitConnection;
         }
 
-        //KODU DÜZENLE!
-        public async Task<bool> QueueMessageDirectAsync(string message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(string message, string queue, string exchange, string routingKey)
         {
-            using (var channel = _rabbitConnection.CreateModel())
+            try
             {
+                var channel = _rabbitConnection.CreateModel();
+
                 channel.QueueDeclare(queue: queue,
                                      durable: true,
                                      exclusive: false,
@@ -47,30 +44,38 @@ namespace DataLayer.DataAccess
                                      routingKey: routingKey,
                                      basicProperties: null,
                                      body: body);
-            }
 
-            return true;    
+            }
+            catch (Exception exception)
+            {
+                WebServiceErrors error = new WebServiceErrors();
+                error.ErrorMessage = exception.Message.ToString();
+                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            } 
         }
 
         //KODU DÜZENLE!
-        public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string fileName, string fileContent, string contentType)
+        public async Task<bool> StoreFileAsync(string bucketName, string location, string objectName, string filePath, string fileContent, string contentType)
         {
+
             try
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await minio.MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
                 // Upload a file to bucket.
                 var putObjectArgs = new PutObjectArgs()
                     .WithBucket(bucketName)
                     .WithObject(objectName)
-                    .WithFileName(fileName)
+                    .WithFileName()
                     .WithContentType(contentType);
                 await minio.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 Console.WriteLine("Successfully uploaded " + objectName);
@@ -83,6 +88,7 @@ namespace DataLayer.DataAccess
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
+
         }
     }
 }

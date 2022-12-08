@@ -21,8 +21,11 @@ namespace APILayer.Converters
         [HttpPost]
         public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file)
         {
-            bool objStorageResult = await _converterService.StoreFileAsync("", "", "", "", "", "");
-            bool queueResult = await _converterService.QueueMessageDirectAsync("", "", "", "");
+            string guid = Guid.NewGuid().ToString("N").ToUpper();
+            File().Create();
+
+            bool objStorageResult = await _converterService.StoreFileAsync("", "", guid, "", "", "");
+            //bool queueResult = await _converterService.QueueMessageDirectAsync("", "", "", "");
 
             UploadMp4Response response = new UploadMp4Response();
             response.Message = "test";

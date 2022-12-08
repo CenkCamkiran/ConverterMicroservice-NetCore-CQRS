@@ -12,7 +12,11 @@
         "MINIO_HOST": "34.89.179.82:9000",
         "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
         "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F",
-        "RABBITMQ_PORT": "5672"
+        "RABBITMQ_PORT": "5672",
+        "ELK_HOST": "34.89.179.82:9200",
+        "ELK_USERNAME": "elastic",
+        "ELK_PASSWORD": "EXh5xa*5lXMxO*9ffX*k",
+        "ELK_DEFAULT_INDEX": "webservice_logs"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7149;http://localhost:5120"
