@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataLayer.Interfaces
+namespace ServiceLayer.Interfaces
 {
-    public interface ILoggingRepository<TLogModel>
+    public interface ILoggingService
     {
-        Task<bool> IndexReqResAsync(string indexName, TLogModel model);
-
+        Task<bool> Log(string indexName, HttpRequest request, HttpResponse response);
     }
 }

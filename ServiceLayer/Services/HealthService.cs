@@ -1,5 +1,5 @@
 ﻿using Helpers.Interfaces;
-using Models.Health;
+using Models;
 using ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;

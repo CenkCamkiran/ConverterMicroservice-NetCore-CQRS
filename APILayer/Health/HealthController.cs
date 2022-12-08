@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models.Health;
+using Models;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
 

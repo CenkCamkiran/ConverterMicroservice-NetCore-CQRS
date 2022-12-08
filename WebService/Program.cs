@@ -24,6 +24,8 @@ builder.Services.AddScoped<IConverterService, ConverterService>();
 builder.Services.AddScoped<IConverterRepository, ConverterRepository>();
 builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
+builder.Services.AddScoped<ILoggingService<>, LoggingRepository<> >();
+builder.Services.AddScoped<ILoggingRepository<object>, LoggingRepository<object> >();
 
 string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");

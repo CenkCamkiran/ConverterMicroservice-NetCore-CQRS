@@ -16,7 +16,7 @@
         "ELK_HOST": "34.89.179.82:9200",
         "ELK_USERNAME": "elastic",
         "ELK_PASSWORD": "EXh5xa*5lXMxO*9ffX*k",
-        "ELK_DEFAULT_INDEX": "webservice_logs"
+        "ELK_DEFAULT_INDEX": "webservice_requestresponse_logs"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7149;http://localhost:5120"

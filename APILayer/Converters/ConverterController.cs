@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models.ConvertersModels;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
 using System.Net.Mime;
 using System.IO;
+using Models;
 
 namespace APILayer.Converters
 {

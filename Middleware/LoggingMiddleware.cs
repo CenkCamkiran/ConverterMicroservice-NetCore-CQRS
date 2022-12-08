@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Models;
+using ServiceLayer.Interfaces;
 using System.Threading.Tasks;
 
 namespace Middleware
@@ -14,10 +16,14 @@ namespace Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext, ILoggingService<object> loggingService)
         {
             await _next(httpContext);
 
+            HttpRequest request = httpContext.Request;
+            HttpResponse response = httpContext.Response;
+
+            loggingService.Log(request, response);
             //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }
     }

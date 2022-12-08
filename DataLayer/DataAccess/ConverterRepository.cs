@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using Minio;
 using Minio.Exceptions;
 using Helpers.ErrorHelper;
-using Models.Errors;
 using Newtonsoft.Json;
 using System.Net;
 using RabbitMQ.Client;
+using Models;
 
 namespace DataLayer.DataAccess
 {

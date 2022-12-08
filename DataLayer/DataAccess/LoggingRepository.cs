@@ -1,7 +1,7 @@
 ﻿using DataLayer.Interfaces;
 using Helpers.ErrorHelper;
 using Microsoft.AspNetCore.Http;
-using Models.Errors;
+using Models;
 using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class LoggingRepository : ILoggingRepository
+    public class LoggingRepository<TLogModel> : ILoggingRepository<TLogModel> where TLogModel : class
     {
         private readonly IElasticClient _elasticClient;
 
@@ -23,11 +23,11 @@ namespace DataLayer.DataAccess
             _elasticClient = elasticClient;
         }
 
-        public async Task<bool> IndexDataAsync(string indexName, HttpRequest request, HttpResponse response)
+        public async Task<bool> IndexReqResAsync(string indexName, TLogModel model)
         {
             try
             {
-                await _elasticClient.IndexDocumentAsync();
+                await _elasticClient.IndexDocumentAsync(model);
             }
             catch (Exception exception)
             {

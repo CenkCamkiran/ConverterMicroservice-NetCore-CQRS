@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Models.Errors;
+using Models;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mime;
