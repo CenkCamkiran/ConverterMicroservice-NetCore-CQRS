@@ -1,12 +1,9 @@
-﻿using Helpers.ErrorHelper;
+﻿using Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Primitives;
 using Models;
 using Newtonsoft.Json;
 using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
 
 namespace Middleware
 {
@@ -35,7 +32,7 @@ namespace Middleware
 
             IFormCollection formData = await httpContext.Request.ReadFormAsync();
 
-            if(!formData.Files.Any())
+            if (!formData.Files.Any())
             {
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = "Request should contain form-data!";
@@ -55,7 +52,7 @@ namespace Middleware
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
-            if(file.ContentType != "video/mp4")
+            if (file.ContentType != "video/mp4")
             {
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = "File format must be mp4!";
@@ -64,31 +61,9 @@ namespace Middleware
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
-            //formData.Keys
-            List<string> keys = formData.Keys.ToList();
-
-            //string trimmedEmail = keys[];
-
-            //MailAddress EmailAddress;
-            //bool IsEmailValid = false;
-
-            //if (trimmedEmail.StartsWith("."))
-            //{
-            //    IsEmailValid = false;
-            //}
-            //else
-            //{
-            //    IsEmailValid = MailAddress.TryCreate(email, out EmailAddress);
-            //}
-
-            //if (!IsEmailValid)
-            //{
-            //    WebServiceErrors error = new WebServiceErrors();
-            //    error.ErrorMessage = "Email is not valid!";
-            //    error.ErrorCode = (int)HttpStatusCode.BadRequest;
-
-            //    throw new WebServiceException(JsonConvert.SerializeObject(error));
-            //}
+            string emailFormData = httpContext.Request.Form["email"].ToString();
+            EmailFormatHelper helper = new EmailFormatHelper();
+            helper.ValidateEMail(emailFormData);
 
             await _next(httpContext);
         }

@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ServiceLayer.Interfaces;
-using ServiceLayer.Services;
-using System.Net.Mime;
-using System.IO;
 using Models;
+using Newtonsoft.Json;
+using ServiceLayer.Interfaces;
+using System.IO;
+using System.Net;
 
 namespace APILayer.Converters
 {
@@ -19,11 +20,35 @@ namespace APILayer.Converters
             _converterService = converterService;
         }
 
+        //    [HttpPost]
+        //    public async Task<OkResult> UploadMP4Video([FromForm] IFormFile file, [FromForm] string email)
+        //    {
+        //        string guid = Guid.NewGuid().ToString("N").ToUpper();
+
+        //        QueueMessage message = new QueueMessage()
+        //        {
+        //            email = email,
+        //            fileGuid = guid
+        //        };
+
+        //        _converterService.QueueMessageDirect(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
+
+        //        using (MemoryStream stream = new MemoryStream())
+        //        {
+        //            await file.CopyToAsync(stream);
+
+        //            await _converterService.StoreFileAsync("videos", guid, stream, file.ContentType);
+        //        }
+
+        //        return Ok();
+        //    }
+        //}
+
         [HttpPost]
         public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file, [FromForm] string email)
         {
-            string guid = Guid.NewGuid().ToString("N").ToUpper();
             UploadMp4Response response = new UploadMp4Response();
+            string guid = Guid.NewGuid().ToString("N").ToUpper();
 
             QueueMessage message = new QueueMessage()
             {
@@ -33,21 +58,44 @@ namespace APILayer.Converters
 
             _converterService.QueueMessageDirect(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
 
-            using (MemoryStream stream = new MemoryStream())
-            {
-                await file.CopyToAsync(stream);
+            //try
+            //{
+            //    byte[]? fileFromBytes = System.IO.File.ReadAllBytes(file.FileName); //pass fileFromBytes to MemoryStream
+            //}
+            //catch (Exception)
+            //{
+            //}
 
-                await _converterService.StoreFileAsync("videos", guid, stream, file.ContentType);
+            Stream? stream = null;
+            try
+            {
+                using (FileStream fs = new FileStream(Environment.CurrentDirectory, FileMode.Create, FileAccess.Write))
+                {
+                    stream = file.OpenReadStream();
+                    await stream.CopyToAsync(fs);
+
+                    await _converterService.StoreFileAsync("videos", guid, fs, file.ContentType);
+                }
+            }
+            catch (Exception exception)
+            {
+                FileAttributes attr = (new FileInfo(stream)).Attributes;
+                Console.Write("UnAuthorizedAccessException: Unable to access file. ");
+                if ((attr & FileAttributes.ReadOnly) > 0)
+                    Console.Write("The file is read-only.");
+
+                WebServiceErrors error = new WebServiceErrors();
+                error.ErrorMessage = exception.Message.ToString();
+                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
-            response.Message = "test";
-            response.ResponseCode = 200;
+            response.ResponseCode = (int)HttpStatusCode.OK;
+            response.Message = "success";
 
             return response;
         }
     }
 
-    public class cenk{
-        public IFormFile File { get; set; } 
-    }
 }

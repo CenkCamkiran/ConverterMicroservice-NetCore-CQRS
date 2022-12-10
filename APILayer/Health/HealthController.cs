@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using ServiceLayer.Interfaces;
-using ServiceLayer.Services;
 
 namespace APILayer.Health
 {

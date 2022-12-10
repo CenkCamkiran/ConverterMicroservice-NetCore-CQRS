@@ -1,14 +1,9 @@
 ﻿using Helpers.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Helpers.PingHelper
+namespace Helpers
 {
-    public class PingHelper: IPingHelper
+    public class PingHelper : IPingHelper
     {
 
         public PingReply PingElasticSearch(string Host)

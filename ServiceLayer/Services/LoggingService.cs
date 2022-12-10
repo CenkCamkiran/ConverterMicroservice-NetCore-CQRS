@@ -1,18 +1,12 @@
-﻿using DataLayer.DataAccess;
-using DataLayer.Interfaces;
+﻿using DataLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Models;
 using ServiceLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
-    public class LoggingService: ILoggingService
+    public class LoggingService : ILoggingService
     {
 
         private ILoggingRepository _loggingRepository;
@@ -22,10 +16,12 @@ namespace ServiceLayer.Services
             _loggingRepository = loggingRepository;
         }
 
-        public async Task<bool> Log(string indexName, HttpRequest request, HttpResponse response)
+        public async Task<bool> LogFormData(string indexName, HttpRequest request, HttpResponse response)
         {
             Stream originalResponseBody = response.Body;
-            Stream originalRequestBody = response.Body;
+
+            IFormCollection formData = await request.ReadFormAsync();
+            IFormFile file = formData.Files.GetFile("file");
 
             try
             {
@@ -35,7 +31,54 @@ namespace ServiceLayer.Services
                     memStream.Position = 0;
                     await memStream.CopyToAsync(originalResponseBody);
 
-                    memStream.FlushAsync();
+                    await memStream.FlushAsync();
+
+                    response.Body.Position = 0;
+                    StreamReader responseStream = new StreamReader(response.Body);
+
+                    var JSONResponseBody = await responseStream.ReadToEndAsync();
+
+                    RequestResponseLogModel model = new RequestResponseLogModel()
+                    {
+                        requestDate = DateTime.Now,
+                        requestContentType = request.ContentType,
+                        requestFileDetails = new FileDetails()
+                        {
+                            CreatedDate = DateTime.Now,
+                            Length = file.Length.ToString(),
+                            Name = file.Name
+                        },
+                        responseContentType = response.ContentType,
+                        responseDate = DateTime.Now,
+                        responseMessage = "",
+                        responseStatusCode = (short)response.StatusCode
+                    };
+
+                    return await _loggingRepository.IndexReqResAsync(indexName, model);
+
+                }
+            }
+            finally
+            {
+                response.Body = originalResponseBody;
+            }
+
+        }
+
+        public async Task<bool> LogJsonBody(string indexName, HttpRequest request, HttpResponse response)
+        {
+            Stream originalResponseBody = response.Body;
+            Stream originalRequestBody = request.Body;
+
+            try
+            {
+                using (MemoryStream memStream = new MemoryStream())
+                {
+                    response.Body = memStream;
+                    memStream.Position = 0;
+                    await memStream.CopyToAsync(originalResponseBody);
+
+                    await memStream.FlushAsync();
 
                     request.Body = memStream;
                     memStream.Position = 0;
@@ -73,9 +116,8 @@ namespace ServiceLayer.Services
             finally
             {
                 response.Body = originalResponseBody;
-                request.Body = originalRequestBody; 
+                request.Body = originalRequestBody;
             }
-
         }
     }
 }

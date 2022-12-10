@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Models;
 using ServiceLayer.Interfaces;
-using System.Threading.Tasks;
 
 namespace Middleware
 {
@@ -23,7 +21,12 @@ namespace Middleware
             HttpRequest request = httpContext.Request;
             HttpResponse response = httpContext.Response;
 
-            await loggingService.Log("webservice_requestresponse_logs", request, response);
+            if (request.ContentType == "multipart/form-data")
+                await loggingService.LogFormData("webservice_requestresponse_logs", request, response);
+
+            if (request.ContentType == "application/json")
+                await loggingService.LogJsonBody("webservice_requestresponse_logs", request, response);
+
             //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }
     }

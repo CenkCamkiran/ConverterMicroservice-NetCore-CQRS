@@ -1,20 +1,13 @@
 ﻿using DataLayer.Interfaces;
-using Helpers.ErrorHelper;
-using Microsoft.AspNetCore.Http;
+using Helpers;
 using Models;
 using Nest;
 using Newtonsoft.Json;
-using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class LoggingRepository: ILoggingRepository
+    public class LoggingRepository : ILoggingRepository
     {
         private readonly IElasticClient _elasticClient;
 

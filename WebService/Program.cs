@@ -1,20 +1,17 @@
+using DataLayer.DataAccess;
+using DataLayer.Interfaces;
 using Elasticsearch.Net;
+using Helpers;
 using Helpers.Interfaces;
-using Helpers.PingHelper;
-using Microsoft.Extensions.DependencyInjection;
 using Middleware;
+using Minio;
 using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
 //using MongoDB.Driver;
-using ServiceLayer;
 //using StackExchange.Redis;
-using System.Data;
 using IConnection = RabbitMQ.Client.IConnection;
-using Minio;
-using DataLayer.Interfaces;
-using DataLayer.DataAccess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,10 +51,10 @@ builder.Services.AddSingleton<IElasticClient>(elasticClient);
 
 var connectionFactory = new ConnectionFactory
 {
-	HostName = rabbitmqHost,
-	Port = Convert.ToInt32(rabbitmqPort),
-	UserName = rabbitmqUsername,
-	Password = rabbitmqPassword
+    HostName = rabbitmqHost,
+    Port = Convert.ToInt32(rabbitmqPort),
+    UserName = rabbitmqUsername,
+    Password = rabbitmqPassword
 };
 var rabbitConnection = connectionFactory.CreateConnection();
 builder.Services.AddSingleton<IConnection>(rabbitConnection);
@@ -65,8 +62,7 @@ builder.Services.AddSingleton<IConnection>(rabbitConnection);
 MinioClient minioClient = new MinioClient()
                                     .WithEndpoint(minioHost)
                                     .WithCredentials(minioAccessKey, minioSecretKey)
-                                    .WithSSL(false)
-                                    .Build();
+                                    .WithSSL(false);
 builder.Services.AddSingleton<IMinioClient>(minioClient);
 
 builder.Services.AddEndpointsApiExplorer();

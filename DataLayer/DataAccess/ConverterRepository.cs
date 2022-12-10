@@ -1,16 +1,14 @@
 ﻿using DataLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Helpers;
 using Minio;
+using Minio.DataModel;
 using Minio.Exceptions;
-using Helpers.ErrorHelper;
-using Newtonsoft.Json;
-using System.Net;
-using RabbitMQ.Client;
 using Models;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace DataLayer.DataAccess
 {
@@ -54,11 +52,16 @@ namespace DataLayer.DataAccess
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
-            } 
+            }
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
         {
+            ServerSideEncryption? sse = null;
+            Dictionary<string, string> metaData = new Dictionary<string, string>
+            {
+                { "Guid", objectName }
+            };
 
             try
             {
@@ -71,28 +74,21 @@ namespace DataLayer.DataAccess
                         .WithBucket(bucketName);
                     await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
-                // Upload a file to bucket.
+
                 var putObjectArgs = new PutObjectArgs()
                     .WithBucket(bucketName)
                     .WithObject(objectName)
-                    .WithContentType(contentType)
                     .WithStreamData(fileStream)
                     .WithObjectSize(fileStream.Length)
-                    .WithMatchETag("video");
+                    .WithContentType(contentType)
+                    .WithHeaders(metaData)
+                    .WithServerSideEncryption(sse);
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
 
             }
-            catch (MinioException exception)
-            {
-                WebServiceErrors error = new WebServiceErrors();
-                error.ErrorMessage = exception.Message.ToString();
-                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
-
-                throw new WebServiceException(JsonConvert.SerializeObject(error));
-            }
             catch (Exception exception)
             {
-                                WebServiceErrors error = new WebServiceErrors();
+                WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
