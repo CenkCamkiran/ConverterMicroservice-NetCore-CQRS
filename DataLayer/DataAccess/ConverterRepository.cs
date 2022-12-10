@@ -57,12 +57,22 @@ namespace DataLayer.DataAccess
             }
         }
 
-        public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
+        public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
             ServerSideEncryption? sse = null;
-            Dictionary<string, string> metaData = new Dictionary<string, string>
+            stream.Position = 0;
+
+            Dictionary<string, string> metadata = new Dictionary<string, string>()
             {
-                { "Guid", objectName }
+                {
+                    "Id", objectName
+                },
+                {
+                    "FileLength", stream.Length.ToString()
+                },
+                {
+                    "ContentType", "video/mp4"
+                }
             };
 
             try
@@ -80,12 +90,13 @@ namespace DataLayer.DataAccess
                 var putObjectArgs = new PutObjectArgs()
                     .WithBucket(bucketName)
                     .WithObject(objectName)
-                    .WithStreamData(fileStream)
-                    .WithObjectSize(fileStream.Length)
-                    .WithContentType(contentType)
-                    .WithHeaders(metaData)
+                    .WithStreamData(stream)
+                    .WithObjectSize(stream.Length)
+                    .WithContentType("video/mp4")
+                    .WithHeaders(metadata)
                     .WithServerSideEncryption(sse);
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+                //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
             }
             catch (Exception exception)

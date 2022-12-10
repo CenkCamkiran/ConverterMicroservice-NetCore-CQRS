@@ -18,9 +18,9 @@ namespace ServiceLayer.Services
             _converterRepository.QueueMessageDirect(message, queue, exchange, routingKey);
         }
 
-        public async Task StoreFileAsync(string bucketName, string objectName, Stream fileStream, string contentType)
+        public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-            await _converterRepository.StoreFileAsync(bucketName, objectName, fileStream, contentType);
+            await _converterRepository.StoreFileAsync(bucketName, objectName, stream, contentType);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using ServiceLayer.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace Middleware
 {
@@ -21,11 +22,13 @@ namespace Middleware
             HttpRequest request = httpContext.Request;
             HttpResponse response = httpContext.Response;
 
-            await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
-            //if (request.ContentType == "multipart/form-data")
-            //    await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
+            Regex formRegex = new Regex("form-data");
+            Regex jsonRegex = new Regex("json");
 
-            if (request.ContentType == "application/json")
+            if (formRegex.Match(request.ContentType).Success)
+                await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
+
+            if (jsonRegex.Match(request.ContentType).Success)
                 await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
 
             //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
