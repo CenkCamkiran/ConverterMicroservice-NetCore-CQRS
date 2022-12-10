@@ -21,11 +21,12 @@ namespace Middleware
             HttpRequest request = httpContext.Request;
             HttpResponse response = httpContext.Response;
 
-            if (request.ContentType == "multipart/form-data")
-                await loggingService.LogFormData("webservice_requestresponse_logs", request, response);
+            await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
+            //if (request.ContentType == "multipart/form-data")
+            //    await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
 
             if (request.ContentType == "application/json")
-                await loggingService.LogJsonBody("webservice_requestresponse_logs", request, response);
+                await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
 
             //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }

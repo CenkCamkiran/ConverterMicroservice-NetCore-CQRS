@@ -13,6 +13,9 @@ using ServiceLayer.Services;
 //using StackExchange.Redis;
 using IConnection = RabbitMQ.Client.IConnection;
 
+if(!Directory.Exists(Environment.CurrentDirectory + "\\VideoFiles"))
+    Directory.CreateDirectory(Environment.CurrentDirectory + "\\VideoFiles");
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -65,8 +68,8 @@ MinioClient minioClient = new MinioClient()
                                     .WithSSL(false);
 builder.Services.AddSingleton<IMinioClient>(minioClient);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
@@ -82,8 +85,8 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v1/main"), 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 //app.UseHttpsRedirection();

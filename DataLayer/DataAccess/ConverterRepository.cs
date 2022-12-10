@@ -29,6 +29,8 @@ namespace DataLayer.DataAccess
             try
             {
                 var channel = _rabbitConnection.CreateModel();
+                var properties = channel.CreateBasicProperties();
+                properties.Persistent = true;
 
                 channel.QueueDeclare(queue: queue,
                                      durable: true,
@@ -41,7 +43,7 @@ namespace DataLayer.DataAccess
 
                 channel.BasicPublish(exchange: exchange,
                                      routingKey: routingKey,
-                                     basicProperties: null,
+                                     basicProperties: properties,
                                      body: body);
 
             }

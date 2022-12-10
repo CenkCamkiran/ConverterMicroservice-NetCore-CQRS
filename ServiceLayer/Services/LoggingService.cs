@@ -16,7 +16,7 @@ namespace ServiceLayer.Services
             _loggingRepository = loggingRepository;
         }
 
-        public async Task<bool> LogFormData(string indexName, HttpRequest request, HttpResponse response)
+        public async Task<bool> LogFormDataAsync(string indexName, HttpRequest request, HttpResponse response)
         {
             Stream originalResponseBody = response.Body;
 
@@ -28,10 +28,9 @@ namespace ServiceLayer.Services
                 using (MemoryStream memStream = new MemoryStream())
                 {
                     response.Body = memStream;
+
                     memStream.Position = 0;
                     await memStream.CopyToAsync(originalResponseBody);
-
-                    await memStream.FlushAsync();
 
                     response.Body.Position = 0;
                     StreamReader responseStream = new StreamReader(response.Body);
@@ -46,7 +45,7 @@ namespace ServiceLayer.Services
                         {
                             CreatedDate = DateTime.Now,
                             Length = file.Length.ToString(),
-                            Name = file.Name
+                            Name = file.FileName
                         },
                         responseContentType = response.ContentType,
                         responseDate = DateTime.Now,
@@ -65,7 +64,7 @@ namespace ServiceLayer.Services
 
         }
 
-        public async Task<bool> LogJsonBody(string indexName, HttpRequest request, HttpResponse response)
+        public async Task<bool> LogJsonBodyAsync(string indexName, HttpRequest request, HttpResponse response)
         {
             Stream originalResponseBody = response.Body;
             Stream originalRequestBody = request.Body;

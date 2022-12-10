@@ -66,30 +66,26 @@ namespace APILayer.Converters
             //{
             //}
 
-            Stream? stream = null;
-            try
-            {
-                using (FileStream fs = new FileStream(Environment.CurrentDirectory, FileMode.Create, FileAccess.Write))
-                {
-                    stream = file.OpenReadStream();
-                    await stream.CopyToAsync(fs);
+            //Stream? stream = null;
+            //try
+            //{
+            //    using (FileStream fs = new FileStream(Environment.CurrentDirectory + "\\VideoFiles", FileMode.Create))
+            //    {
+            //        stream = file.OpenReadStream();
+            //        await stream.CopyToAsync(fs);
 
-                    await _converterService.StoreFileAsync("videos", guid, fs, file.ContentType);
-                }
-            }
-            catch (Exception exception)
-            {
-                FileAttributes attr = (new FileInfo(stream)).Attributes;
-                Console.Write("UnAuthorizedAccessException: Unable to access file. ");
-                if ((attr & FileAttributes.ReadOnly) > 0)
-                    Console.Write("The file is read-only.");
+            //        await _converterService.StoreFileAsync("videos", guid, fs, file.ContentType);
+            //    }
+            //}
+            //catch (Exception exception)
+            //{
 
-                WebServiceErrors error = new WebServiceErrors();
-                error.ErrorMessage = exception.Message.ToString();
-                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+            //    WebServiceErrors error = new WebServiceErrors();
+            //    error.ErrorMessage = exception.Message.ToString();
+            //    error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-                throw new WebServiceException(JsonConvert.SerializeObject(error));
-            }
+            //    throw new WebServiceException(JsonConvert.SerializeObject(error));
+            //}
 
             response.ResponseCode = (int)HttpStatusCode.OK;
             response.Message = "success";
