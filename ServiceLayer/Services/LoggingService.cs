@@ -1,6 +1,7 @@
 ﻿using DataLayer.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Models;
+using Newtonsoft.Json;
 using ServiceLayer.Interfaces;
 using System.Net.Http;
 
@@ -18,49 +19,32 @@ namespace ServiceLayer.Services
 
         public async Task<bool> LogFormDataAsync(string indexName, HttpRequest request, HttpResponse response)
         {
-            Stream originalResponseBody = response.Body;
+            response.Body.Position = 0;
 
             IFormCollection formData = await request.ReadFormAsync();
             IFormFile file = formData.Files.GetFile("file");
 
-            try
+            StreamReader responseStream = new StreamReader(response.Body);
+            string JSONResponseBody = await responseStream.ReadToEndAsync();
+            UploadMp4Response? responseObj = JsonConvert.DeserializeObject<UploadMp4Response>(JSONResponseBody);
+
+            RequestResponseLogModel model = new RequestResponseLogModel()
             {
-                using (MemoryStream memStream = new MemoryStream())
+                requestDate = DateTime.Now,
+                requestContentType = request.ContentType,
+                requestFileDetails = new FileDetails()
                 {
-                    response.Body = memStream;
+                    CreatedDate = DateTime.Now,
+                    Length = file.Length.ToString(),
+                    Name = file.FileName
+                },
+                responseContentType = response.ContentType,
+                responseDate = DateTime.Now,
+                responseMessage = responseObj.Message,
+                responseStatusCode = (short)responseObj.ResponseCode
+            };
 
-                    memStream.Position = 0;
-                    await memStream.CopyToAsync(originalResponseBody);
-
-                    response.Body.Position = 0;
-                    StreamReader responseStream = new StreamReader(response.Body);
-
-                    var JSONResponseBody = await responseStream.ReadToEndAsync();
-
-                    RequestResponseLogModel model = new RequestResponseLogModel()
-                    {
-                        requestDate = DateTime.Now,
-                        requestContentType = request.ContentType,
-                        requestFileDetails = new FileDetails()
-                        {
-                            CreatedDate = DateTime.Now,
-                            Length = file.Length.ToString(),
-                            Name = file.FileName
-                        },
-                        responseContentType = response.ContentType,
-                        responseDate = DateTime.Now,
-                        responseMessage = "",
-                        responseStatusCode = (short)response.StatusCode
-                    };
-
-                    return await _loggingRepository.IndexReqResAsync(indexName, model);
-
-                }
-            }
-            finally
-            {
-                response.Body = originalResponseBody;
-            }
+            return await _loggingRepository.IndexReqResAsync(indexName, model);
 
         }
 

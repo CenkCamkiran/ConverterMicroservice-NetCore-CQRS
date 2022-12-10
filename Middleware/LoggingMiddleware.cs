@@ -25,13 +25,15 @@ namespace Middleware
             Regex formRegex = new Regex("form-data");
             Regex jsonRegex = new Regex("json");
 
-            if (formRegex.Match(request.ContentType).Success)
-                await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
+            if (!string.IsNullOrEmpty(request.ContentType))
+            {
+                if (formRegex.Match(request.ContentType).Success)
+                    await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
 
-            if (jsonRegex.Match(request.ContentType).Success)
-                await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
+                if (jsonRegex.Match(request.ContentType).Success)
+                    await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
+            }
 
-            //Fonksiyonu tanımlayıp burada çağır. Params: HttpRequest request, HttpResponse response
         }
     }
 

@@ -70,6 +70,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+app.UseReadableResponseStreamMiddleware();
+
 app.UseLoggingMiddleware();
 
 app.UseErrorHandlerMiddleware();
