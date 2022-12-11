@@ -53,7 +53,7 @@ namespace DataLayer.DataAccess
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-                throw new WebServiceException(JsonConvert.SerializeObject(error));
+                throw new Helpers.WebServiceException(JsonConvert.SerializeObject(error));
             }
         }
 
@@ -105,7 +105,7 @@ namespace DataLayer.DataAccess
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-                throw new WebServiceException(JsonConvert.SerializeObject(error));
+                throw new Helpers.WebServiceException(JsonConvert.SerializeObject(error));
             }
 
         }
