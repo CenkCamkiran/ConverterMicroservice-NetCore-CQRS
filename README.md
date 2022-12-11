@@ -20,3 +20,14 @@ Queue'dan mesajı al, mp3 çevir ve stream datasını elde et, stream datasını
 ### Notif Yapılacaklar
 
 Queue'ya gelen dosya guid'i ve email adresini al, mail olarak yolla!
+
+### K8S
+
+YAML paylaşılacaklar
+RAbbitMQ
+Minio
+ELK
+Kong (API Gateway) => Webservice dışarı açık olmayacak internal olacak, Kong'un admin url'i hariç diğer url dışarı açılacak (Basic auth ile)
+WebService
+Consumer
+NotifConsumer
