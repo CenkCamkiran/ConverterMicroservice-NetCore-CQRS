@@ -14,3 +14,9 @@ elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Sonra bu dosyayı 
 Batch mi ya da farklı bişey olarak mı çalışacak? Karar ver.
 MP4'ten Mp3'e convert eden library bul!
 Web service'deki gibi Singleton yapısında connection'lar kur!
+
+Queue'dan mesajı al, mp3 çevir ve stream datasını elde et, stream datasını (mp3 dosyası, guid verisi) minio'ya yolla, başka bir queue'ya (mesela adı notif olsun) dosya guid'i ve email adresini yolla. converter kuyruğuna ack+ yolla!
+
+### Notif Yapılacaklar
+
+Queue'ya gelen dosya guid'i ve email adresini al, mail olarak yolla!
