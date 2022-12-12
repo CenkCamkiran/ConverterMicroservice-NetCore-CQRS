@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ErrorHelper\" />
-    <Folder Include="PingHelper\" />
+    <Compile Remove="ErrorHelper\**" />
+    <Compile Remove="PingHelper\**" />
+    <EmbeddedResource Remove="ErrorHelper\**" />
+    <EmbeddedResource Remove="PingHelper\**" />
+    <None Remove="ErrorHelper\**" />
+    <None Remove="PingHelper\**" />
   </ItemGroup>
 
   <ItemGroup>
