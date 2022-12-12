@@ -45,8 +45,7 @@ catch (Exception exception)
     await logging.IndexExceptionAsync("converter_logs", exceptionModel);
 }
 
-
-
+/* ************************************************************************************************* */
 
 //Consume queue (get guid and email from message)
 //Convert mp4 to mp3 (get mp4 object from videos bucket using guid)
@@ -55,3 +54,4 @@ catch (Exception exception)
 //send message to notification queue (message consists of guid of mp3 file and email)
 //Write notif microservice!
 
+/* ************************************************************************************************* */
