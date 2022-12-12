@@ -3,7 +3,6 @@ using Elasticsearch.Net;
 using Models;
 using Nest;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace DataAccess
 {
@@ -51,6 +50,9 @@ namespace DataAccess
             {
                 ConsumerExceptionModel error = new ConsumerExceptionModel();
                 error.ErrorMessage = exception.Message.ToString();
+
+                Logger log = new Logger();
+                log.Error(exception.Message.ToString());
 
                 throw new ConsumerException(JsonConvert.SerializeObject(error));
             }

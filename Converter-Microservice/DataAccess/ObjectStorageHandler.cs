@@ -2,9 +2,6 @@
 using Minio;
 using Minio.DataModel;
 using Models;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
-using System.Net;
 
 namespace DataAccess
 {

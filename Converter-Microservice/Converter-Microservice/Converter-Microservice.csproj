@@ -13,10 +13,4 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="App.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
