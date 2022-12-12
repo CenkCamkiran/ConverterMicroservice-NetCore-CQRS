@@ -37,7 +37,7 @@ namespace DataAccess
                     "FileLength", stream.Length.ToString()
                 },
                 {
-                    "ContentType", "video/mp4"
+                    "ContentType", contentType
                 }
             };
 
@@ -79,57 +79,50 @@ namespace DataAccess
 
         }
 
-        //public async Task GetFileAsync(string bucketName, string objectName, Stream stream, string contentType)
-        //{
-        //    ServerSideEncryption? sse = null;
-        //    stream.Position = 0;
+        public async Task<SelectResponseStream> GetFileAsync(string bucketName, string objectName)
+        {
 
-        //    Dictionary<string, string> metadata = new Dictionary<string, string>()
-        //    {
-        //        {
-        //            "Id", objectName
-        //        },
-        //        {
-        //            "FileLength", stream.Length.ToString()
-        //        },
-        //        {
-        //            "ContentType", "video/mp4"
-        //        }
-        //    };
+            SelectResponseStream? responseStream = null;
+            ServerSideEncryption? sse = null;
+            MinioClient minioClient = ConnectMinio();
 
-        //    try
-        //    {
-        //        var beArgs = new BucketExistsArgs()
-        //            .WithBucket(bucketName);
-        //        bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
-        //        if (!found)
-        //        {
-        //            var mbArgs = new MakeBucketArgs()
-        //                .WithBucket(bucketName);
-        //            await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
-        //        }
+            try
+            {
+                var beArgs = new BucketExistsArgs()
+                    .WithBucket(bucketName);
+                bool found = await minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
+                if (!found)
+                {
+                    var mbArgs = new MakeBucketArgs()
+                        .WithBucket(bucketName);
+                    await minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                }
 
-        //        var putObjectArgs = new PutObjectArgs()
-        //            .WithBucket(bucketName)
-        //            .WithObject(objectName)
-        //            .WithStreamData(stream)
-        //            .WithObjectSize(stream.Length)
-        //            .WithContentType("video/mp4")
-        //            .WithHeaders(metadata)
-        //            .WithServerSideEncryption(sse);
-        //        await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
-        //        //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
+                var args = new SelectObjectContentArgs()
+                               .WithBucket(bucketName)
+                               .WithObject(objectName)
+                               .WithServerSideEncryption(sse);
+                responseStream = await minioClient.SelectObjectContentAsync(args);
+                Console.WriteLine("Bytes scanned:" + responseStream.Stats.BytesScanned);
+                Console.WriteLine("Bytes returned:" + responseStream.Stats.BytesReturned);
+                Console.WriteLine("Bytes processed:" + responseStream.Stats.BytesProcessed);
 
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        WebServiceErrors error = new WebServiceErrors();
-        //        error.ErrorMessage = exception.Message.ToString();
-        //        error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+                return responseStream;
 
-        //        throw new Helpers.WebServiceException(JsonConvert.SerializeObject(error));
-        //    }
+            }
+            catch (Exception exception)
+            {
+                ElkLogging logging = new ElkLogging();
 
-        //}
+                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+                {
+                    ErrorMessage = exception.Message.ToString()
+                };
+
+                await logging.IndexExceptionAsync("converter_logs", exceptionModel);
+
+                return responseStream;
+            }
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace DataLayer.DataAccess
                     "FileLength", stream.Length.ToString()
                 },
                 {
-                    "ContentType", "video/mp4"
+                    "ContentType", contentType
                 }
             };
 
