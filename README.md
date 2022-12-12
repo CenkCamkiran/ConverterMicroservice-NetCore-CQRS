@@ -4,8 +4,9 @@ Description....
 
 ## Web Service Yapılacaklar
 
-Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName)
-Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla.
+- Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName)
+- Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla.
+- Web service'de file logging için elk da yaptığın gibi info log'ları ekle
 
 ## Consumer Yapılacaklar
 
@@ -14,6 +15,7 @@ Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Son
 - Batch mi ya da farklı bişey olarak mı çalışacak? Karar ver.
 - MP4'ten Mp3'e convert eden library bul!
 - Web service'deki gibi Singleton yapısında connection'lar kur!
+- Web service'de file logging için elk da yaptığın gibi info log'ları ekle
 
 - Queue'dan mesajı al, mp3 çevir ve stream datasını elde et, stream datasını (mp3 dosyası, guid verisi) minio'ya yolla, başka bir queue'ya (mesela adı notif olsun) dosya guid'i ve email adresini yolla. converter kuyruğuna ack+ yolla!
 

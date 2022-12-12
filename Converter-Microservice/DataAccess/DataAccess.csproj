@@ -11,7 +11,6 @@
     <PackageReference Include="Minio" Version="4.0.6" />
     <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-    <PackageReference Include="NReco.VideoConverter" Version="1.1.4" />
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 

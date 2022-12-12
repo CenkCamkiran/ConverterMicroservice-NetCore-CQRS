@@ -23,6 +23,7 @@ builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
 builder.Services.AddScoped<ILoggingService, LoggingService>();
 builder.Services.AddScoped<ILoggingRepository, LoggingRepository>();
+builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
 string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");

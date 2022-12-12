@@ -1,5 +1,6 @@
 ﻿using DataLayer.Interfaces;
 using Helpers;
+using log4net.Repository.Hierarchy;
 using Models;
 using Nest;
 using Newtonsoft.Json;
@@ -10,10 +11,16 @@ namespace DataLayer.DataAccess
     public class LoggingRepository : ILoggingRepository
     {
         private readonly IElasticClient _elasticClient;
+        private readonly ILog4NetRepository _log4NetRepository;
 
         public LoggingRepository(IElasticClient elasticClient)
         {
             _elasticClient = elasticClient;
+        }
+
+        public LoggingRepository(ILog4NetRepository log4NetRepository)
+        {
+            _log4NetRepository = log4NetRepository;
         }
 
         public async Task<bool> IndexReqResAsync(string indexName, RequestResponseLogModel model)
@@ -38,6 +45,8 @@ namespace DataLayer.DataAccess
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                _log4NetRepository.Error(exception.Message.ToString());
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
@@ -65,6 +74,8 @@ namespace DataLayer.DataAccess
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                _log4NetRepository.Error(exception.Message.ToString());
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }

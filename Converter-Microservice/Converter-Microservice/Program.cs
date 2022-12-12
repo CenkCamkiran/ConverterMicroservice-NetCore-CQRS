@@ -3,11 +3,8 @@ using Minio.DataModel;
 using Models;
 using System;
 
-Logger log = new Logger();
-log.Info("Cenk Test");
-
 QueueHandler queueHandler = new QueueHandler();
-ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler(); 
+ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler();
 ConverterHandler converterHandler = new ConverterHandler();
 
 QueueMessage message = await queueHandler.ConsumeQueue();

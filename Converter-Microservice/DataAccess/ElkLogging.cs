@@ -8,6 +8,7 @@ namespace DataAccess
 {
     public class ElkLogging
     {
+        private Logger log = new Logger();
 
         public ElasticClient ConnectELK()
         {
@@ -29,6 +30,7 @@ namespace DataAccess
 
         public async Task<bool> IndexExceptionAsync(string indexName, ConsumerExceptionModel model)
         {
+
             try
             {
                 ElasticClient client = ConnectELK();
@@ -51,7 +53,6 @@ namespace DataAccess
                 ConsumerExceptionModel error = new ConsumerExceptionModel();
                 error.ErrorMessage = exception.Message.ToString();
 
-                Logger log = new Logger();
                 log.Error(exception.Message.ToString());
 
                 throw new ConsumerException(JsonConvert.SerializeObject(error));
