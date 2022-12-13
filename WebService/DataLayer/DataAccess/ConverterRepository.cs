@@ -50,6 +50,8 @@ namespace DataLayer.DataAccess
                                      basicProperties: properties,
                                      body: body);
 
+
+                loggingRepository.
                 string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
                 _log4NetRepository.Info(logText);
 
