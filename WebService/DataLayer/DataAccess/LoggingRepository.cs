@@ -9,7 +9,7 @@ using System.Net;
 
 namespace DataLayer.DataAccess
 {
-    public class LoggingRepository<TModel> : ILoggingRepository<TModel> where TModel : class
+    public class LoggingRepository<TModel>: ILoggingRepository<TModel> where TModel : class
     {
         private readonly IElasticClient _elasticClient;
         private readonly ILog4NetRepository _log4NetRepository;

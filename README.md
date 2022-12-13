@@ -5,10 +5,10 @@ Description....
 ## Web Service Yapılacaklar
 
 - Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName)
-- Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla. (OK!)
+- Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. (OK!) Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla.
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
 - Request ve response date'leri almaya çalış. ???
-- ELK logging'deki 2 ayrı fonksiyonu teke indirgemeye çalış.
+- ELK logging'deki 2 ayrı fonksiyonu teke indirgemeye çalış. (OK!)
 
 ## Consumer Yapılacaklar
 
