@@ -4,6 +4,7 @@ using log4net.Repository.Hierarchy;
 using Models;
 using Nest;
 using Newtonsoft.Json;
+using System;
 using System.Net;
 
 namespace DataLayer.DataAccess
@@ -13,13 +14,9 @@ namespace DataLayer.DataAccess
         private readonly IElasticClient _elasticClient;
         private readonly ILog4NetRepository _log4NetRepository;
 
-        public LoggingRepository(IElasticClient elasticClient)
+        public LoggingRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository)
         {
             _elasticClient = elasticClient;
-        }
-
-        public LoggingRepository(ILog4NetRepository log4NetRepository)
-        {
             _log4NetRepository = log4NetRepository;
         }
 
@@ -28,14 +25,9 @@ namespace DataLayer.DataAccess
             try
             {
                 IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-                Console.WriteLine("Document Id: " + indexDocument.Id);
-                Console.WriteLine("Index: " + indexDocument.Index);
-                Console.WriteLine("Result: " + indexDocument.Result);
-                Console.WriteLine("IsValid: " + indexDocument.IsValid);
-                Console.WriteLine("ServerError: " + indexDocument.ServerError);
-                Console.WriteLine("ApiCall.HttpStatusCode: " + indexDocument.ApiCall.HttpStatusCode);
-                Console.WriteLine("ApiCall.OriginalException: " + indexDocument.ApiCall.OriginalException);
-                Console.WriteLine("ApiCall.Success: " + indexDocument.ApiCall.Success);
+
+                string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
+                _log4NetRepository.Info(elkResponse);
 
                 return indexDocument.IsValid;
 
@@ -57,14 +49,36 @@ namespace DataLayer.DataAccess
             try
             {
                 IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-                Console.WriteLine("Document Id: " + indexDocument.Id);
-                Console.WriteLine("Index: " + indexDocument.Index);
-                Console.WriteLine("Result: " + indexDocument.Result);
-                Console.WriteLine("IsValid: " + indexDocument.IsValid);
-                Console.WriteLine("ServerError: " + indexDocument.ServerError);
-                Console.WriteLine("ApiCall.HttpStatusCode: " + indexDocument.ApiCall.HttpStatusCode);
-                Console.WriteLine("ApiCall.OriginalException: " + indexDocument.ApiCall.OriginalException);
-                Console.WriteLine("ApiCall.Success: " + indexDocument.ApiCall.Success);
+
+                string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
+                _log4NetRepository.Info(elkResponse);
+
+
+                return indexDocument.IsValid;
+
+            }
+            catch (Exception exception)
+            {
+                WebServiceErrors error = new WebServiceErrors();
+                error.ErrorMessage = exception.Message.ToString();
+                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                _log4NetRepository.Error(exception.Message.ToString());
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            }
+        }
+
+
+        public async Task<bool> IndexProcessAsync(string indexName, ExceptionLogModel model)
+        {
+            try
+            {
+                IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
+
+                string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
+                _log4NetRepository.Info(elkResponse);
+
 
                 return indexDocument.IsValid;
 

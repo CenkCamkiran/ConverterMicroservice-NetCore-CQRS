@@ -17,11 +17,15 @@ namespace DataLayer.DataAccess
 
         private readonly IMinioClient _minioClient;
         private readonly IConnection _rabbitConnection;
+        private readonly ILog4NetRepository _log4NetRepository;
+        private readonly ILoggingRepository loggingRepository;
 
-        public ConverterRepository(IMinioClient minioClient, IConnection rabbitConnection)
+        public ConverterRepository(IMinioClient minioClient, IConnection rabbitConnection, ILog4NetRepository log4NetRepository, ILoggingRepository loggingRepository)
         {
             _minioClient = minioClient;
             _rabbitConnection = rabbitConnection;
+            _log4NetRepository = log4NetRepository;
+            this.loggingRepository = loggingRepository;
         }
 
         public void QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey)
@@ -46,6 +50,10 @@ namespace DataLayer.DataAccess
                                      basicProperties: properties,
                                      body: body);
 
+                string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
+                _log4NetRepository.Info(logText);
+
+
             }
             catch (Exception exception)
             {
@@ -53,7 +61,7 @@ namespace DataLayer.DataAccess
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-                throw new Helpers.WebServiceException(JsonConvert.SerializeObject(error));
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
         }
 
@@ -98,6 +106,9 @@ namespace DataLayer.DataAccess
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
+                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
+                _log4NetRepository.Info(logText);
+
             }
             catch (Exception exception)
             {
@@ -105,7 +116,7 @@ namespace DataLayer.DataAccess
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-                throw new Helpers.WebServiceException(JsonConvert.SerializeObject(error));
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
         }

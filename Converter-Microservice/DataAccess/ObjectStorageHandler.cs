@@ -2,11 +2,15 @@
 using Minio;
 using Minio.DataModel;
 using Models;
+using System.IO;
+using System.Net.Mime;
 
 namespace DataAccess
 {
     public class ObjectStorageHandler
     {
+        private Logger log = new Logger();
+
         public MinioClient ConnectMinio()
         {
             EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
@@ -64,6 +68,9 @@ namespace DataAccess
                 await minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
+                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
+                log.Info(logText);
+
             }
             catch (Exception exception)
             {
@@ -103,9 +110,9 @@ namespace DataAccess
                                .WithObject(objectName)
                                .WithServerSideEncryption(sse);
                 responseStream = await minioClient.SelectObjectContentAsync(args);
-                Console.WriteLine("Bytes scanned:" + responseStream.Stats.BytesScanned);
-                Console.WriteLine("Bytes returned:" + responseStream.Stats.BytesReturned);
-                Console.WriteLine("Bytes processed:" + responseStream.Stats.BytesProcessed);
+
+                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Length from Bytes: {responseStream.Stats.BytesReturned}";
+                log.Info(logText);
 
                 return responseStream;
 

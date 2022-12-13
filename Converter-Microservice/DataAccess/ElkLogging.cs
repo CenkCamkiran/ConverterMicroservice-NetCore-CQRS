@@ -36,14 +36,9 @@ namespace DataAccess
                 ElasticClient client = ConnectELK();
 
                 IndexResponse indexDocument = await client.IndexDocumentAsync(model);
-                Console.WriteLine("Document Id: " + indexDocument.Id);
-                Console.WriteLine("Index: " + indexDocument.Index);
-                Console.WriteLine("Result: " + indexDocument.Result);
-                Console.WriteLine("IsValid: " + indexDocument.IsValid);
-                Console.WriteLine("ServerError: " + indexDocument.ServerError);
-                Console.WriteLine("ApiCall.HttpStatusCode: " + indexDocument.ApiCall.HttpStatusCode);
-                Console.WriteLine("ApiCall.OriginalException: " + indexDocument.ApiCall.OriginalException);
-                Console.WriteLine("ApiCall.Success: " + indexDocument.ApiCall.Success);
+
+                string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
+                log.Info(elkResponse);
 
                 return indexDocument.IsValid;
 
