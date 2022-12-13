@@ -1,4 +1,5 @@
-﻿using Helpers;
+﻿using DataLayer.Interfaces;
+using Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -13,11 +14,13 @@ namespace APILayer.Converters
     [ApiController]
     public class ConverterController : ControllerBase
     {
-        private IConverterService _converterService;
+        private IQueueRepository _queueRepository;  
+        private IMinioStorageRepository _minioStorageRepository;
 
-        public ConverterController(IConverterService converterService)
+        public ConverterController(IQueueRepository queueRepository, IMinioStorageRepository minioStorageRepository)
         {
-            _converterService = converterService;
+            _queueRepository = queueRepository;
+            _minioStorageRepository = minioStorageRepository;
         }
 
         [HttpPost]
@@ -32,7 +35,7 @@ namespace APILayer.Converters
                 fileGuid = guid
             };
 
-            _converterService.QueueMessageDirect(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
+           await _queueRepository.QueueMessageDirectAsync(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
 
             var stream = file.OpenReadStream();
             try
@@ -41,7 +44,7 @@ namespace APILayer.Converters
                 {
                     await stream.CopyToAsync(ms);
 
-                    await _converterService.StoreFileAsync("videos", guid, ms, file.ContentType);
+                    await _minioStorageRepository.StoreFileAsync("videos", guid, ms, file.ContentType);
                 }
             }
             catch (Exception exception)

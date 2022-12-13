@@ -17,13 +17,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddScoped<IConverterService, ConverterService>();
-builder.Services.AddScoped<IConverterRepository, ConverterRepository>();
+builder.Services.AddScoped<IQueueService, QueueService>();
+builder.Services.AddScoped<IMinioStorageService, MinioStorageService>();
 builder.Services.AddScoped<IHealthService, HealthService>();
-builder.Services.AddScoped<IPingHelper, PingHelper>();
 builder.Services.AddScoped<ILoggingService, LoggingService>();
-builder.Services.AddScoped<ILoggingRepository, LoggingRepository>();
+builder.Services.AddScoped<IPingHelper, PingHelper>();
+
+builder.Services.AddScoped<ILoggingRepository<object>, LoggingRepository<object> >();
 builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
+builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
+builder.Services.AddScoped<IQueueRepository, QueueRepository>();
 
 string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");

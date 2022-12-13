@@ -30,8 +30,8 @@ namespace Middleware
                 if (formRegex.Match(request.ContentType).Success)
                     await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
 
-                if (jsonRegex.Match(request.ContentType).Success)
-                    await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
+                //if (jsonRegex.Match(request.ContentType).Success)
+                //    await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
             }
 
         }

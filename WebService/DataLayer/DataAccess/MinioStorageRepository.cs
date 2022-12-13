@@ -1,70 +1,29 @@
 ﻿using DataLayer.Interfaces;
 using Helpers;
-using Minio;
 using Minio.DataModel;
-using Minio.Exceptions;
+using Minio;
 using Models;
 using Newtonsoft.Json;
-using RabbitMQ.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
-using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class ConverterRepository : IConverterRepository
+    public class MinioStorageRepository: IMinioStorageRepository
     {
-
         private readonly IMinioClient _minioClient;
-        private readonly IConnection _rabbitConnection;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly ILoggingRepository loggingRepository;
+        private readonly ILoggingRepository<ObjectStorageLog> _loggingRepository;
 
-        public ConverterRepository(IMinioClient minioClient, IConnection rabbitConnection, ILog4NetRepository log4NetRepository, ILoggingRepository loggingRepository)
+        public MinioStorageRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, ILoggingRepository<ObjectStorageLog> loggingRepository)
         {
             _minioClient = minioClient;
-            _rabbitConnection = rabbitConnection;
             _log4NetRepository = log4NetRepository;
-            this.loggingRepository = loggingRepository;
-        }
-
-        public void QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey)
-        {
-            try
-            {
-                var channel = _rabbitConnection.CreateModel();
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
-
-                channel.QueueDeclare(queue: queue,
-                                     durable: true,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-
-                string serializedObj = JsonConvert.SerializeObject(message);
-                var body = Encoding.UTF8.GetBytes(serializedObj);
-
-                channel.BasicPublish(exchange: exchange,
-                                     routingKey: routingKey,
-                                     basicProperties: properties,
-                                     body: body);
-
-
-                loggingRepository.
-                string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
-                _log4NetRepository.Info(logText);
-
-
-            }
-            catch (Exception exception)
-            {
-                WebServiceErrors error = new WebServiceErrors();
-                error.ErrorMessage = exception.Message.ToString();
-                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
-
-                throw new WebServiceException(JsonConvert.SerializeObject(error));
-            }
+            _loggingRepository = loggingRepository;
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
@@ -107,6 +66,15 @@ namespace DataLayer.DataAccess
                     .WithServerSideEncryption(sse);
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
+
+                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
+                {
+                    BucketName = bucketName,
+                    ContentLength = stream.Length,
+                    ContentType = contentType,
+                    ObjectName = objectName
+                };
+                await _loggingRepository.IndexDocAsync("", objectStorageLog);
 
                 string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
                 _log4NetRepository.Info(logText);
