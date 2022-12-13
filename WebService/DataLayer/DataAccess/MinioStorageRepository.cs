@@ -72,9 +72,10 @@ namespace DataLayer.DataAccess
                     BucketName = bucketName,
                     ContentLength = stream.Length,
                     ContentType = contentType,
-                    ObjectName = objectName
+                    ObjectName = objectName,
+                    Date = DateTime.Now
                 };
-                await _loggingRepository.IndexDocAsync("", objectStorageLog);
+                await _loggingRepository.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
 
                 string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
                 _log4NetRepository.Info(logText);

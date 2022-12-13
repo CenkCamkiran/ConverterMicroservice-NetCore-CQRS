@@ -49,7 +49,6 @@ namespace APILayer.Converters
             }
             catch (Exception exception)
             {
-
                 WebServiceErrors error = new WebServiceErrors();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;

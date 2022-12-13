@@ -7,7 +7,7 @@ QueueHandler queueHandler = new QueueHandler();
 ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler();
 ConverterHandler converterHandler = new ConverterHandler();
 
-QueueMessage message = await queueHandler.ConsumeQueue();
+QueueMessage message = await queueHandler.ConsumeQueueAsync("converter");
 SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
 //Convert to MP3
 
@@ -26,13 +26,13 @@ try
             fileGuid = guid
         };
 
-        await queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+        await queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
 
     }
 }
 catch (Exception exception)
 {
-    ElkLogging logging = new ElkLogging();
+    ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
 
     ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
     {

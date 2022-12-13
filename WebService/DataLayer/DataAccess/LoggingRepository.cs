@@ -24,7 +24,8 @@ namespace DataLayer.DataAccess
         {
             try
             {
-                IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
+                //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
+                IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
                 _log4NetRepository.Info(elkResponse);
@@ -43,81 +44,5 @@ namespace DataLayer.DataAccess
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
         }
-
-        //public async Task<bool> IndexReqResAsync(string indexName, RequestResponseLogModel model)
-        //{
-        //    try
-        //    {
-        //        IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-
-        //        string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
-        //        _log4NetRepository.Info(elkResponse);
-
-        //        return indexDocument.IsValid;
-
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        WebServiceErrors error = new WebServiceErrors();
-        //        error.ErrorMessage = exception.Message.ToString();
-        //        error.ErrorCode = (int)HttpStatusCode.InternalServerError;
-
-        //        _log4NetRepository.Error(exception.Message.ToString());
-
-        //        throw new WebServiceException(JsonConvert.SerializeObject(error));
-        //    }
-        //}
-
-        //public async Task<bool> IndexExceptionAsync(string indexName, ExceptionLogModel model)
-        //{
-        //    try
-        //    {
-        //        IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-
-        //        string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
-        //        _log4NetRepository.Info(elkResponse);
-
-
-        //        return indexDocument.IsValid;
-
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        WebServiceErrors error = new WebServiceErrors();
-        //        error.ErrorMessage = exception.Message.ToString();
-        //        error.ErrorCode = (int)HttpStatusCode.InternalServerError;
-
-        //        _log4NetRepository.Error(exception.Message.ToString());
-
-        //        throw new WebServiceException(JsonConvert.SerializeObject(error));
-        //    }
-        //}
-
-
-        //public async Task<bool> IndexProcessAsync(string indexName, ExceptionLogModel model)
-        //{
-        //    try
-        //    {
-        //        IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-
-        //        string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
-        //        _log4NetRepository.Info(elkResponse);
-
-
-        //        return indexDocument.IsValid;
-
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        WebServiceErrors error = new WebServiceErrors();
-        //        error.ErrorMessage = exception.Message.ToString();
-        //        error.ErrorCode = (int)HttpStatusCode.InternalServerError;
-
-        //        _log4NetRepository.Error(exception.Message.ToString());
-
-        //        throw new WebServiceException(JsonConvert.SerializeObject(error));
-        //    }
-        //}
-
     }
 }

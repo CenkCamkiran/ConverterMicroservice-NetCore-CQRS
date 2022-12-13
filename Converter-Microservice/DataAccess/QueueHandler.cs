@@ -1,16 +1,21 @@
 ﻿using Configuration;
+using log4net;
 using Models;
+using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Net;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text;
 
 namespace DataAccess
 {
     public class QueueHandler
     {
+        private Logger log = new Logger();
+
         public IConnection ConnectRabbitMQ()
         {
             EnvVariablesHandler envHandler = new EnvVariablesHandler();
@@ -30,7 +35,7 @@ namespace DataAccess
 
         }
 
-        public async Task<QueueMessage> ConsumeQueue()
+        public async Task<QueueMessage> ConsumeQueueAsync(string queue)
         {
             QueueMessage? queueMsg = null;
             try
@@ -39,7 +44,7 @@ namespace DataAccess
 
                 using (var channel = rabbitConnection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: "converter",
+                    channel.QueueDeclare(queue: queue,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
@@ -65,7 +70,21 @@ namespace DataAccess
                                          autoAck: false,
                                          consumer: consumer);
 
-                    await Task.FromResult(queueMsg);
+                    QueueLog queueLog = new QueueLog()
+                    {
+                        Date = DateTime.Now,
+                        Message = queueMsg,
+                        QueueName = queue
+                    };
+                    ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
+                    await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
+
+                    string logText = $"Queue: {queue} - Message: (fileGuid: {queueLog.Message.fileGuid} && email: {queueLog.Message.email})";
+                    log.Info(logText);
+
+                    return await Task.FromResult(queueMsg);
+
+                 
                     //Console.WriteLine(" Press [enter] to exit.");
                     //Console.ReadLine();
 
@@ -73,7 +92,7 @@ namespace DataAccess
             }
             catch (Exception exception)
             {
-                ElkLogging logging = new ElkLogging();
+                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
 
                 ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
                 {
@@ -85,7 +104,7 @@ namespace DataAccess
 
         }
 
-        public async Task QueueMessageDirect(QueueMessage message, string queue, string exchange, string routingKey)
+        public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -108,10 +127,25 @@ namespace DataAccess
                                      basicProperties: properties,
                                      body: body);
 
+                QueueLog queueLog = new QueueLog()
+                {
+                    OperationType = nameof(channel.BasicPublish),
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
+                    Message = message,
+                    QueueName = queue,
+                    RoutingKey = routingKey
+                };
+                ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
+                await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
+
+                string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
+                log.Info(logText);
+
             }
             catch (Exception exception)
             {
-                ElkLogging logging = new ElkLogging();
+                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
 
                 ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
                 {

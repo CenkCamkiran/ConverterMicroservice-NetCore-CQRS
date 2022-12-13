@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace DataAccess
 {
-    public class ElkLogging
+    public class ElkLogging<TModel> where TModel : class
     {
         private Logger log = new Logger();
 
@@ -28,14 +28,13 @@ namespace DataAccess
             return elasticClient;
         }
 
-        public async Task<bool> IndexExceptionAsync(string indexName, ConsumerExceptionModel model)
+        public async Task<bool> IndexExceptionAsync(string indexName, TModel model)
         {
 
             try
             {
                 ElasticClient client = ConnectELK();
-
-                IndexResponse indexDocument = await client.IndexDocumentAsync(model);
+                IndexResponse indexDocument = await client.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
                 log.Info(elkResponse);

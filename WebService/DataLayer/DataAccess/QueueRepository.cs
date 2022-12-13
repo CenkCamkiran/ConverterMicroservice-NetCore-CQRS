@@ -50,17 +50,16 @@ namespace DataLayer.DataAccess
 
                 QueueLog queueLog = new QueueLog()
                 {
-                    DateTime = DateTime.Now,
-                    Exchange = exchange,
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
                     Message = message,
                     QueueName = queue,
                     RoutingKey = routingKey
                 };
-                await loggingRepository.IndexDocAsync("", queueLog);
+                await loggingRepository.IndexDocAsync("webservice_queue_logs", queueLog);
                 
                 string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
                 _log4NetRepository.Info(logText);
-
 
             }
             catch (Exception exception)
