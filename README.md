@@ -4,7 +4,7 @@ Description....
 
 ## Web Service Yapılacaklar
 
-- Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName)
+- Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName) (OK!)
 - Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. (OK!) Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla.
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
 - Request ve response date'leri almaya çalış. ???
@@ -12,7 +12,7 @@ Description....
 
 ## Consumer Yapılacaklar
 
-- Farklı index'lere log atmayı öğren. (param olarak indexName)
+- Farklı index'lere log atmayı öğren. (param olarak indexName) (OK!)
 - elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. Sonra bu dosyayı k8s'de ve dockerfile'da??? volume olarak tanımla. (OK!)
 - Batch mi ya da farklı bişey olarak mı çalışacak? Karar ver.
 - MP4'ten Mp3'e convert eden library bul!
