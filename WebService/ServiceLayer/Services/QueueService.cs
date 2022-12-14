@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using DataLayer.Interfaces;
+using Models;
 using ServiceLayer.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,16 +11,16 @@ namespace ServiceLayer.Services
 {
     public class QueueService : IQueueService
     {
-        private IQueueService _queueService;
+        private IQueueRepository _queueRepository;
 
-        public QueueService(IQueueService queueService)
+        public QueueService(IQueueRepository queueRepository)
         {
-            _queueService = queueService;
+            _queueRepository = queueRepository;
         }
 
         public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey)
         {
-            await _queueService.QueueMessageDirectAsync(message, queue, exchange, routingKey);
+            await _queueRepository.QueueMessageDirectAsync(message, queue, exchange, routingKey);
         }
     }
 }
