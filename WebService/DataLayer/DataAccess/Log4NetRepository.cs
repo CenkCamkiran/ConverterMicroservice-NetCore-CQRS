@@ -13,13 +13,13 @@ namespace DataLayer.DataAccess
 {
     public class Log4NetRepository: ILog4NetRepository
     {
-        private ILoggerRepository logRepository;
+        private ILoggerRepository _logRepository;
         private readonly ILog _logger;
 
         public Log4NetRepository()
         {
-            logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
-            XmlConfigurator.Configure(logRepository, new FileInfo("App.config"));
+            _logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            XmlConfigurator.Configure(_logRepository, new FileInfo("App.config"));
             this._logger = LogManager.GetLogger(MethodBase.GetCurrentMethod()?.DeclaringType);
         }
 

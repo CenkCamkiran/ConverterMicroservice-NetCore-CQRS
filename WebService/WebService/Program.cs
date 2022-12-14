@@ -3,8 +3,11 @@ using DataLayer.Interfaces;
 using Elasticsearch.Net;
 using Helpers;
 using Helpers.Interfaces;
+using log4net;
+using log4net.Repository;
 using Middleware;
 using Minio;
+using Models;
 using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
@@ -16,17 +19,6 @@ using IConnection = RabbitMQ.Client.IConnection;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-builder.Services.AddScoped<IQueueService, QueueService>();
-builder.Services.AddScoped<IMinioStorageService, MinioStorageService>();
-builder.Services.AddScoped<IHealthService, HealthService>();
-builder.Services.AddScoped<ILoggingService, LoggingService>();
-builder.Services.AddScoped<IPingHelper, PingHelper>();
-
-builder.Services.AddScoped<ILoggingRepository<object>, LoggingRepository<object> >();
-builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
-builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
-builder.Services.AddScoped<IQueueRepository, QueueRepository>();
 
 string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
 string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
@@ -41,6 +33,20 @@ string? elkHost = Environment.GetEnvironmentVariable("ELK_HOST");
 string? elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX");
 string? elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
 string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
+
+//must add every type of repository
+builder.Services.AddScoped<ILoggingRepository<ObjectStorageLog>, LoggingRepository<ObjectStorageLog>>();
+builder.Services.AddScoped<ILoggingRepository<QueueLog>, LoggingRepository<QueueLog>>();
+builder.Services.AddScoped<ILoggingRepository<RequestResponseLogModel>, LoggingRepository<RequestResponseLogModel>>();
+builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
+builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
+builder.Services.AddScoped<IQueueRepository, QueueRepository>();
+
+builder.Services.AddScoped<IQueueService, QueueService>();
+builder.Services.AddScoped<IMinioStorageService, MinioStorageService>();
+builder.Services.AddScoped<IHealthService, HealthService>();
+builder.Services.AddScoped<ILoggingService, LoggingService>();
+builder.Services.AddScoped<IPingHelper, PingHelper>();
 
 ConnectionSettings? connection = new ConnectionSettings(new Uri(elkHost)).
    DefaultIndex(elkDefaultIndex).
