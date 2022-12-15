@@ -2,8 +2,12 @@
 using Minio;
 using Minio.DataModel;
 using Models;
+using Newtonsoft.Json;
+using System;
+using System.Data.Common;
 using System.IO;
 using System.Net.Mime;
+using Xabe.FFmpeg;
 
 namespace DataAccess
 {
@@ -77,23 +81,46 @@ namespace DataAccess
                     ObjectName = objectName,
                     Date = DateTime.Now
                 };
-                ElkLogging<ObjectStorageLog> elkLogging = new ElkLogging<ObjectStorageLog>();
-                await elkLogging.IndexExceptionAsync("converter_objstorage_logs", objectStorageLog);
-
-                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
-                log.Info(logText);
 
             }
             catch (Exception exception)
             {
-                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
-
-                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    ErrorMessage = exception.Message.ToString()
+                    OperationType = nameof(minioClient.PutObjectAsync),
+                    BucketName = bucketName,
+                    ContentLength = stream.Length,
+                    ContentType = contentType,
+                    ObjectName = objectName,
+                    Date = DateTime.Now,
+                    ExceptionMessage = exception.Message.ToString()
                 };
 
-                await logging.IndexExceptionAsync("converterservice_logs", exceptionModel);
+                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
+                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+
+                string logText = $"Exception: { JsonConvert.SerializeObject(objectStorageLog) }";
+                log.Info(logText);
+
+                throw;
+            }
+            finally
+            {
+                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
+                {
+                    OperationType = nameof(minioClient.PutObjectAsync),
+                    BucketName = bucketName,
+                    ContentLength = stream.Length,
+                    ContentType = contentType,
+                    ObjectName = objectName,
+                    Date = DateTime.Now
+                };
+
+                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
+                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+
+                string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
+                log.Info(logText);
             }
 
         }
@@ -123,6 +150,29 @@ namespace DataAccess
                                .WithServerSideEncryption(sse);
                 responseStream = await minioClient.SelectObjectContentAsync(args);
 
+            }
+            catch (Exception exception)
+            {
+                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
+                {
+                    OperationType = nameof(minioClient.SelectObjectContentAsync),
+                    BucketName = bucketName,
+                    ObjectName = objectName,
+                    Date = DateTime.Now,
+                    ExceptionMessage = exception.Message.ToString()
+                };
+
+                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
+                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+
+                string logText = $"Exception: { JsonConvert.SerializeObject(objectStorageLog) }";
+                log.Error(logText);
+
+                throw;
+
+            }
+            finally
+            {
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
                     OperationType = nameof(minioClient.SelectObjectContentAsync),
@@ -131,28 +181,15 @@ namespace DataAccess
                     ObjectName = objectName,
                     Date = DateTime.Now
                 };
-                ElkLogging<ObjectStorageLog> elkLogging = new ElkLogging<ObjectStorageLog>();
-                await elkLogging.IndexExceptionAsync("converter_objstorage_logs", objectStorageLog);
 
-                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Length from Bytes: {responseStream.Stats.BytesReturned}";
+                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
+                queueHandler.QueueMessageDirectAsync(objectStorageLog, "otherlogs", "log_exchange.direct", "other_log");
+
+                string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Info(logText);
-
-                return responseStream;
-
             }
-            catch (Exception exception)
-            {
-                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
 
-                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
-                {
-                    ErrorMessage = exception.Message.ToString()
-                };
-
-                await logging.IndexExceptionAsync("converterservice_logs", exceptionModel);
-
-                return responseStream;
-            }
+            return responseStream;
         }
     }
 }

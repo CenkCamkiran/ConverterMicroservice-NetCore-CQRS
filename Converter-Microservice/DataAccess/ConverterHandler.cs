@@ -10,6 +10,9 @@ using log4net;
 using Models;
 using Newtonsoft.Json;
 using System.Collections;
+using Nest;
+using System.Security.AccessControl;
+using Minio;
 
 namespace DataAccess
 {
@@ -42,14 +45,36 @@ namespace DataAccess
             }
 			catch (Exception exception)
 			{
-                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
+                //Başka bir queue'ya log at.
+                //Filelogging devam et.
 
                 ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
                 {
                     ErrorMessage = exception.Message.ToString()
                 };
 
-                await logging.IndexExceptionAsync("converter_logs", exceptionModel);
+
+                string logText = $"Exception: {exception.Message.ToString()}";
+                log.Info(logText);
+
+            }
+            finally
+            {
+
+                //ObjectStorageLog objectStorageLog = new ObjectStorageLog()
+                //{
+                //    OperationType = nameof(minioClient.SelectObjectContentAsync),
+                //    BucketName = bucketName,
+                //    ContentLength = responseStream.Stats.BytesReturned,
+                //    ObjectName = objectName,
+                //    Date = DateTime.Now
+                //};
+
+                //QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
+                //queueHandler.QueueMessageDirectAsync(objectStorageLog, "otherlogs", "log_exchange.direct", "other_log");
+
+                //string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
+                //log.Info(logText);
             }
         }
     }

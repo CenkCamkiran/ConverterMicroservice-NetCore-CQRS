@@ -3,15 +3,15 @@ using Minio.DataModel;
 using Models;
 using System;
 
-QueueHandler queueHandler = new QueueHandler();
+QueueHandler<object> queueHandler = new QueueHandler<object>();
 ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler();
 ConverterHandler converterHandler = new ConverterHandler();
 
-QueueMessage message = await queueHandler.ConsumeQueueAsync("converter");
+/*QueueMessage message = */queueHandler.ConsumeQueueAsync("converter");
 
-if (message != null)
+if ("message" != null)
 {
-    SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
+    SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", "message.fileGuid");
 
     try
     {
@@ -24,24 +24,24 @@ if (message != null)
 
             QueueMessage msg = new QueueMessage()
             {
-                email = message.email,
+                email = "message.email",
                 fileGuid = guid
             };
 
-            await queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+            queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
 
         }
     }
     catch (Exception exception)
     {
-        ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
+        //Başka bir queue'ya log at.
+        //Filelogging devam et.
 
         ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
         {
             ErrorMessage = exception.Message.ToString()
         };
 
-        await logging.IndexExceptionAsync("converter_logs", exceptionModel);
     }
 }
 

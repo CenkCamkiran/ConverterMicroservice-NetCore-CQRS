@@ -5,7 +5,6 @@ using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
 using System.Net;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -14,9 +13,27 @@ using System.Threading.Channels;
 
 namespace DataAccess
 {
-    public class QueueHandler<TMessage> where TMessage: class
+    public class QueueHandler
     {
         private Logger log = new Logger();
+
+        private QueueMessage? queueMessage { get; set; }
+        private BasicDeliverEventArgs? EventArgs { get; set; }
+
+        public void cenk()
+        {
+            RegisterEvent(null, EventArgs);
+        }
+
+        public void RegisterEvent(object? sender, BasicDeliverEventArgs ea)
+        {
+            var body = ea.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+            Console.WriteLine(" [x] Received {0}", message);
+
+            queueMessage = JsonConvert.DeserializeObject<QueueMessage>(message);
+            EventArgs = ea;
+        }
 
         public IConnection ConnectRabbitMQ()
         {
@@ -37,7 +54,7 @@ namespace DataAccess
 
         }
 
-        public async Task ConsumeQueueAsync(string queue)
+        public async Task<QueueMessage> ConsumeQueueAsync(string queue)
         {
             QueueMessage? queueMsg = null;
             try
@@ -56,21 +73,28 @@ namespace DataAccess
 
                     var consumer = new EventingBasicConsumer(channel);
 
-                    consumer.Received += (sender, ea) =>
-                    {
-                        var body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-                        Console.WriteLine(" [x] Received {0}", message);
+                    //public delegate void EventHandler<TEventArgs>(object? sender, TEventArgs e);
+                    consumer.Received += RegisterEvent;
+                    cenk();
+                    channel.BasicAck(deliveryTag: EventArgs.DeliveryTag, multiple: false);
 
-                        queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
-
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-                    };
-
-                    channel.BasicConsume(queue: queue,
+                    channel.BasicConsume(queue: "converter",
                                          autoAck: false,
                                          consumer: consumer);
+
+                    QueueLog queueLog = new QueueLog()
+                    {
+                        Date = DateTime.Now,
+                        Message = queueMsg,
+                        QueueName = queue
+                    };
+                    ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
+                    await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
+
+                    string logText = $"Queue: {queue} - Message: (fileGuid: {queueLog.Message?.fileGuid} && email: {queueLog.Message?.email})";
+                    log.Info(logText);
+
+                    return await Task.FromResult(queueMsg);
                  
                     //Console.WriteLine(" Press [enter] to exit.");
                     //Console.ReadLine();
@@ -78,35 +102,21 @@ namespace DataAccess
             }
             catch (Exception exception)
             {
-                QueueLog queueLog = new QueueLog()
+                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
+
+                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
                 {
-                    OperationType = "BasicConsume",
-                    Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(queueMsg),
-                    QueueName = queue,
-                    ExceptionMessage = exception.Message.ToString()
+                    ErrorMessage = exception.Message.ToString()
                 };
 
-                string logText = $"Exception: { JsonConvert.SerializeObject(queueLog) }";
-                log.Info(logText);
+                await logging.IndexExceptionAsync("converter_logs", exceptionModel);
 
-                throw;
+                return null;
             }
-            finally
-            {
-                QueueLog queueLog = new QueueLog()
-                {
-                    Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(queueMsg),
-                    QueueName = queue
-                };
 
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
-            }
         }
 
-        public void QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
+        public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -129,41 +139,32 @@ namespace DataAccess
                                      basicProperties: properties,
                                      body: body);
 
-            }
-            catch (Exception exception)
-            {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = nameof(channel.BasicPublish),
                     Date = DateTime.Now,
                     ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
-                    QueueName = queue,
-                    RoutingKey = routingKey,
-                    ExceptionMessage = exception.Message.ToString()
-                };
-
-                string logText = $"Exception: { JsonConvert.SerializeObject(queueLog) }";
-                log.Error(logText);
-
-                throw;
-
-            }
-            finally
-            {
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicPublish",
-                    Date = DateTime.Now,
-                    ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
+                    Message = message,
                     QueueName = queue,
                     RoutingKey = routingKey
                 };
+                ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
+                await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
 
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
+                string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
                 log.Info(logText);
 
+            }
+            catch (Exception exception)
+            {
+                ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
+
+                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+                {
+                    ErrorMessage = exception.Message.ToString()
+                };
+
+                await logging.IndexExceptionAsync("converter_logs", exceptionModel);
             }
         }
     }

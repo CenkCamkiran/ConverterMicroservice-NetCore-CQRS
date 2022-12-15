@@ -3,6 +3,8 @@ using Elasticsearch.Net;
 using Models;
 using Nest;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace DataAccess
 {
