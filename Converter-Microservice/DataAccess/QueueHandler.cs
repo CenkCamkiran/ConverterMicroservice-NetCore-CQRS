@@ -37,7 +37,7 @@ namespace DataAccess
 
         }
 
-        public async Task ConsumeQueueAsync(string queue)
+        public void ConsumeQueueAsync(string queue)
         {
             QueueMessage? queueMsg = null;
             try
@@ -55,7 +55,6 @@ namespace DataAccess
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     var consumer = new EventingBasicConsumer(channel);
-
                     consumer.Received += (sender, ea) =>
                     {
                         var body = ea.Body.ToArray();
@@ -65,7 +64,6 @@ namespace DataAccess
                         queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
                     };
 
                     channel.BasicConsume(queue: queue,
