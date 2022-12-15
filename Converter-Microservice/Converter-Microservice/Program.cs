@@ -8,39 +8,44 @@ ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler();
 ConverterHandler converterHandler = new ConverterHandler();
 
 QueueMessage message = await queueHandler.ConsumeQueueAsync("converter");
-SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
-//Convert to MP3
 
-try
+if (message != null)
 {
-    using (MemoryStream ms = new MemoryStream())
+    SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
+
+    try
     {
-        await response.Payload.CopyToAsync(ms);
-
-        string guid = Guid.NewGuid().ToString();
-        await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
-
-        QueueMessage msg = new QueueMessage()
+        using (MemoryStream ms = new MemoryStream())
         {
-            email = message.email,
-            fileGuid = guid
+            await response.Payload.CopyToAsync(ms);
+
+            string guid = Guid.NewGuid().ToString();
+            await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
+
+            QueueMessage msg = new QueueMessage()
+            {
+                email = message.email,
+                fileGuid = guid
+            };
+
+            await queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+
+        }
+    }
+    catch (Exception exception)
+    {
+        ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
+
+        ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+        {
+            ErrorMessage = exception.Message.ToString()
         };
 
-        await queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
-
+        await logging.IndexExceptionAsync("converter_logs", exceptionModel);
     }
 }
-catch (Exception exception)
-{
-    ElkLogging<ConsumerExceptionModel> logging = new ElkLogging<ConsumerExceptionModel>();
 
-    ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
-    {
-        ErrorMessage = exception.Message.ToString()
-    };
-
-    await logging.IndexExceptionAsync("converter_logs", exceptionModel);
-}
+//Convert to MP3
 
 /* ************************************************************************************************* */
 

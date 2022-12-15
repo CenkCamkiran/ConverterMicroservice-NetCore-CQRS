@@ -79,15 +79,13 @@ namespace DataAccess
                     ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
                     await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
 
-                    string logText = $"Queue: {queue} - Message: (fileGuid: {queueLog.Message.fileGuid} && email: {queueLog.Message.email})";
+                    string logText = $"Queue: {queue} - Message: (fileGuid: {queueLog.Message?.fileGuid} && email: {queueLog.Message?.email})";
                     log.Info(logText);
 
                     return await Task.FromResult(queueMsg);
-
                  
                     //Console.WriteLine(" Press [enter] to exit.");
                     //Console.ReadLine();
-
                 }
             }
             catch (Exception exception)
@@ -100,6 +98,8 @@ namespace DataAccess
                 };
 
                 await logging.IndexExceptionAsync("converter_logs", exceptionModel);
+
+                return null;
             }
 
         }
