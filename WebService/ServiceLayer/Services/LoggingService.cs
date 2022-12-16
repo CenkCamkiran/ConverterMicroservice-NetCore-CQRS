@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Models;
 using Newtonsoft.Json;
 using ServiceLayer.Interfaces;
+using System.Net;
 
 namespace ServiceLayer.Services
 {
@@ -21,10 +22,11 @@ namespace ServiceLayer.Services
             response.Body.Position = 0;
 
             IFormCollection formData = await request.ReadFormAsync();
-            IFormFile file = formData.Files.GetFile("file");
+            IFormFile? file = formData.Files.GetFile("file");
 
             StreamReader responseStream = new StreamReader(response.Body);
             string JSONResponseBody = await responseStream.ReadToEndAsync();
+
             UploadMp4Response? responseObj = JsonConvert.DeserializeObject<UploadMp4Response>(JSONResponseBody);
 
             RequestResponseLogModel model = new RequestResponseLogModel()
@@ -34,13 +36,13 @@ namespace ServiceLayer.Services
                 requestFileDetails = new FileDetails()
                 {
                     CreatedDate = DateTime.Now,
-                    Length = file.Length.ToString(),
-                    Name = file.FileName
+                    Length = file != null ? file.Length.ToString() : string.Empty,
+                    Name = file != null ? file.FileName : string.Empty, 
                 },
                 responseContentType = response.ContentType,
                 responseDate = DateTime.Now,
-                responseMessage = responseObj.Message,
-                responseStatusCode = (short)responseObj.ResponseCode
+                responseMessage = response.StatusCode == (int) HttpStatusCode.OK ? responseObj.Message : responseObj.ErrorMessage,
+                responseStatusCode = (short)response.StatusCode
             };
 
             return await _loggingRepository.IndexDocAsync(indexName, model);

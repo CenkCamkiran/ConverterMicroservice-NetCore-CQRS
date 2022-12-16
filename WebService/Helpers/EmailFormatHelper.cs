@@ -24,7 +24,7 @@ namespace Helpers
 
             if (!IsEmailValid)
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = "Email is not valid!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 

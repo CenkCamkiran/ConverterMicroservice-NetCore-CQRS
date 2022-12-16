@@ -76,7 +76,7 @@ namespace DataLayer.DataAccess
             }
             catch (Exception exception)
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 

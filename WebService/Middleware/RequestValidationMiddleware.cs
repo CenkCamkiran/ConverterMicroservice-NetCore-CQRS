@@ -23,7 +23,7 @@ namespace Middleware
 
             if (!request.HasFormContentType)
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = "Content-Type should be multipart/form-data!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 
@@ -34,7 +34,7 @@ namespace Middleware
 
             if (!formData.Files.Any())
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = "Request should contain form-data!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 
@@ -45,7 +45,7 @@ namespace Middleware
 
             if (file.Length == 0)
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = "File must be exists!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 
@@ -54,7 +54,7 @@ namespace Middleware
 
             if (file.ContentType != "video/mp4")
             {
-                WebServiceErrors error = new WebServiceErrors();
+                UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = "File format must be mp4!";
                 error.ErrorCode = (int)HttpStatusCode.BadRequest;
 
