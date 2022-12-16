@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DataAccess.Interfaces
 {
-    public interface IILog4NetRepository
+    public interface ILog4NetRepository
     {
         void Debug(string message);
 

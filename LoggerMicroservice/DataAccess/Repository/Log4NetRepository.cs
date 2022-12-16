@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using DataAccess.Interfaces;
+using log4net;
 using log4net.Config;
 using log4net.Repository;
 using System;
@@ -7,17 +8,6 @@ using System.Reflection;
 
 namespace DataAccess.Repository
 {
-    public interface ILog4NetRepository
-    {
-        void Debug(string message);
-
-        void Fatal(string message);
-
-        void Info(string message);
-
-        void Error(string message, Exception ex = null);
-    }
-
     public class Log4NetRepository : ILog4NetRepository
     {
         private ILoggerRepository logRepository;

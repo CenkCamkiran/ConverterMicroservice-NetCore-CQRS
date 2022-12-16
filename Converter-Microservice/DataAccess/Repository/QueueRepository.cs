@@ -66,6 +66,16 @@ namespace DataAccess.Repository
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
+                        QueueLog queueLog = new QueueLog()
+                        {
+                            Date = DateTime.Now,
+                            Message = message,
+                            QueueName = queue
+                        };
+
+                        string logText = $"{JsonConvert.SerializeObject(queueLog)}";
+                        log.Info(logText);
+
                         if (msgCount == counter)
                         {
                             msgsRecievedGate.Set();
@@ -81,16 +91,6 @@ namespace DataAccess.Repository
 
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
-
-                    QueueLog queueLog = new QueueLog()
-                    {
-                        Date = DateTime.Now,
-                        Message = JsonConvert.SerializeObject(""),
-                        QueueName = queue
-                    };
-
-                    string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                    log.Info(logText);
 
                     return messageList;
                 }

@@ -1,4 +1,5 @@
 ﻿using Configuration;
+using DataAccess.Interfaces;
 using log4net;
 using Models;
 using Nest;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class QueueRepository<TMessage> where TMessage : class
+    public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
         private List<QueueMessage> messageList = new List<QueueMessage>();
         private Log4NetRepository log = new Log4NetRepository();
