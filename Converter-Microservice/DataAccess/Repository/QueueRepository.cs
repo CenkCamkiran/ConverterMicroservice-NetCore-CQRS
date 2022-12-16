@@ -11,7 +11,7 @@ namespace DataAccess.Repository
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
         private List<QueueMessage> messageList = new List<QueueMessage>();
-        private Logger log = new Logger();
+        private Log4NetRepository log = new Log4NetRepository();
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         public IConnection ConnectRabbitMQ()
@@ -82,6 +82,16 @@ namespace DataAccess.Repository
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
 
+                    QueueLog queueLog = new QueueLog()
+                    {
+                        Date = DateTime.Now,
+                        Message = JsonConvert.SerializeObject(""),
+                        QueueName = queue
+                    };
+
+                    string logText = $"{JsonConvert.SerializeObject(queueLog)}";
+                    log.Info(logText);
+
                     return messageList;
                 }
             }
@@ -99,20 +109,8 @@ namespace DataAccess.Repository
                 string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
                 log.Info(logText);
 
-                throw;
+                return null;
             }
-            //finally
-            //{
-            //    QueueLog queueLog = new QueueLog()
-            //    {
-            //        Date = DateTime.Now,
-            //        Message = JsonConvert.SerializeObject(""),
-            //        QueueName = queue
-            //    };
-
-            //    string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-            //    log.Info(logText);
-            //}
         }
 
         public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
@@ -138,6 +136,19 @@ namespace DataAccess.Repository
                                      basicProperties: properties,
                                      body: body);
 
+                QueueLog queueLog = new QueueLog()
+                {
+                    OperationType = "BasicPublish",
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
+                    Message = JsonConvert.SerializeObject(message),
+                    QueueName = queue,
+                    RoutingKey = routingKey
+                };
+
+                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
+                log.Info(logText);
+
             }
             catch (Exception exception)
             {
@@ -154,24 +165,6 @@ namespace DataAccess.Repository
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
                 log.Error(logText);
-
-                throw;
-
-            }
-            finally
-            {
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicPublish",
-                    Date = DateTime.Now,
-                    ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
-                    QueueName = queue,
-                    RoutingKey = routingKey
-                };
-
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
 
             }
         }

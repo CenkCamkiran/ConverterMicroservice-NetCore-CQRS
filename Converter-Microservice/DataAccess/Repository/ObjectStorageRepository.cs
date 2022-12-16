@@ -9,7 +9,7 @@ namespace DataAccess.Repository
 {
     public class ObjectStorageRepository
     {
-        private Logger log = new Logger();
+        private Log4NetRepository log = new Log4NetRepository();
 
         public MinioClient ConnectMinio()
         {
@@ -102,6 +102,24 @@ namespace DataAccess.Repository
 
                 throw;
             }
+            finally
+            {
+                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
+                {
+                    OperationType = "PutObjectAsync",
+                    BucketName = bucketName,
+                    ContentLength = stream.Length,
+                    ContentType = contentType,
+                    ObjectName = objectName,
+                    Date = DateTime.Now
+                };
+
+                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
+                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+
+                string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
+                log.Info(logText);
+            }
 
         }
 
@@ -128,6 +146,7 @@ namespace DataAccess.Repository
                                .WithBucket(bucketName)
                                .WithObject(objectName)
                                .WithServerSideEncryption(sse);
+
                 responseStream = await minioClient.SelectObjectContentAsync(args);
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
@@ -146,7 +165,7 @@ namespace DataAccess.Repository
             {
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = nameof(minioClient.SelectObjectContentAsync),
+                    OperationType = "SelectObjectContentAsync",
                     BucketName = bucketName,
                     ObjectName = objectName,
                     Date = DateTime.Now,

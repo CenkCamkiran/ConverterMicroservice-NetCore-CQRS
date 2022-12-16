@@ -7,12 +7,12 @@ using System.Reflection;
 namespace DataAccess.Repository
 {
 
-    public class Logger : ILogger
+    public class Log4NetRepository : ILog4NetRepository
     {
         private ILoggerRepository logRepository;
         private readonly ILog _logger;
 
-        public Logger()
+        public Log4NetRepository()
         {
             logRepository = LogManager.GetRepository(Assembly.GetEntryAssembly());
             XmlConfigurator.Configure(logRepository, new FileInfo("App.config"));

@@ -1,6 +1,6 @@
 ﻿namespace DataAccess.Interfaces
 {
-    public interface ILogger
+    public interface ILog4NetRepository
     {
         void Debug(string message);
 
