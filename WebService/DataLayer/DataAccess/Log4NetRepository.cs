@@ -2,16 +2,11 @@
 using log4net;
 using log4net.Config;
 using log4net.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class Log4NetRepository: ILog4NetRepository
+    public class Log4NetRepository : ILog4NetRepository
     {
         private ILoggerRepository _logRepository;
         private readonly ILog _logger;

@@ -3,11 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Models;
 using Newtonsoft.Json;
 using ServiceLayer.Interfaces;
-using System.Net.Http;
 
 namespace ServiceLayer.Services
 {
-    public class LoggingService: ILoggingService
+    public class LoggingService : ILoggingService
     {
 
         private ILoggingRepository<RequestResponseLogModel> _loggingRepository;

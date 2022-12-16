@@ -3,15 +3,10 @@ using Minio;
 using Minio.DataModel;
 using Models;
 using Newtonsoft.Json;
-using System;
-using System.Data.Common;
-using System.IO;
-using System.Net.Mime;
-using Xabe.FFmpeg;
 
-namespace DataAccess
+namespace DataAccess.Repository
 {
-    public class ObjectStorageHandler
+    public class ObjectStorageRepository
     {
         private Logger log = new Logger();
 
@@ -96,10 +91,10 @@ namespace DataAccess
                     ExceptionMessage = exception.Message.ToString()
                 };
 
-                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
-                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
+                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
 
-                string logText = $"Exception: { JsonConvert.SerializeObject(objectStorageLog) }";
+                string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Info(logText);
 
                 throw;
@@ -116,8 +111,8 @@ namespace DataAccess
                     Date = DateTime.Now
                 };
 
-                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
-                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
+                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Info(logText);
@@ -162,10 +157,10 @@ namespace DataAccess
                     ExceptionMessage = exception.Message.ToString()
                 };
 
-                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
-                queueHandler.QueueMessageDirectAsync(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
+                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
+                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
 
-                string logText = $"Exception: { JsonConvert.SerializeObject(objectStorageLog) }";
+                string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Error(logText);
 
                 throw;
@@ -182,8 +177,8 @@ namespace DataAccess
                     Date = DateTime.Now
                 };
 
-                QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
-                queueHandler.QueueMessageDirectAsync(objectStorageLog, "otherlogs", "log_exchange.direct", "other_log");
+                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
+                queueHandler.QueueMessageDirect(objectStorageLog, "otherlogs", "log_exchange.direct", "other_log");
 
                 string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Info(logText);

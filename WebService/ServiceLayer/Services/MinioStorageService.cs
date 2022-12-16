@@ -1,10 +1,5 @@
 ﻿using DataLayer.Interfaces;
 using ServiceLayer.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceLayer.Services
 {
@@ -19,7 +14,7 @@ namespace ServiceLayer.Services
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-            await _minioRepository.StoreFileAsync(bucketName, objectName, stream, contentType);   
+            await _minioRepository.StoreFileAsync(bucketName, objectName, stream, contentType);
         }
     }
 }

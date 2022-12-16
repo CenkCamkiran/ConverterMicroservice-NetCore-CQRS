@@ -10,7 +10,10 @@
         "ELK_HOST": "http://34.89.179.82:9200/",
         "ELK_USERNAME": "elastic",
         "ELK_PASSWORD": "EXh5xa*5lXMxO*9ffX*k",
-        "ELK_DEFAULT_INDEX": "converter_logs"
+        "ELK_DEFAULT_INDEX": "converter_logs",
+        "MINIO_HOST": "34.89.179.82:9000",
+        "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
+        "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F"
       }
     }
   }

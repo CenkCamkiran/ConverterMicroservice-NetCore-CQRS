@@ -1,47 +1,52 @@
-﻿using DataAccess;
+﻿using DataAccess.Repository;
 using Minio.DataModel;
 using Models;
-using System;
 
-QueueHandler<object> queueHandler = new QueueHandler<object>();
-ObjectStorageHandler objectStorageHandler = new ObjectStorageHandler();
-ConverterHandler converterHandler = new ConverterHandler();
+QueueRepository<object> queueHandler = new QueueRepository<object>();
+ObjectStorageRepository objectStorageHandler = new ObjectStorageRepository();
+ConverterRepository converterHandler = new ConverterRepository();
 
-/*QueueMessage message = */queueHandler.ConsumeQueueAsync("converter");
+List<QueueMessage> messageList = queueHandler.ConsumeQueue("converter");
 
-if ("message" != null)
+if (messageList.Any())
 {
-    SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", "message.fileGuid");
-
-    try
+    foreach (var message in messageList)
     {
-        using (MemoryStream ms = new MemoryStream())
+        try
         {
-            await response.Payload.CopyToAsync(ms);
+            SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
 
-            string guid = Guid.NewGuid().ToString();
-            await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
-
-            QueueMessage msg = new QueueMessage()
+            using (MemoryStream ms = new MemoryStream())
             {
-                email = "message.email",
-                fileGuid = guid
+
+                await response.Payload.CopyToAsync(ms);
+
+                string guid = Guid.NewGuid().ToString();
+                await converterHandler.ConvertMP4_to_MP3(ms, guid);
+
+                await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
+
+                QueueMessage msg = new QueueMessage()
+                {
+                    email = "message.email",
+                    fileGuid = guid
+                };
+
+                queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+
+            }
+        }
+        catch (Exception exception)
+        {
+            //Başka bir queue'ya log at.
+            //Filelogging devam et.
+
+            ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+            {
+                ErrorMessage = exception.Message.ToString()
             };
 
-            queueHandler.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
-
         }
-    }
-    catch (Exception exception)
-    {
-        //Başka bir queue'ya log at.
-        //Filelogging devam et.
-
-        ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
-        {
-            ErrorMessage = exception.Message.ToString()
-        };
-
     }
 }
 

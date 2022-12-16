@@ -1,29 +1,22 @@
 ﻿using DataLayer.Interfaces;
 using Helpers;
-using Minio;
 using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class QueueRepository: IQueueRepository
+    public class QueueRepository : IQueueRepository
     {
         private readonly IConnection _rabbitConnection;
-        private readonly ILog4NetRepository _log4NetRepository;
-        private readonly ILoggingRepository<QueueLog> loggingRepository;
+        private readonly ILogOtherRepository _logOtherRepository;
 
-        public QueueRepository(IConnection rabbitConnection, ILog4NetRepository log4NetRepository, ILoggingRepository<QueueLog> loggingRepository)
+        public QueueRepository(IConnection rabbitConnection, ILogOtherRepository logOtherRepository)
         {
             _rabbitConnection = rabbitConnection;
-            _log4NetRepository = log4NetRepository;
-            this.loggingRepository = loggingRepository;
+            _logOtherRepository = logOtherRepository;
         }
 
         public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey)
@@ -56,10 +49,7 @@ namespace DataLayer.DataAccess
                     QueueName = queue,
                     RoutingKey = routingKey
                 };
-                await loggingRepository.IndexDocAsync("webservice_queue_logs", queueLog);
-                
-                string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
-                _log4NetRepository.Info(logText);
+                await _logOtherRepository.LogQueueOther(queueLog);
 
             }
             catch (Exception exception)

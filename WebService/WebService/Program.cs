@@ -3,8 +3,6 @@ using DataLayer.Interfaces;
 using Elasticsearch.Net;
 using Helpers;
 using Helpers.Interfaces;
-using log4net;
-using log4net.Repository;
 using Middleware;
 using Minio;
 using Models;
@@ -41,6 +39,7 @@ builder.Services.AddScoped<ILoggingRepository<RequestResponseLogModel>, LoggingR
 builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
 builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();
+builder.Services.AddScoped<ILogOtherRepository, LogOtherRepository>();
 
 builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.AddScoped<IMinioStorageService, MinioStorageService>();

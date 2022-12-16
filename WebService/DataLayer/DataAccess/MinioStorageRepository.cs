@@ -1,19 +1,14 @@
 ﻿using DataLayer.Interfaces;
 using Helpers;
-using Minio.DataModel;
 using Minio;
+using Minio.DataModel;
 using Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataLayer.DataAccess
 {
-    public class MinioStorageRepository: IMinioStorageRepository
+    public class MinioStorageRepository : IMinioStorageRepository
     {
         private readonly IMinioClient _minioClient;
         private readonly ILog4NetRepository _log4NetRepository;
@@ -75,10 +70,8 @@ namespace DataLayer.DataAccess
                     ObjectName = objectName,
                     Date = DateTime.Now
                 };
-                await _loggingRepository.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
 
-                string logText = $"BucketName: {bucketName} - ObjectName: {objectName} - Content Type: {contentType} - Content Length from Bytes: {stream.Length}";
-                _log4NetRepository.Info(logText);
+                await LogStorage(objectStorageLog);
 
             }
             catch (Exception exception)
@@ -90,6 +83,14 @@ namespace DataLayer.DataAccess
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
+        }
+
+        public async Task LogStorage(ObjectStorageLog objectStorageLog)
+        {
+            await _loggingRepository.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
+
+            string logText = $"BucketName: {objectStorageLog.BucketName} - ObjectName: {objectStorageLog.ObjectName} - Content Type: {objectStorageLog.ContentType}";
+            _log4NetRepository.Info(logText);
         }
     }
 }

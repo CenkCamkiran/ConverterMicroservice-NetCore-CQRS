@@ -1,22 +1,18 @@
 ﻿using Configuration;
-using log4net;
+using DataAccess.Interfaces;
 using Models;
-using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Net;
-using System.Reflection;
-using System.Security.AccessControl;
 using System.Text;
-using System.Threading.Channels;
 
-namespace DataAccess
+namespace DataAccess.Repository
 {
-    public class QueueHandler<TMessage> where TMessage: class
+    public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
+        private List<QueueMessage> messageList = new List<QueueMessage>();
         private Logger log = new Logger();
+        private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         public IConnection ConnectRabbitMQ()
         {
@@ -37,16 +33,15 @@ namespace DataAccess
 
         }
 
-        public void ConsumeQueueAsync(string queue)
+        public List<QueueMessage> ConsumeQueue(string queue)
         {
-            QueueMessage? queueMsg = null;
             try
             {
                 IConnection rabbitConnection = ConnectRabbitMQ();
 
                 using (var channel = rabbitConnection.CreateModel())
                 {
-                    channel.QueueDeclare(queue: queue,
+                    var queueResult = channel.QueueDeclare(queue: queue,
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
@@ -55,23 +50,39 @@ namespace DataAccess
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     var consumer = new EventingBasicConsumer(channel);
+
+                    uint msgCount = queueResult.MessageCount;
+                    uint counter = 0;
+
                     consumer.Received += (sender, ea) =>
                     {
+                        counter++;
+
                         var body = ea.Body.ToArray();
                         var message = Encoding.UTF8.GetString(body);
-                        Console.WriteLine(" [x] Received {0}", message);
 
-                        queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
+                        QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
+                        messageList.Add(queueMsg);
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+                        if (msgCount == counter)
+                        {
+                            msgsRecievedGate.Set();
+
+                            return;
+                        }
+
                     };
 
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
                                          consumer: consumer);
-                 
-                    //Console.WriteLine(" Press [enter] to exit.");
-                    //Console.ReadLine();
+
+                    // Wait here until all messages are retrieved
+                    msgsRecievedGate.Wait();
+
+                    return messageList;
                 }
             }
             catch (Exception exception)
@@ -80,31 +91,31 @@ namespace DataAccess
                 {
                     OperationType = "BasicConsume",
                     Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(queueMsg),
+                    Message = JsonConvert.SerializeObject(""),
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
                 };
 
-                string logText = $"Exception: { JsonConvert.SerializeObject(queueLog) }";
+                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
                 log.Info(logText);
 
                 throw;
             }
-            finally
-            {
-                QueueLog queueLog = new QueueLog()
-                {
-                    Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(queueMsg),
-                    QueueName = queue
-                };
+            //finally
+            //{
+            //    QueueLog queueLog = new QueueLog()
+            //    {
+            //        Date = DateTime.Now,
+            //        Message = JsonConvert.SerializeObject(""),
+            //        QueueName = queue
+            //    };
 
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
-            }
+            //    string logText = $"{JsonConvert.SerializeObject(queueLog)}";
+            //    log.Info(logText);
+            //}
         }
 
-        public void QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -141,7 +152,7 @@ namespace DataAccess
                     ExceptionMessage = exception.Message.ToString()
                 };
 
-                string logText = $"Exception: { JsonConvert.SerializeObject(queueLog) }";
+                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
                 log.Error(logText);
 
                 throw;

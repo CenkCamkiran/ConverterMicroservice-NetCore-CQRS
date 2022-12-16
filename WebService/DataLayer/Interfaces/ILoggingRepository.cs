@@ -1,6 +1,4 @@
-﻿using Models;
-
-namespace DataLayer.Interfaces
+﻿namespace DataLayer.Interfaces
 {
     public interface ILoggingRepository<TModel> where TModel : class
     {

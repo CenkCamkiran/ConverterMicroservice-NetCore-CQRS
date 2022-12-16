@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Newtonsoft.Json;
-using ServiceLayer.Interfaces;
-using System.IO;
 using System.Net;
 
 namespace APILayer.Converters
@@ -14,7 +12,7 @@ namespace APILayer.Converters
     [ApiController]
     public class ConverterController : ControllerBase
     {
-        private IQueueRepository _queueRepository;  
+        private IQueueRepository _queueRepository;
         private IMinioStorageRepository _minioStorageRepository;
 
         public ConverterController(IQueueRepository queueRepository, IMinioStorageRepository minioStorageRepository)
@@ -35,7 +33,7 @@ namespace APILayer.Converters
                 fileGuid = guid
             };
 
-           await _queueRepository.QueueMessageDirectAsync(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
+            await _queueRepository.QueueMessageDirectAsync(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
 
             var stream = file.OpenReadStream();
             try

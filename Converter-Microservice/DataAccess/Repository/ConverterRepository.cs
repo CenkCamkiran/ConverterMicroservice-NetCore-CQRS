@@ -1,38 +1,33 @@
-﻿using System.Resources;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using Xabe.FFmpeg;
-using log4net;
+﻿using Minio.DataModel;
 using Models;
-using Newtonsoft.Json;
-using System.Collections;
-using Nest;
-using System.Security.AccessControl;
-using Minio;
+using Xabe.FFmpeg;
 
-namespace DataAccess
+namespace DataAccess.Repository
 {
-    public class ConverterHandler
+    public class ConverterRepository
     {
         private Logger log = new Logger();
 
-        public async Task con()
+        public async Task ConvertMP4_to_MP3(MemoryStream ms, string guid)
         {
-			try
-			{
-                string outputPath = Path.ChangeExtension(Path.GetTempFileName(), ".mp4");
-                IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo("");
+            try
+            {
+                string fileName = guid + ".mp4";
+
+                using (var fileStream = File.Create(Path.Combine(System.IO.Path.GetTempPath(), fileName)))
+                {
+                    await fileStream.CopyToAsync(ms);
+                }
+
+                string outputPath = Path.Combine(System.IO.Path.GetTempPath(), fileName);
+                IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(fileName);
 
                 IStream? videoStream = mediaInfo.VideoStreams.FirstOrDefault()
                     ?.SetCodec(VideoCodec.mpeg4);
                 IStream? audioStream = mediaInfo.AudioStreams.FirstOrDefault()
                     ?.SetCodec(AudioCodec.mp3);
 
-                IConversionResult? obj = await FFmpeg.Conversions.New()
+                IConversionResult? conversionResult = await FFmpeg.Conversions.New()
                     .AddStream(audioStream, videoStream)
                     .SetOutput(outputPath)
                     .Start();
@@ -43,8 +38,8 @@ namespace DataAccess
                 //string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
                 //log.Info(logText);
             }
-			catch (Exception exception)
-			{
+            catch (Exception exception)
+            {
                 //Başka bir queue'ya log at.
                 //Filelogging devam et.
 
