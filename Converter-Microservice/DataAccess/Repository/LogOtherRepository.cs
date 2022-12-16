@@ -12,7 +12,7 @@ namespace DataAccess.Repository
 {
     public class LogOtherRepository : ILogOtherRepository
     {
-        private Logger log = new Logger();
+        private Log4NetRepository log = new Log4NetRepository();
 
         public Task LogConverterOther()
         {

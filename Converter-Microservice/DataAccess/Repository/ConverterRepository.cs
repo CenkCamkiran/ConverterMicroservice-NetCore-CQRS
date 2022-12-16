@@ -6,7 +6,7 @@ namespace DataAccess.Repository
 {
     public class ConverterRepository
     {
-        private Logger log = new Logger();
+        private Log4NetRepository log = new Log4NetRepository();
 
         public async Task ConvertMP4_to_MP3(MemoryStream ms, string guid)
         {
@@ -43,6 +43,7 @@ namespace DataAccess.Repository
                 //Başka bir queue'ya log at.
                 //Filelogging devam et.
 
+                //Logger microservice icin ayrı bir clas tanımla, service'de onu da consume et!
                 ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
                 {
                     ErrorMessage = exception.Message.ToString()

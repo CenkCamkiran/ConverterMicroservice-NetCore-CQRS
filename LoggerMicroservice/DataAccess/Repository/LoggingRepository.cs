@@ -14,7 +14,7 @@ namespace DataAccess.Repository
     {
         private Log4NetRepository log = new Log4NetRepository();
 
-        public ElasticClient ConnectELK()
+        private ElasticClient ConnectELK()
         {
             EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
             ElkConfiguration elkConfiguration = envVariablesHandler.GetElkEnvVariables();
