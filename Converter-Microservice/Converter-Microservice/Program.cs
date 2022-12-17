@@ -14,37 +14,35 @@ if (messageList.Any())
     {
         try
         {
-            SelectResponseStream response = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
+            ObjectDataModel objModel = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
 
-            using (MemoryStream ms = new MemoryStream())
+            string guid = Guid.NewGuid().ToString();
+            string ConvertToFilePath = Path.Combine(Path.GetTempPath(), guid + ".mp3");
+            var conversionResult = converterHandler.ConvertMP4_to_MP3(objModel.FileFullPath, ConvertToFilePath);
+            await Task.WhenAll(conversionResult);
+
+            using(FileStream fs = File.OpenRead(ConvertToFilePath))
             {
-
-                await response.Payload.CopyToAsync(ms);
-
-                string guid = Guid.NewGuid().ToString();
-                await converterHandler.ConvertMP4_to_MP3(ms, guid);
-
-                await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
+                await objectStorageHandler.StoreFileAsync("audios", guid, fs, "audio/mp3");
 
                 QueueMessage msg = new QueueMessage()
                 {
-                    email = "message.email",
+                    email = message.email,
                     fileGuid = guid
                 };
 
                 queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
-
             }
+
         }
         catch (Exception exception)
         {
-            //Başka bir queue'ya log at.
-            //Filelogging devam et.
 
             ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
             {
                 ErrorMessage = exception.Message.ToString()
             };
+            queueHandler.QueueMessageDirect(exceptionModel, "errorlogs", "log_exchange.direct", "error_log");
 
         }
     }

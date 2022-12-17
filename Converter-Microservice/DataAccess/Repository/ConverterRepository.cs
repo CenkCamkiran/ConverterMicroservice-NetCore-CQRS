@@ -1,6 +1,10 @@
-﻿using Minio.DataModel;
-using Models;
+﻿using Models;
+using System.Resources;
+using System;
 using Xabe.FFmpeg;
+using Nest;
+using Newtonsoft.Json;
+using System.Security.AccessControl;
 
 namespace DataAccess.Repository
 {
@@ -8,70 +12,30 @@ namespace DataAccess.Repository
     {
         private Log4NetRepository log = new Log4NetRepository();
 
-        public async Task ConvertMP4_to_MP3(MemoryStream ms, string guid)
+        public async Task ConvertMP4_to_MP3(string ConvertFromFilePath, string ConvertToFilePath)
         {
             try
             {
-                string fileName = guid + ".mp4";
+                var conversion = await FFmpeg.Conversions.FromSnippet.ExtractAudio(ConvertFromFilePath, ConvertToFilePath);
+                conversion.SetOverwriteOutput(false);
 
-                using (var fileStream = File.Create(Path.Combine(System.IO.Path.GetTempPath(), fileName)))
-                {
-                    await fileStream.CopyToAsync(ms);
-                }
+                await conversion.Start();
 
-                string outputPath = Path.Combine(System.IO.Path.GetTempPath(), fileName);
-                IMediaInfo mediaInfo = await FFmpeg.GetMediaInfo(fileName);
-
-                IStream? videoStream = mediaInfo.VideoStreams.FirstOrDefault()
-                    ?.SetCodec(VideoCodec.mpeg4);
-                IStream? audioStream = mediaInfo.AudioStreams.FirstOrDefault()
-                    ?.SetCodec(AudioCodec.mp3);
-
-                IConversionResult? conversionResult = await FFmpeg.Conversions.New()
-                    .AddStream(audioStream, videoStream)
-                    .SetOutput(outputPath)
-                    .Start();
-
-                //ElkLogging<QueueLog> elkLogging = new ElkLogging<QueueLog>();
-                //await elkLogging.IndexExceptionAsync("converter_queue_logs", queueLog);
-
-                //string logText = $"Exchange: {exchange} - Queue: {queue} - Routing Key: {routingKey} - Message: (fileGuid: {message.fileGuid} && email: {message.email})";
-                //log.Info(logText);
             }
             catch (Exception exception)
             {
-                //Başka bir queue'ya log at.
-                //Filelogging devam et.
-
-                //Logger microservice icin ayrı bir clas tanımla, service'de onu da consume et!
-                ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
+                ConverterLog exceptionModel = new ConverterLog()
                 {
-                    ErrorMessage = exception.Message.ToString()
+                    Error = exception.Message.ToString()
                 };
 
+                QueueRepository<ConverterLog> queueHandler = new QueueRepository<ConverterLog>();
+                queueHandler.QueueMessageDirect(exceptionModel, "errorlogs", "log_exchange.direct", "error_log");
 
-                string logText = $"Exception: {exception.Message.ToString()}";
-                log.Info(logText);
+                string logText = $"Exception: {JsonConvert.SerializeObject(exceptionModel)}";
+                log.Error(logText);
 
-            }
-            finally
-            {
-
-                //ObjectStorageLog objectStorageLog = new ObjectStorageLog()
-                //{
-                //    OperationType = nameof(minioClient.SelectObjectContentAsync),
-                //    BucketName = bucketName,
-                //    ContentLength = responseStream.Stats.BytesReturned,
-                //    ObjectName = objectName,
-                //    Date = DateTime.Now
-                //};
-
-                //QueueHandler<ObjectStorageLog> queueHandler = new QueueHandler<ObjectStorageLog>();
-                //queueHandler.QueueMessageDirectAsync(objectStorageLog, "otherlogs", "log_exchange.direct", "other_log");
-
-                //string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
-                //log.Info(logText);
-            }
+            }   
         }
     }
 }

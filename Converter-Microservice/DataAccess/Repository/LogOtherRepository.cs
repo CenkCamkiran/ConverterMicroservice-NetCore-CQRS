@@ -1,12 +1,6 @@
 ﻿using DataAccess.Interfaces;
-using log4net;
 using Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -14,7 +8,7 @@ namespace DataAccess.Repository
     {
         private Log4NetRepository log = new Log4NetRepository();
 
-        public Task LogConverterOther()
+        public Task LogErrors()
         {
             throw new NotImplementedException();
         }

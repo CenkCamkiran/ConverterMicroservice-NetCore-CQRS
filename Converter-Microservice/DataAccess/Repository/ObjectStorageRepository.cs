@@ -1,17 +1,17 @@
 ﻿using Configuration;
+using DataAccess.Interfaces;
 using Minio;
 using Minio.DataModel;
 using Models;
 using Newtonsoft.Json;
-using System;
 
 namespace DataAccess.Repository
 {
-    public class ObjectStorageRepository
+    public class ObjectStorageRepository: IObjectStorageRepository
     {
         private Log4NetRepository log = new Log4NetRepository();
 
-        public MinioClient ConnectMinio()
+        private MinioClient ConnectMinio()
         {
             EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
             MinioConfiguration minioConfiguration = envVariablesHandler.GetMinioEnvVariables();
@@ -99,34 +99,13 @@ namespace DataAccess.Repository
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Info(logText);
-
-                throw;
             }
-            finally
-            {
-                ObjectStorageLog objectStorageLog = new ObjectStorageLog()
-                {
-                    OperationType = "PutObjectAsync",
-                    BucketName = bucketName,
-                    ContentLength = stream.Length,
-                    ContentType = contentType,
-                    ObjectName = objectName,
-                    Date = DateTime.Now
-                };
-
-                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
-                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
-
-                string logText = $"{JsonConvert.SerializeObject(objectStorageLog)}";
-                log.Info(logText);
-            }
-
         }
 
-        public async Task<SelectResponseStream> GetFileAsync(string bucketName, string objectName)
+        public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
         {
 
-            SelectResponseStream? responseStream = null;
+            ObjectDataModel? objDataModel = null;
             ServerSideEncryption? sse = null;
             MinioClient minioClient = ConnectMinio();
 
@@ -142,20 +121,28 @@ namespace DataAccess.Repository
                     await minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
-                var args = new SelectObjectContentArgs()
+                string filePath = Path.Combine(Path.GetTempPath(), objectName + ".mp4");
+                var args = new GetObjectArgs()
                                .WithBucket(bucketName)
                                .WithObject(objectName)
-                               .WithServerSideEncryption(sse);
+                               .WithFile(filePath);
 
-                responseStream = await minioClient.SelectObjectContentAsync(args);
+                ObjectStat objStat = await minioClient.GetObjectAsync(args);
+
+                objDataModel = new ObjectDataModel()
+                {
+                    FileFullPath = filePath,
+                    ObjectStats = objStat
+                };
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
                     OperationType = "SelectObjectContentAsync",
                     BucketName = bucketName,
-                    ContentLength = responseStream != null ? responseStream.Stats.BytesReturned : 0,
+                    ContentLength = objStat != null ? objStat.Size : 0,
                     ObjectName = objectName,
-                    Date = DateTime.Now
+                    Date = DateTime.Now,
+                    ContentType = objStat != null ? objStat.ContentType : ""
                 };
                 LogOtherRepository logOtherRepository = new LogOtherRepository();
                 await logOtherRepository.LogStorageOther(objectStorageLog);
@@ -178,11 +165,9 @@ namespace DataAccess.Repository
                 string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
                 log.Error(logText);
 
-                throw;
-
             }
 
-            return responseStream;
+            return objDataModel;
         }
     }
 }

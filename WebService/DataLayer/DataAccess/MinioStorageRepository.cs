@@ -29,13 +29,16 @@ namespace DataLayer.DataAccess
             Dictionary<string, string> metadata = new Dictionary<string, string>()
             {
                 {
-                    "Id", objectName
-                },
-                {
-                    "FileLength", stream.Length.ToString()
+                    "FileByteLength", stream.Length.ToString()
                 },
                 {
                     "ContentType", contentType
+                },
+                {
+                    "Fullname", objectName + ".mp4"
+                },
+                {
+                    "ModifiedDate", DateTime.Now.ToString()
                 }
             };
 
