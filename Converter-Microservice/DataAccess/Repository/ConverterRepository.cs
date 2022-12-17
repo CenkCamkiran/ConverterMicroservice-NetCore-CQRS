@@ -1,10 +1,6 @@
 ﻿using Models;
-using System.Resources;
 using System;
 using Xabe.FFmpeg;
-using Nest;
-using Newtonsoft.Json;
-using System.Security.AccessControl;
 
 namespace DataAccess.Repository
 {
@@ -21,6 +17,18 @@ namespace DataAccess.Repository
 
                 await conversion.Start();
 
+                ConverterLog converterLog = new ConverterLog()
+                {
+                    Info = "Conversion finished!"
+                };
+                OtherLog otherLog = new OtherLog()
+                {
+                    converterLog = converterLog
+                };
+
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogConverterOther(otherLog);
+
             }
             catch (Exception exception)
             {
@@ -28,14 +36,15 @@ namespace DataAccess.Repository
                 {
                     Error = exception.Message.ToString()
                 };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    converterLog = exceptionModel
+                };
 
-                QueueRepository<ConverterLog> queueHandler = new QueueRepository<ConverterLog>();
-                queueHandler.QueueMessageDirect(exceptionModel, "errorlogs", "log_exchange.direct", "error_log");
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogConverterError(errorLog);
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(exceptionModel)}";
-                log.Error(logText);
-
-            }   
+            }
         }
     }
 }

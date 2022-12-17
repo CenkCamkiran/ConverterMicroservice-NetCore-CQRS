@@ -1,5 +1,4 @@
 ﻿using DataAccess.Repository;
-using Minio.DataModel;
 using Models;
 
 QueueRepository<object> queueHandler = new QueueRepository<object>();
@@ -21,7 +20,7 @@ if (messageList.Any())
             var conversionResult = converterHandler.ConvertMP4_to_MP3(objModel.FileFullPath, ConvertToFilePath);
             await Task.WhenAll(conversionResult);
 
-            using(FileStream fs = File.OpenRead(ConvertToFilePath))
+            using (FileStream fs = File.OpenRead(ConvertToFilePath))
             {
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -46,7 +45,13 @@ if (messageList.Any())
             {
                 ErrorMessage = exception.Message.ToString()
             };
-            queueHandler.QueueMessageDirect(exceptionModel, "errorlogs", "log_exchange.direct", "error_log");
+            ErrorLog errorLog = new ErrorLog()
+            {
+                exceptionModel = exceptionModel,
+            };
+
+            LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+            await logOtherRepository.LogConverterError(errorLog);
 
         }
     }

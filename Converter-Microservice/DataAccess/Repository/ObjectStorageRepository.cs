@@ -3,11 +3,10 @@ using DataAccess.Interfaces;
 using Minio;
 using Minio.DataModel;
 using Models;
-using Newtonsoft.Json;
 
 namespace DataAccess.Repository
 {
-    public class ObjectStorageRepository: IObjectStorageRepository
+    public class ObjectStorageRepository : IObjectStorageRepository
     {
         private Log4NetRepository log = new Log4NetRepository();
 
@@ -70,15 +69,20 @@ namespace DataAccess.Repository
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = nameof(minioClient.PutObjectAsync),
+                    OperationType = "PutObjectAsync",
                     BucketName = bucketName,
                     ContentLength = stream.Length,
                     ContentType = contentType,
                     ObjectName = objectName,
                     Date = DateTime.Now
                 };
-                LogOtherRepository logOtherRepository = new LogOtherRepository();
-                await logOtherRepository.LogStorageOther(objectStorageLog);
+                OtherLog otherLog = new OtherLog()
+                {
+                    storageLog = objectStorageLog
+                };
+
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogStorageOther(otherLog);
 
             }
             catch (Exception exception)
@@ -93,12 +97,13 @@ namespace DataAccess.Repository
                     Date = DateTime.Now,
                     ExceptionMessage = exception.Message.ToString()
                 };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    storageLog = objectStorageLog
+                };
 
-                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
-                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
-
-                string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
-                log.Info(logText);
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogStorageError(errorLog);
             }
         }
 
@@ -137,15 +142,20 @@ namespace DataAccess.Repository
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = "SelectObjectContentAsync",
+                    OperationType = "GetObjectAsync",
                     BucketName = bucketName,
                     ContentLength = objStat != null ? objStat.Size : 0,
                     ObjectName = objectName,
                     Date = DateTime.Now,
                     ContentType = objStat != null ? objStat.ContentType : ""
                 };
-                LogOtherRepository logOtherRepository = new LogOtherRepository();
-                await logOtherRepository.LogStorageOther(objectStorageLog);
+                OtherLog otherLog = new OtherLog()
+                {
+                    storageLog = objectStorageLog
+                };
+
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogStorageOther(otherLog);
 
             }
             catch (Exception exception)
@@ -158,12 +168,13 @@ namespace DataAccess.Repository
                     Date = DateTime.Now,
                     ExceptionMessage = exception.Message.ToString()
                 };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    storageLog = objectStorageLog
+                };
 
-                QueueRepository<ObjectStorageLog> queueHandler = new QueueRepository<ObjectStorageLog>();
-                queueHandler.QueueMessageDirect(objectStorageLog, "errorlogs", "log_exchange.direct", "error_log");
-
-                string logText = $"Exception: {JsonConvert.SerializeObject(objectStorageLog)}";
-                log.Error(logText);
+                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                await logOtherRepository.LogStorageError(errorLog);
 
             }
 

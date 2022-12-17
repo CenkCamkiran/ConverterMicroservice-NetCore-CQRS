@@ -1,5 +1,4 @@
-﻿using Minio.DataModel;
-using Models;
+﻿using Models;
 
 namespace DataAccess.Interfaces
 {
