@@ -29,9 +29,9 @@
 
 ## Logging Yapılacaklar
 
-- Logging microservice'i draw.io'da çiz!
-- otherlogs ve errorlogs kuyrukların attığın model tipelrine kara ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek)
-- Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet!
+- Logging microservice'i draw.io'da çiz! (ARAŞTIR!)
+- otherlogs ve errorlogs kuyrukların attığın model tiplerine karar ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek) (OK!)
+- Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet! (ARAŞTIR!)
 
 ## K8S
 
