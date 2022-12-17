@@ -23,15 +23,19 @@ if (messageList.Any())
 
             using(FileStream fs = File.OpenRead(ConvertToFilePath))
             {
-                await objectStorageHandler.StoreFileAsync("audios", guid, fs, "audio/mp3");
-
-                QueueMessage msg = new QueueMessage()
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    email = message.email,
-                    fileGuid = guid
-                };
+                    await fs.CopyToAsync(ms);
+                    await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
 
-                queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+                    QueueMessage msg = new QueueMessage()
+                    {
+                        email = message.email,
+                        fileGuid = guid
+                    };
+
+                    queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+                }
             }
 
         }

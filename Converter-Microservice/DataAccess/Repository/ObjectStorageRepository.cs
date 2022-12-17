@@ -35,13 +35,13 @@ namespace DataAccess.Repository
             Dictionary<string, string> metadata = new Dictionary<string, string>()
             {
                 {
-                    "Id", objectName
-                },
-                {
-                    "FileLength", stream.Length.ToString()
+                    "FileByteLength", stream.Length.ToString()
                 },
                 {
                     "ContentType", contentType
+                },
+                {
+                    "ModifiedDate", DateTime.Now.ToString()
                 }
             };
 
@@ -62,7 +62,7 @@ namespace DataAccess.Repository
                     .WithObject(objectName)
                     .WithStreamData(stream)
                     .WithObjectSize(stream.Length)
-                    .WithContentType("video/mp4")
+                    .WithContentType(contentType)
                     .WithHeaders(metadata)
                     .WithServerSideEncryption(sse);
                 await minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
