@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
@@ -14,6 +10,6 @@ namespace Models
         public string RoutingKey { get; set; } = String.Empty;
         public string? Message { get; set; } = null;
         public DateTime Date { get; set; }
-        public string ExceptionMessage { get; set; } = String.Empty;  
+        public string ExceptionMessage { get; set; } = String.Empty;
     }
 }

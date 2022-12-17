@@ -3,14 +3,12 @@ using DataAccess.Interfaces;
 using Elasticsearch.Net;
 using Models;
 using Nest;
-using Newtonsoft.Json;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
-    public class LoggingRepository<TModel>: ILoggingRepository<TModel> where TModel : class
+    public class LoggingRepository<TModel> : ILoggingRepository<TModel> where TModel : class
     {
         private Log4NetRepository log = new Log4NetRepository();
 

@@ -37,11 +37,11 @@ namespace ServiceLayer.Services
                 {
                     CreatedDate = DateTime.Now,
                     Length = file != null ? file.Length.ToString() : string.Empty,
-                    Name = file != null ? file.FileName : string.Empty, 
+                    Name = file != null ? file.FileName : string.Empty,
                 },
                 responseContentType = response.ContentType,
                 responseDate = DateTime.Now,
-                responseMessage = response.StatusCode == (int) HttpStatusCode.OK ? responseObj.Message : responseObj.ErrorMessage,
+                responseMessage = response.StatusCode == (int)HttpStatusCode.OK ? responseObj.Message : responseObj.ErrorMessage,
                 responseStatusCode = (short)response.StatusCode
             };
 

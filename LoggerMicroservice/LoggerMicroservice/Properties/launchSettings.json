@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "LoggerMicroservice": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "RABBITMQ_HOST": "34.89.179.82",
+        "RABBITMQ_USERNAME": "rabbitmq_admin",
+        "RABBITMQ_PASSWORD": "eXHdZbgQWRa7Tw#Vp5",
+        "RABBITMQ_PORT": "5672",
+        "ELK_HOST": "http://34.89.179.82:9200/",
+        "ELK_USERNAME": "elastic",
+        "ELK_PASSWORD": "EXh5xa*5lXMxO*9ffX*k",
+        "ELK_DEFAULT_INDEX": "converter_logs"
+      }
+    }
+  }
+}

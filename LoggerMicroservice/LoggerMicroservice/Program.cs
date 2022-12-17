@@ -7,6 +7,6 @@ QueueOperation queueOperation = new QueueOperation();
 List<QueueMessage> errorLogMessageList = queueOperation.ConsumeErrorLogsQueue("errorlogs");
 List<QueueMessage> otherLogMessageList = queueOperation.ConsumeOtherLogsQueue("otherlogs");
 
-LoggingRepository<ObjectStorageLog> loggingRepository = new LoggingRepository<ObjectStorageLog>();
+LoggingRepository<OtherLog> loggingRepository = new LoggingRepository<OtherLog>();
 //await loggingRepository.IndexDocAsync("");
 

@@ -1,20 +1,13 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
-using log4net;
 using Models;
-using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Reflection;
-using System.Security.AccessControl;
 using System.Text;
 using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
