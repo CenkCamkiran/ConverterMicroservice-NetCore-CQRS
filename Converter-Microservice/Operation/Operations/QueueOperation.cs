@@ -1,4 +1,5 @@
-﻿using DataAccess.Repository;
+﻿using DataAccess.Interfaces;
+using DataAccess.Repository;
 using log4net;
 using Models;
 using Newtonsoft.Json;
@@ -13,16 +14,21 @@ namespace Operation.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {
-        QueueRepository<object> queueRepository = new QueueRepository<object>();
+        IQueueRepository<object> _queueRepository;
+
+        public QueueOperation(IQueueRepository<object> queueRepository)
+        {
+            _queueRepository = queueRepository;
+        }
 
         public List<QueueMessage> ConsumeQueue(string queue)
         {
-            return queueRepository.ConsumeQueue(queue);
+            return _queueRepository.ConsumeQueue(queue);
         }
 
         public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
         {
-            queueRepository.QueueMessageDirect(message, queue, exchange, routingKey);
+            _queueRepository.QueueMessageDirect(message, queue, exchange, routingKey);
         }
     }
 }

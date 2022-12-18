@@ -1,4 +1,5 @@
-﻿using DataAccess.Repository;
+﻿using DataAccess.Interfaces;
+using DataAccess.Repository;
 using Models;
 using Nest;
 using Operation.Interfaces;
@@ -13,10 +14,18 @@ namespace Operation.Operations
 {
     public class ConverterOperation : IConverterOperation
     {
-        private ConverterRepository converterRepository = new ConverterRepository();
-        private ObjectStorageRepository objectStorageRepository = new ObjectStorageRepository();
-        private QueueOperation<object> queueOperation = new QueueOperation<object>();
-        private LoggingOtherOperation loggingOtherOperation = new LoggingOtherOperation();
+        private IConverterRepository _converterRepository;
+        private IObjectStorageOperation _objectStorageOperation;
+        private IQueueOperation<object> _queueOperation;
+        private ILoggingOperation _loggingOperation;
+
+        public ConverterOperation(IConverterRepository converterRepository, IObjectStorageOperation objectStorageOperation, IQueueOperation<object> queueOperation, ILoggingOperation loggingOperation)
+        {
+            _converterRepository = converterRepository;
+            _objectStorageOperation = objectStorageOperation;
+            _queueOperation = queueOperation;
+            _loggingOperation = loggingOperation;
+        }
 
         public async Task ConvertMP4_to_MP3(ObjectDataModel objDataModel, QueueMessage message)
         {
@@ -24,7 +33,7 @@ namespace Operation.Operations
             {
                 string guid = Guid.NewGuid().ToString();
                 string ConvertToFilePath = Path.Combine(Path.GetTempPath(), guid + ".mp3");
-                var conversionResult = converterRepository.ConvertMP4_to_MP3(objDataModel.FileFullPath, ConvertToFilePath);
+                var conversionResult = _converterRepository.ConvertMP4_to_MP3(objDataModel.FileFullPath, ConvertToFilePath);
                 await Task.WhenAll(conversionResult);
 
                 using (FileStream fs = File.OpenRead(ConvertToFilePath))
@@ -32,7 +41,7 @@ namespace Operation.Operations
                     using (MemoryStream ms = new MemoryStream())
                     {
                         await fs.CopyToAsync(ms);
-                        await objectStorageRepository.StoreFileAsync("audios", guid, ms, "audio/mp3");
+                        await _objectStorageOperation.StoreFileAsync("audios", guid, ms, "audio/mp3");
 
                         QueueMessage msg = new QueueMessage()
                         {
@@ -40,7 +49,7 @@ namespace Operation.Operations
                             fileGuid = guid
                         };
 
-                        queueOperation.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+                        _queueOperation.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
                     }
                 }
             }
@@ -55,7 +64,7 @@ namespace Operation.Operations
                     exceptionModel = exceptionModel,
                 };
 
-                await loggingOtherOperation.LogConverterError(errorLog);
+                await _loggingOperation.LogConverterError(errorLog);
             }
         }
     }

@@ -1,45 +1,35 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
+using Elasticsearch.Net;
 using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using IConnection = RabbitMQ.Client.IConnection;
 
 namespace DataAccess.Repository
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
         private List<QueueMessage> messageList = new List<QueueMessage>();
-        private Log4NetRepository log = new Log4NetRepository();
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
-        public IConnection ConnectRabbitMQ()
+        private readonly IConnection _connection;
+        private readonly ILoggingRepository _loggingRepository;
+
+        public QueueRepository(IConnection connection, ILoggingRepository loggingRepository)
         {
-            EnvVariablesHandler envHandler = new EnvVariablesHandler();
-            RabbitMqConfiguration rabbitMqConfiguration = envHandler.GetRabbitEnvVariables();
-
-            var connectionFactory = new ConnectionFactory
-            {
-                HostName = rabbitMqConfiguration.RabbitMqHost,
-                Port = Convert.ToInt32(rabbitMqConfiguration.RabbitMqPort),
-                UserName = rabbitMqConfiguration.RabbitMqUsername,
-                Password = rabbitMqConfiguration.RabbitMqPassword
-            };
-
-            IConnection rabbitConnection = connectionFactory.CreateConnection();
-
-            return rabbitConnection;
-
+            _connection = connection;
+            _loggingRepository = loggingRepository;
         }
 
         public List<QueueMessage> ConsumeQueue(string queue)
         {
             try
             {
-                IConnection rabbitConnection = ConnectRabbitMQ();
 
-                using (var channel = rabbitConnection.CreateModel())
+                using (var channel = _connection.CreateModel())
                 {
                     var queueResult = channel.QueueDeclare(queue: queue,
                                          durable: true,
@@ -72,9 +62,12 @@ namespace DataAccess.Repository
                             Message = message,
                             QueueName = queue
                         };
+                        OtherLog otherLog = new OtherLog()
+                        {
+                            queueLog = queueLog
+                        };
 
-                        string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                        log.Info(logText);
+                        _loggingRepository.LogQueueOther(otherLog);
 
                         if (msgCount == counter)
                         {
@@ -105,9 +98,12 @@ namespace DataAccess.Repository
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
                 };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    queueLog = queueLog
+                };
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
+                _loggingRepository.LogQueueError(errorLog);
 
                 return null;
             }
@@ -117,8 +113,7 @@ namespace DataAccess.Repository
         {
             try
             {
-                IConnection rabbitConnection = ConnectRabbitMQ();
-                var channel = rabbitConnection.CreateModel();
+                var channel = _connection.CreateModel();
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
@@ -145,9 +140,11 @@ namespace DataAccess.Repository
                     QueueName = queue,
                     RoutingKey = routingKey
                 };
-
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
+                OtherLog otherLog = new OtherLog()
+                {
+                    queueLog = queueLog
+                };
+                _loggingRepository.LogQueueOther(otherLog);
 
             }
             catch (Exception exception)
@@ -162,9 +159,12 @@ namespace DataAccess.Repository
                     RoutingKey = routingKey,
                     ExceptionMessage = exception.Message.ToString()
                 };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    queueLog = queueLog
+                };
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
-                log.Error(logText);
+                _loggingRepository.LogQueueError(errorLog);
 
             }
         }

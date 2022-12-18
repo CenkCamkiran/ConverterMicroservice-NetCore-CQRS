@@ -1,4 +1,5 @@
-﻿using DataAccess.Repository;
+﻿using DataAccess.Interfaces;
+using DataAccess.Repository;
 using Models;
 using Operation.Interfaces;
 using System;
@@ -11,18 +12,22 @@ namespace Operation.Operations
 {
     public class ObjectStorageOperation : IObjectStorageOperation
     {
-        private ObjectStorageRepository objectStorageRepository = new ObjectStorageRepository();
-        private QueueRepository<object> queueRepository = new QueueRepository<object>();
+        private IObjectStorageRepository _objectStorageRepository;
+
+        public ObjectStorageOperation(IObjectStorageRepository objectStorageRepository)
+        {
+            _objectStorageRepository = objectStorageRepository;
+        }
 
         public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
         {
-            return await objectStorageRepository.GetFileAsync(bucketName, objectName); 
+            return await _objectStorageRepository.GetFileAsync(bucketName, objectName); 
 
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-            await objectStorageRepository.StoreFileAsync(bucketName, objectName, stream, contentType);  
+            await _objectStorageRepository.StoreFileAsync(bucketName, objectName, stream, contentType);  
         }
     }
 }

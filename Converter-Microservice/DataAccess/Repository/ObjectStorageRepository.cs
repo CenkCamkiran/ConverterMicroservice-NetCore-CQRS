@@ -8,26 +8,17 @@ namespace DataAccess.Repository
 {
     public class ObjectStorageRepository : IObjectStorageRepository
     {
-        private Log4NetRepository log = new Log4NetRepository();
+        private readonly IMinioClient _minioClient;
+        private readonly ILoggingRepository _loggingOtherRepository;
 
-        private MinioClient ConnectMinio()
+        public ObjectStorageRepository(IMinioClient minioClient, ILoggingRepository loggingOtherRepository)
         {
-            EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
-            MinioConfiguration minioConfiguration = envVariablesHandler.GetMinioEnvVariables();
-
-            MinioClient minioClient = new MinioClient()
-                                    .WithEndpoint(minioConfiguration.MinioHost)
-                                    .WithCredentials(minioConfiguration.MinioAccessKey, minioConfiguration.MinioSecretKey)
-                                    .WithSSL(false);
-
-            return minioClient;
+            _minioClient = minioClient;
+            _loggingOtherRepository = loggingOtherRepository;
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-
-            MinioClient minioClient = ConnectMinio();
-
             ServerSideEncryption? sse = null;
             stream.Position = 0;
 
@@ -48,12 +39,12 @@ namespace DataAccess.Repository
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
                 var putObjectArgs = new PutObjectArgs()
@@ -64,7 +55,7 @@ namespace DataAccess.Repository
                     .WithContentType(contentType)
                     .WithHeaders(metadata)
                     .WithServerSideEncryption(sse);
-                await minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+                await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
                 
@@ -82,15 +73,14 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
-                await logOtherRepository.LogStorageOther(otherLog);
+                await _loggingOtherRepository.LogStorageOther(otherLog);
 
             }
             catch (Exception exception)
             {
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = nameof(minioClient.PutObjectAsync),
+                    OperationType = "PutObjectAsync",
                     BucketName = bucketName,
                     ContentLength = stream.Length,
                     ContentType = contentType,
@@ -103,8 +93,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
-                await logOtherRepository.LogStorageError(errorLog);
+                await _loggingOtherRepository.LogStorageError(errorLog);
             }
         }
 
@@ -113,18 +102,17 @@ namespace DataAccess.Repository
 
             ObjectDataModel? objDataModel = null;
             ServerSideEncryption? sse = null;
-            MinioClient minioClient = ConnectMinio();
 
             try
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
                 string filePath = Path.Combine(Path.GetTempPath(), objectName + ".mp4");
@@ -133,7 +121,7 @@ namespace DataAccess.Repository
                                .WithObject(objectName)
                                .WithFile(filePath);
 
-                ObjectStat objStat = await minioClient.GetObjectAsync(args);
+                ObjectStat objStat = await _minioClient.Build().GetObjectAsync(args);
 
                 objDataModel = new ObjectDataModel()
                 {
@@ -155,8 +143,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
-                await logOtherRepository.LogStorageOther(otherLog);
+                await _loggingOtherRepository.LogStorageOther(otherLog);
 
             }
             catch (Exception exception)
@@ -174,8 +161,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
-                await logOtherRepository.LogStorageError(errorLog);
+                await _loggingOtherRepository.LogStorageError(errorLog);
 
             }
 

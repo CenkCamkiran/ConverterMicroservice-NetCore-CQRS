@@ -6,8 +6,12 @@ namespace DataAccess.Repository
 {
     public class ConverterRepository: IConverterRepository
     {
-        private Log4NetRepository log = new Log4NetRepository();
-        private LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
+        private readonly ILoggingRepository _loggingRepository;
+
+        public ConverterRepository(ILoggingRepository loggingRepository)
+        {
+            _loggingRepository = loggingRepository;
+        }
 
         public async Task ConvertMP4_to_MP3(string ConvertFromFilePath, string ConvertToFilePath)
         {
@@ -27,7 +31,7 @@ namespace DataAccess.Repository
                     converterLog = converterLog
                 };
 
-                await logOtherRepository.LogConverterOther(otherLog);
+                await _loggingRepository.LogConverterOther(otherLog);
 
             }
             catch (Exception exception)
@@ -41,7 +45,7 @@ namespace DataAccess.Repository
                     converterLog = exceptionModel
                 };
 
-                await logOtherRepository.LogConverterError(errorLog);
+                await _loggingRepository.LogConverterError(errorLog);
 
             }
         }
