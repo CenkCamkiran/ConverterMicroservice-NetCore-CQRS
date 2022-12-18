@@ -1,11 +1,13 @@
-﻿using Models;
+﻿using DataAccess.Interfaces;
+using Models;
 using Xabe.FFmpeg;
 
 namespace DataAccess.Repository
 {
-    public class ConverterRepository
+    public class ConverterRepository: IConverterRepository
     {
         private Log4NetRepository log = new Log4NetRepository();
+        private LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
 
         public async Task ConvertMP4_to_MP3(string ConvertFromFilePath, string ConvertToFilePath)
         {
@@ -25,7 +27,6 @@ namespace DataAccess.Repository
                     converterLog = converterLog
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
                 await logOtherRepository.LogConverterOther(otherLog);
 
             }
@@ -40,7 +41,6 @@ namespace DataAccess.Repository
                     converterLog = exceptionModel
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
                 await logOtherRepository.LogConverterError(errorLog);
 
             }

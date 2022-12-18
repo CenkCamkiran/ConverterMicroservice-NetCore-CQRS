@@ -64,7 +64,7 @@ namespace DataAccess.Repository
                         QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
                         messageList.Add(queueMsg);
 
-                        channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                        //channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
                         QueueLog queueLog = new QueueLog()
                         {

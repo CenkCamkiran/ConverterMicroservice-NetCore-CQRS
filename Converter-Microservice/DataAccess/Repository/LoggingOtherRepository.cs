@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace DataAccess.Repository
 {
-    public class LoggingHelperRepository : ILoggingHelperRepository
+    public class LoggingOtherRepository : ILoggingOtherRepository
     {
         private Log4NetRepository log = new Log4NetRepository();
 

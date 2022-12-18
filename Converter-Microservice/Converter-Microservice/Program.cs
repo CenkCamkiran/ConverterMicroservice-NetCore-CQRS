@@ -1,61 +1,22 @@
 ﻿using DataAccess.Repository;
 using Models;
+using Operation.Operations;
+using RabbitMQ.Client;
+using System.Threading.Channels;
 
-QueueRepository<object> queueHandler = new QueueRepository<object>();
-ObjectStorageRepository objectStorageHandler = new ObjectStorageRepository();
-ConverterRepository converterHandler = new ConverterRepository();
+QueueOperation<object> queueOperation = new QueueOperation<object>();
+ObjectStorageOperation objectStorageOperation = new ObjectStorageOperation();
+ConverterOperation ConverterOperation = new ConverterOperation();
 
-List<QueueMessage> messageList = queueHandler.ConsumeQueue("converter");
+List<QueueMessage> messageList = queueOperation.ConsumeQueue("converter");
 
-if (messageList.Any())
+foreach (var message in messageList)
 {
-    foreach (var message in messageList)
-    {
-        try
-        {
-            ObjectDataModel objModel = await objectStorageHandler.GetFileAsync("videos", message.fileGuid);
-
-            string guid = Guid.NewGuid().ToString();
-            string ConvertToFilePath = Path.Combine(Path.GetTempPath(), guid + ".mp3");
-            var conversionResult = converterHandler.ConvertMP4_to_MP3(objModel.FileFullPath, ConvertToFilePath);
-            await Task.WhenAll(conversionResult);
-
-            using (FileStream fs = File.OpenRead(ConvertToFilePath))
-            {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    await fs.CopyToAsync(ms);
-                    await objectStorageHandler.StoreFileAsync("audios", guid, ms, "audio/mp3");
-
-                    QueueMessage msg = new QueueMessage()
-                    {
-                        email = message.email,
-                        fileGuid = guid
-                    };
-
-                    queueHandler.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
-                }
-            }
-
-        }
-        catch (Exception exception)
-        {
-
-            ConsumerExceptionModel exceptionModel = new ConsumerExceptionModel()
-            {
-                ErrorMessage = exception.Message.ToString()
-            };
-            ErrorLog errorLog = new ErrorLog()
-            {
-                exceptionModel = exceptionModel,
-            };
-
-            LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
-            await logOtherRepository.LogConverterError(errorLog);
-
-        }
-    }
+    ObjectDataModel objModel = await objectStorageOperation.GetFileAsync("videos", message.fileGuid);
+    await ConverterOperation.ConvertMP4_to_MP3(objModel, message);
 }
+
+Console.ReadLine();
 
 //Convert to MP3
 

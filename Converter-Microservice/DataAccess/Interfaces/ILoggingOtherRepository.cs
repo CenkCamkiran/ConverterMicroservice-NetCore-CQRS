@@ -2,7 +2,7 @@
 
 namespace DataAccess.Interfaces
 {
-    public interface ILoggingHelperRepository
+    public interface ILoggingOtherRepository
     {
         Task LogStorageOther(OtherLog objectStorageLog);
         Task LogStorageError(ErrorLog errorLog);

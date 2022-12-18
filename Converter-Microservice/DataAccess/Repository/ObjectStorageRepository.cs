@@ -67,6 +67,7 @@ namespace DataAccess.Repository
                 await minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
+                
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
                     OperationType = "PutObjectAsync",
@@ -81,7 +82,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
                 await logOtherRepository.LogStorageOther(otherLog);
 
             }
@@ -102,7 +103,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
                 await logOtherRepository.LogStorageError(errorLog);
             }
         }
@@ -154,7 +155,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
                 await logOtherRepository.LogStorageOther(otherLog);
 
             }
@@ -173,7 +174,7 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                LoggingHelperRepository logOtherRepository = new LoggingHelperRepository();
+                LoggingOtherRepository logOtherRepository = new LoggingOtherRepository();
                 await logOtherRepository.LogStorageError(errorLog);
 
             }
