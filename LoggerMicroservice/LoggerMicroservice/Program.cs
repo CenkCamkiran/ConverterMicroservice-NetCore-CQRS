@@ -46,3 +46,4 @@ serviceProvider.AddScoped<ILoggingRepository<OtherLog>, LoggingRepository<OtherL
 serviceProvider.AddScoped<ILoggingRepository<ErrorLog>, LoggingRepository<ErrorLog>>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
+serviceProvider.BuildServiceProvider();

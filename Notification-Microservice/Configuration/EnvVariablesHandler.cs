@@ -1,4 +1,6 @@
-﻿namespace Configuration
+﻿using Models;
+
+namespace Configuration
 {
     public class EnvVariablesHandler
     {

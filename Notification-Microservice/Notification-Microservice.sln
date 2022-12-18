@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operation", "Operation\Operation.csproj", "{DF59739C-6139-478C-AA41-6D60AB52F074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "Helpers\Helpers.csproj", "{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helpers\Helper.csproj", "{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
