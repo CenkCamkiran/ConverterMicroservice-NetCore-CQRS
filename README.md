@@ -1,6 +1,6 @@
 # K8S - Microservice App
 
-- Singleton yapısında connection'lar kur!
+- Singleton yapısında connection'lar kur! (OK!)
 
 ## Web Service Yapılacaklar
 
@@ -21,11 +21,13 @@
 - Web service'deki gibi Singleton yapısında connection'lar kur! (ARAŞTIR!)
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
 
+# İş tanımı
+
 - Queue'dan mesajı al, mp3 çevir ve stream datasını elde et, stream datasını (mp3 dosyası, guid verisi) minio'ya yolla, başka bir queue'ya (mesela adı notif olsun) dosya guid'i ve email adresini yolla. converter kuyruğuna ack+ yolla!
 
 ## Notif Yapılacaklar
 
-- Queue'ya gelen dosya guid'i ve email adresini al, mail olarak yolla!
+- Queue'ya gelen dosya guid'i ve email adresini al, mail olarak yolla! ARAŞTIR!)
 
 ## Logging Yapılacaklar
 
@@ -43,3 +45,4 @@
 - WebService
 - Consumer
 - NotifConsumer
+- LoggingConsumer
