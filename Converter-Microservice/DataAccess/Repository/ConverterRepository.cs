@@ -4,7 +4,7 @@ using Xabe.FFmpeg;
 
 namespace DataAccess.Repository
 {
-    public class ConverterRepository: IConverterRepository
+    public class ConverterRepository : IConverterRepository
     {
         private readonly ILoggingRepository _loggingRepository;
 

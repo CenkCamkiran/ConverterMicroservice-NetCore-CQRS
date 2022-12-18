@@ -1,10 +1,8 @@
 ﻿using Adapter.Interfaces;
-using DataAccess.Repository;
-using Models;
 
 namespace Operation.Operations
 {
-    public class LoggingOtherAdapter: ILoggingOtherAdapter
+    public class LoggingOtherAdapter : ILoggingOtherAdapter
     {
         //private LoggingRepository loggingOtherRepository = new LoggingOtherRepository();
 

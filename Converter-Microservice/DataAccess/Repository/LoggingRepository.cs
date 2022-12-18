@@ -1,5 +1,4 @@
 ﻿using DataAccess.Interfaces;
-using log4net;
 using Models;
 using Newtonsoft.Json;
 

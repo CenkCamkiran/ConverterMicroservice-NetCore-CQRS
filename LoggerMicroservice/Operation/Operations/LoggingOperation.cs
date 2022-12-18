@@ -1,11 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using Models;
 using Operation.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Operation.Operations
 {

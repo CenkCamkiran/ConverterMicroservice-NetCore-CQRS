@@ -1,5 +1,4 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
+﻿using DataAccess.Interfaces;
 using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;

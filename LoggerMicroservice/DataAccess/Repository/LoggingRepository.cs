@@ -1,6 +1,4 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
-using Elasticsearch.Net;
+﻿using DataAccess.Interfaces;
 using Models;
 using Nest;
 using Newtonsoft.Json;

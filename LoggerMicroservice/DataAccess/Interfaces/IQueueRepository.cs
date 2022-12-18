@@ -1,5 +1,4 @@
 ﻿using Models;
-using RabbitMQ.Client;
 using System.Collections.Generic;
 
 namespace DataAccess.Interfaces

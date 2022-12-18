@@ -1,5 +1,4 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
+﻿using DataAccess.Interfaces;
 using Minio;
 using Minio.DataModel;
 using Models;
@@ -58,7 +57,7 @@ namespace DataAccess.Repository
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
-                
+
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
                     OperationType = "PutObjectAsync",

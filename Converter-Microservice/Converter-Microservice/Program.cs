@@ -1,15 +1,12 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
 using DataAccess.Repository;
-using log4net.Repository.Hierarchy;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Models;
-using Nest;
 using Operation.Interfaces;
 using Operation.Operations;
 using RabbitMQ.Client;
-using System.Threading.Channels;
 
 var serviceProvider = new ServiceCollection();
 

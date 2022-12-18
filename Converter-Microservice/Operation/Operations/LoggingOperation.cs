@@ -1,16 +1,10 @@
 ﻿using DataAccess.Interfaces;
-using DataAccess.Repository;
 using Models;
 using Operation.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Operation.Operations
 {
-    public class LoggingOperation: ILoggingOperation
+    public class LoggingOperation : ILoggingOperation
     {
         private ILoggingRepository _loggingRepository;
 
