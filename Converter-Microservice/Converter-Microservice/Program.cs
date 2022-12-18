@@ -36,9 +36,7 @@ internal class Program
                                 .WithSSL(false);
         serviceProvider.AddSingleton<IMinioClient>(minioClient);
 
-
-        EnvVariablesHandler envHandler = new EnvVariablesHandler();
-        RabbitMqConfiguration rabbitMqConfiguration = envHandler.GetRabbitEnvVariables();
+        RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
         var connectionFactory = new ConnectionFactory
         {
             HostName = rabbitMqConfiguration.RabbitMqHost,

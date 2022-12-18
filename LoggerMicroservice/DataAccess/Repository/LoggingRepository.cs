@@ -3,6 +3,7 @@ using DataAccess.Interfaces;
 using Elasticsearch.Net;
 using Models;
 using Nest;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -10,24 +11,13 @@ namespace DataAccess.Repository
 {
     public class LoggingRepository<TModel> : ILoggingRepository<TModel> where TModel : class
     {
-        private Log4NetRepository log = new Log4NetRepository();
+        private readonly ILog4NetRepository _log4NetRepository;
+        private readonly IElasticClient _elasticClient;
 
-        private ElasticClient ConnectELK()
+        public LoggingRepository(ILog4NetRepository log4NetRepository, IElasticClient elasticClient)
         {
-            EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
-            ElkConfiguration elkConfiguration = envVariablesHandler.GetElkEnvVariables();
-
-            ConnectionSettings connection = new ConnectionSettings(new Uri(elkConfiguration.ElkHost)).
-            DefaultIndex(elkConfiguration.ElkDefaultIndex).
-            ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-            ThrowExceptions(true).
-            PrettyJson().
-            RequestTimeout(TimeSpan.FromSeconds(300)).
-            BasicAuthentication(elkConfiguration.ElkUsername, elkConfiguration.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
-
-            ElasticClient elasticClient = new ElasticClient(connection);
-
-            return elasticClient;
+            _log4NetRepository = log4NetRepository;
+            _elasticClient = elasticClient;
         }
 
         public async Task<bool> IndexDocAsync(string indexName, TModel model)
@@ -35,22 +25,35 @@ namespace DataAccess.Repository
             try
             {
 
-                ElasticClient elasticClient = ConnectELK();
                 //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-                IndexResponse indexDocument = await elasticClient.IndexAsync(model, elk => elk.Index(indexName));
+                IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
-                log.Info(elkResponse);
+                _log4NetRepository.Info(elkResponse);
 
                 return indexDocument.IsValid;
 
             }
             catch (Exception exception)
             {
-                log.Error(exception.Message.ToString());
+                _log4NetRepository.Error(exception.Message.ToString());
 
                 return await Task.FromResult(true);
             }
+        }
+
+        public async Task LogOther(OtherLog log)
+        {
+            string logText = $"{JsonConvert.SerializeObject(log)}";
+            _log4NetRepository.Info(logText);
+            await Task.FromResult(true);
+        }
+
+        public async Task LogError(ErrorLog log)
+        {
+            string logText = $"{JsonConvert.SerializeObject(log)}";
+            _log4NetRepository.Error(logText);
+            await Task.FromResult(true);
         }
     }
 }
