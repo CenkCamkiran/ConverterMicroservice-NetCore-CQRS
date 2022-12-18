@@ -14,21 +14,21 @@ namespace Operation.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {
-        IQueueRepository<object> _queueRepository;
+        private IQueueRepository<object> _queueRepository;
 
         public QueueOperation(IQueueRepository<object> queueRepository)
         {
             _queueRepository = queueRepository;
         }
 
-        public List<QueueMessage> ConsumeQueue(string queue)
+        public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
         {
-            return _queueRepository.ConsumeQueue(queue);
+            return await _queueRepository.ConsumeQueueAsync(queue);
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        public async Task QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
         {
-            _queueRepository.QueueMessageDirect(message, queue, exchange, routingKey);
+            await _queueRepository.QueueMessageDirectAsync(message, queue, exchange, routingKey);
         }
     }
 }

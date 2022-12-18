@@ -14,35 +14,25 @@ namespace DataAccess.Repository
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
         private List<QueueMessage> messageList = new List<QueueMessage>();
-        private Log4NetRepository log = new Log4NetRepository();
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
-        public IConnection ConnectRabbitMQ()
+        private readonly IConnection _connection;
+        private readonly ILoggingRepository<OtherLog> _loggingOtherRepository;
+        private readonly ILoggingRepository<ErrorLog> _loggingErrorRepository;
+
+        public QueueRepository(IConnection connection, ILoggingRepository<OtherLog> loggingOtherRepository, ILoggingRepository<ErrorLog> loggingErrorRepository)
         {
-            EnvVariablesHandler envHandler = new EnvVariablesHandler();
-            RabbitMqConfiguration rabbitMqConfiguration = envHandler.GetRabbitEnvVariables();
-
-            var connectionFactory = new ConnectionFactory
-            {
-                HostName = rabbitMqConfiguration.RabbitMqHost,
-                Port = Convert.ToInt32(rabbitMqConfiguration.RabbitMqPort),
-                UserName = rabbitMqConfiguration.RabbitMqUsername,
-                Password = rabbitMqConfiguration.RabbitMqPassword
-            };
-
-            IConnection rabbitConnection = connectionFactory.CreateConnection();
-
-            return rabbitConnection;
-
+            _connection = connection;
+            _loggingOtherRepository = loggingOtherRepository;
+            _loggingErrorRepository = loggingErrorRepository;
         }
 
         public List<QueueMessage> ConsumeQueue(string queue)
         {
             try
             {
-                IConnection rabbitConnection = ConnectRabbitMQ();
 
-                using (var channel = rabbitConnection.CreateModel())
+                using (var channel = _connection.CreateModel())
                 {
                     var queueResult = channel.QueueDeclare(queue: queue,
                                          durable: true,
@@ -69,6 +59,18 @@ namespace DataAccess.Repository
 
                         channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
+                        QueueLog queueLog = new QueueLog()
+                        {
+                            Date = DateTime.Now,
+                            Message = JsonConvert.SerializeObject(""),
+                            QueueName = queue
+                        };
+                        OtherLog otherLog = new OtherLog()
+                        {
+                            queueLog = queueLog
+                        };
+                        _loggingOtherRepository.LogOther(otherLog);
+
                         if (msgCount == counter)
                         {
                             msgsRecievedGate.Set();
@@ -85,16 +87,6 @@ namespace DataAccess.Repository
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
 
-                    QueueLog queueLog = new QueueLog()
-                    {
-                        Date = DateTime.Now,
-                        Message = JsonConvert.SerializeObject(""),
-                        QueueName = queue
-                    };
-
-                    string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                    log.Info(logText);
-
                     return messageList;
                 }
             }
@@ -108,9 +100,11 @@ namespace DataAccess.Repository
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
                 };
-
-                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    queueLog = queueLog
+                };
+                _loggingOtherRepository.LogError(errorLog);
 
                 return null;
             }
@@ -120,8 +114,7 @@ namespace DataAccess.Repository
         {
             try
             {
-                IConnection rabbitConnection = ConnectRabbitMQ();
-                var channel = rabbitConnection.CreateModel();
+                var channel = _connection.CreateModel();
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
@@ -148,9 +141,11 @@ namespace DataAccess.Repository
                     QueueName = queue,
                     RoutingKey = routingKey
                 };
-
-                string logText = $"{JsonConvert.SerializeObject(queueLog)}";
-                log.Info(logText);
+                OtherLog otherLog = new OtherLog()
+                {
+                    queueLog = queueLog
+                };
+                _loggingOtherRepository.LogOther(otherLog);
 
             }
             catch (Exception exception)
@@ -165,9 +160,11 @@ namespace DataAccess.Repository
                     RoutingKey = routingKey,
                     ExceptionMessage = exception.Message.ToString()
                 };
-
-                string logText = $"Exception: {JsonConvert.SerializeObject(queueLog)}";
-                log.Error(logText);
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    queueLog = queueLog
+                };
+                _loggingOtherRepository.LogError(errorLog);
 
             }
         }

@@ -1,4 +1,5 @@
-﻿using DataAccess.Repository;
+﻿using DataAccess.Interfaces;
+using DataAccess.Repository;
 using Models;
 using Operation.Interfaces;
 
@@ -6,16 +7,21 @@ namespace Operation.Operations
 {
     public class QueueOperation : IQueueOperation
     {
-        QueueRepository<object> queueRepository = new QueueRepository<object>();
+        IQueueRepository<object> _queueRepository;
+
+        public QueueOperation(IQueueRepository<object> queueRepository)
+        {
+            _queueRepository = queueRepository;
+        }
 
         public List<QueueMessage> ConsumeErrorLogsQueue(string queue)
         {
-            return queueRepository.ConsumeQueue(queue);
+            return _queueRepository.ConsumeQueue(queue);
         }
 
         public List<QueueMessage> ConsumeOtherLogsQueue(string queue)
         {
-            return queueRepository.ConsumeQueue(queue);
+            return _queueRepository.ConsumeQueue(queue);
         }
     }
 }

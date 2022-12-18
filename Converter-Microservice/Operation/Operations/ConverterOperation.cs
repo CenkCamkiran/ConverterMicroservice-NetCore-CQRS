@@ -49,7 +49,7 @@ namespace Operation.Operations
                             fileGuid = guid
                         };
 
-                        _queueOperation.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+                        await _queueOperation.QueueMessageDirectAsync(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
                     }
                 }
             }

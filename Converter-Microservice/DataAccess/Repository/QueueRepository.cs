@@ -24,7 +24,7 @@ namespace DataAccess.Repository
             _loggingRepository = loggingRepository;
         }
 
-        public List<QueueMessage> ConsumeQueue(string queue)
+        public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace DataAccess.Repository
                     uint msgCount = queueResult.MessageCount;
                     uint counter = 0;
 
-                    consumer.Received += (sender, ea) =>
+                    consumer.Received += async (sender, ea) =>
                     {
                         counter++;
 
@@ -67,7 +67,7 @@ namespace DataAccess.Repository
                             queueLog = queueLog
                         };
 
-                        _loggingRepository.LogQueueOther(otherLog);
+                        await _loggingRepository.LogQueueOther(otherLog);
 
                         if (msgCount == counter)
                         {
@@ -103,13 +103,13 @@ namespace DataAccess.Repository
                     queueLog = queueLog
                 };
 
-                _loggingRepository.LogQueueError(errorLog);
+                await _loggingRepository.LogQueueError(errorLog);
 
-                return null;
+                return await Task.FromResult(new List<QueueMessage>());
             }
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        public async Task QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
-                _loggingRepository.LogQueueOther(otherLog);
+                await _loggingRepository.LogQueueOther(otherLog);
 
             }
             catch (Exception exception)
@@ -164,7 +164,7 @@ namespace DataAccess.Repository
                     queueLog = queueLog
                 };
 
-                _loggingRepository.LogQueueError(errorLog);
+                await _loggingRepository.LogQueueError(errorLog);
 
             }
         }

@@ -20,7 +20,7 @@ namespace DataAccess.Repository
 
         public async Task LogStorageOther(OtherLog log)
         {
-            _otherLogQueueRepository.QueueMessageDirect(log, "otherlogs", "log_exchange.direct", "other_log");
+            await _otherLogQueueRepository.QueueMessageDirectAsync(log, "otherlogs", "log_exchange.direct", "other_log");
 
             string logText = $"{JsonConvert.SerializeObject(log)}";
             _log4NetRepository.Info(logText);
@@ -29,7 +29,7 @@ namespace DataAccess.Repository
 
         public async Task LogStorageError(ErrorLog log)
         {
-            _errorLogQueueRepository.QueueMessageDirect(log, "errorlogs", "log_exchange.direct", "error_log");
+            await _errorLogQueueRepository.QueueMessageDirectAsync(log, "errorlogs", "log_exchange.direct", "error_log");
 
             string logText = $"{JsonConvert.SerializeObject(log)}";
             _log4NetRepository.Error(logText);
@@ -38,7 +38,7 @@ namespace DataAccess.Repository
 
         public async Task LogConverterError(ErrorLog log)
         {
-            _errorLogQueueRepository.QueueMessageDirect(log, "errorlogs", "log_exchange.direct", "error_log");
+            await _errorLogQueueRepository.QueueMessageDirectAsync(log, "errorlogs", "log_exchange.direct", "error_log");
 
             string logText = $"{JsonConvert.SerializeObject(log)}";
             _log4NetRepository.Error(logText);
@@ -47,7 +47,7 @@ namespace DataAccess.Repository
 
         public async Task LogConverterOther(OtherLog log)
         {
-            _otherLogQueueRepository.QueueMessageDirect(log, "otherlogs", "log_exchange.direct", "other_log");
+            await _otherLogQueueRepository.QueueMessageDirectAsync(log, "otherlogs", "log_exchange.direct", "other_log");
 
             string logText = $"{JsonConvert.SerializeObject(log)}";
             _log4NetRepository.Info(logText);
