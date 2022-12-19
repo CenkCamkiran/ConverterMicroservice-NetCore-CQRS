@@ -37,48 +37,25 @@ serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>()
 serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
 serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
 serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
-serviceProvider.AddScoped<IConverterOperation, ConverterOperation>();
 
 //Repositories
 serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
 serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
 serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
+serviceProvider.AddScoped<IQueueRepository<QueueMessage>, QueueRepository<QueueMessage>>();
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
+serviceProvider.AddScoped<ILoggingRepository, LoggingRepository>();
 
-serviceProvider.BuildServiceProvider();
+var builder = serviceProvider.BuildServiceProvider();
 
-Initialize initialize = new Initialize();
-List<QueueMessage> messageList = await initialize._queueOperation.ConsumeQueueAsync("converter");
+var _queueOperation = builder.GetService<IQueueRepository<object>>();
+var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();
+await _queueOperation.ConsumeQueueAsync("converter");
 
-foreach (var message in messageList)
-{
-    ObjectDataModel objModel = await initialize._objectStorageOperation.GetFileAsync("videos", message.fileGuid);
-    await initialize._converterOperation.ConvertMP4_to_MP3(objModel, message);
-}
 
-Console.ReadLine();
-
-class Initialize
-{
-    public IQueueOperation<object> _queueOperation;
-    public IObjectStorageOperation _objectStorageOperation;
-    public IConverterOperation _converterOperation;
-
-    public Initialize()
-    {
-
-    }
-
-    public Initialize(IQueueOperation<object> queueOperation, IObjectStorageOperation objectStorageOperation, IConverterOperation converterOperation)
-    {
-        _queueOperation = queueOperation;
-        _objectStorageOperation = objectStorageOperation;
-        _converterOperation = converterOperation;
-    }
-}
-
+//Console.ReadLine();
 
 /* ************************************************************************************************* */
 

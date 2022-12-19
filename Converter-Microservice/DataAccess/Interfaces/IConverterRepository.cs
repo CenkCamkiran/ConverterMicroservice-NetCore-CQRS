@@ -1,7 +1,9 @@
-﻿namespace DataAccess.Interfaces
+﻿using Models;
+
+namespace DataAccess.Interfaces
 {
     public interface IConverterRepository
     {
-        Task ConvertMP4_to_MP3(string ConvertFromFilePath, string ConvertToFilePath);
+        Task<QueueMessage> ConvertMP4_to_MP3(ObjectDataModel objDataModel, QueueMessage message);
     }
 }

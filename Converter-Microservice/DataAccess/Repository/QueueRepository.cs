@@ -15,11 +15,18 @@ namespace DataAccess.Repository
 
         private readonly IConnection _connection;
         private readonly ILoggingRepository _loggingRepository;
+        private readonly IObjectStorageRepository _objectStorageRepository;
+        private readonly IConverterRepository _converterRepository;
 
-        public QueueRepository(IConnection connection, ILoggingRepository loggingRepository)
+        uint msgCount = 0;
+        uint counter = 0;
+
+        public QueueRepository(IConnection connection, ILoggingRepository loggingRepository, IObjectStorageRepository objectStorageRepository, IConverterRepository converterRepository)
         {
             _connection = connection;
             _loggingRepository = loggingRepository;
+            _objectStorageRepository = objectStorageRepository;
+            _converterRepository = converterRepository;
         }
 
         public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
@@ -39,42 +46,8 @@ namespace DataAccess.Repository
 
                     var consumer = new EventingBasicConsumer(channel);
 
-                    uint msgCount = queueResult.MessageCount;
-                    uint counter = 0;
+                    consumer.Received += ConverterQueue_ReceivedEvent;
 
-                    consumer.Received += async (sender, ea) =>
-                    {
-                        counter++;
-
-                        var body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-
-                        QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
-                        messageList.Add(queueMsg);
-
-                        //channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-                        QueueLog queueLog = new QueueLog()
-                        {
-                            Date = DateTime.Now,
-                            Message = message,
-                            QueueName = queue
-                        };
-                        OtherLog otherLog = new OtherLog()
-                        {
-                            queueLog = queueLog
-                        };
-
-                        await _loggingRepository.LogQueueOther(otherLog);
-
-                        if (msgCount == counter)
-                        {
-                            msgsRecievedGate.Set();
-
-                            return;
-                        }
-
-                    };
 
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
@@ -101,9 +74,9 @@ namespace DataAccess.Repository
                     queueLog = queueLog
                 };
 
-                await _loggingRepository.LogQueueError(errorLog);
+                _loggingRepository.LogQueueError(errorLog);
 
-                return await Task.FromResult(new List<QueueMessage>());
+                return new List<QueueMessage>();
             }
         }
 
@@ -129,21 +102,6 @@ namespace DataAccess.Repository
                                      basicProperties: properties,
                                      body: body);
 
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicPublish",
-                    Date = DateTime.Now,
-                    ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
-                    QueueName = queue,
-                    RoutingKey = routingKey
-                };
-                OtherLog otherLog = new OtherLog()
-                {
-                    queueLog = queueLog
-                };
-                await _loggingRepository.LogQueueOther(otherLog);
-
             }
             catch (Exception exception)
             {
@@ -164,6 +122,48 @@ namespace DataAccess.Repository
 
                 await _loggingRepository.LogQueueError(errorLog);
 
+            }
+        }
+
+        public async void ConverterQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
+        {
+            counter++;
+
+            var e = (EventingBasicConsumer)se;
+            var body = ea.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+
+            msgCount = e.Model.MessageCount("converter");
+            QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
+
+            ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
+            var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
+            //await _queueRepository.QueueMessageDirectAsync(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
+
+            //await Task.WhenAll(converterResult);
+
+            e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+            QueueLog queueLog = new QueueLog()
+            {
+                OperationType = "BasicPublish",
+                Date = DateTime.Now,
+                ExchangeName = ea.Exchange,
+                Message = JsonConvert.SerializeObject(message),
+                QueueName = "converter",
+                RoutingKey = ea.RoutingKey
+            };
+            OtherLog otherLog = new OtherLog()
+            {
+                queueLog = queueLog
+            };
+            await _loggingRepository.LogQueueOther(otherLog);
+
+            if (counter == msgCount)
+            {
+                msgsRecievedGate.Set();
+
+                return;
             }
         }
     }

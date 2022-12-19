@@ -6,9 +6,9 @@ namespace Operation.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {
-        private IQueueRepository<object> _queueRepository;
+        private IQueueRepository<TMessage> _queueRepository;
 
-        public QueueOperation(IQueueRepository<object> queueRepository)
+        public QueueOperation(IQueueRepository<TMessage> queueRepository)
         {
             _queueRepository = queueRepository;
         }

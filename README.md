@@ -20,6 +20,7 @@
 - MP4'ten Mp3'e convert eden library bul! (KODU YAZ!)
 - Web service'deki gibi Singleton yapısında connection'lar kur! (ARAŞTIR!)
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
+- Temp olarak açılan dosyaları en son sil (ARAŞTIR!)
 
 # İş tanımı
 
@@ -34,6 +35,7 @@
 - Logging microservice'i draw.io'da çiz! (ARAŞTIR!)
 - otherlogs ve errorlogs kuyrukların attığın model tiplerine karar ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek) (OK!)
 - Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet! (ARAŞTIR!)
+- Kuyruktan gelen modellere göre ELK'da index'leri oluştur. (ARAŞTIR!)
 
 ## K8S
 

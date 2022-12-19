@@ -98,7 +98,6 @@ namespace DataAccess.Repository
 
         public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
         {
-
             ObjectDataModel? objDataModel = null;
             ServerSideEncryption? sse = null;
 
