@@ -138,7 +138,7 @@ namespace DataAccess.Repository
 
             ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
             var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
-            //await _queueRepository.QueueMessageDirectAsync(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
+            await _queueRepository.QueueMessageDirectAsync(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
 
             //await Task.WhenAll(converterResult);
 
