@@ -17,7 +17,7 @@ namespace ServiceLayer.Services
             _loggingRepository = loggingRepository;
         }
 
-        public async Task<bool> LogFormDataAsync(string indexName, HttpRequest request, HttpResponse response)
+        public async Task<bool> LogFormDataAsync(string indexName, HttpRequest request, HttpResponse response, DateTime requestDate)
         {
             response.Body.Position = 0;
 
@@ -31,7 +31,7 @@ namespace ServiceLayer.Services
 
             RequestResponseLogModel model = new RequestResponseLogModel()
             {
-                requestDate = DateTime.Now,
+                requestDate = requestDate,
                 requestContentType = request.ContentType,
                 requestFileDetails = new FileDetails()
                 {

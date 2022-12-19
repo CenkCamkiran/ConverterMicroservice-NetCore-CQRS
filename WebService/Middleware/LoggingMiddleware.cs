@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using ServiceLayer.Interfaces;
 using System.Text.RegularExpressions;
+using Middleware.Contexts;
+using Middleware.Contexts.Interfaces;
 
 namespace Middleware
 {
@@ -15,8 +17,9 @@ namespace Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, ILoggingService loggingService)
+        public async Task Invoke(HttpContext httpContext, ILoggingService loggingService, IWebServiceContext webServiceContext)
         {
+            DateTime requestDate = webServiceContext.GetRequestDateContext();
             await _next(httpContext);
 
             HttpRequest request = httpContext.Request;
@@ -28,7 +31,7 @@ namespace Middleware
             if (!string.IsNullOrEmpty(request.ContentType))
             {
                 if (formRegex.Match(request.ContentType).Success)
-                    await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response);
+                    await loggingService.LogFormDataAsync("webservice_requestresponse_logs", request, response, requestDate);
 
                 //if (jsonRegex.Match(request.ContentType).Success)
                 //    await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);

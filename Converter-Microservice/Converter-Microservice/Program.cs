@@ -32,17 +32,19 @@ serviceProvider.AddSingleton(rabbitConnection);
 
 //Operations
 serviceProvider.AddScoped<IObjectStorageOperation, ObjectStorageOperation>();
-serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
-serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
-serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
-serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
+serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
+//serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
+//serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
+//serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
 serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
 
 //Repositories
-serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
-serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
-serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
-serviceProvider.AddScoped<IQueueRepository<QueueMessage>, QueueRepository<QueueMessage>>();
+serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
+//serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
+//serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
+//serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
+//serviceProvider.AddScoped<IQueueRepository<QueueMessage>, QueueRepository<QueueMessage>>();
+
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();

@@ -4,8 +4,9 @@ using Elasticsearch.Net;
 using Helpers;
 using Helpers.Interfaces;
 using Middleware;
+using Middleware.Contexts;
+using Middleware.Contexts.Interfaces;
 using Minio;
-using Models;
 using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
@@ -32,20 +33,25 @@ string? elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX"
 string? elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
 string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
 
-//must add every type of repository
-builder.Services.AddScoped<ILoggingRepository<ObjectStorageLog>, LoggingRepository<ObjectStorageLog>>();
-builder.Services.AddScoped<ILoggingRepository<QueueLog>, LoggingRepository<QueueLog>>();
-builder.Services.AddScoped<ILoggingRepository<RequestResponseLogModel>, LoggingRepository<RequestResponseLogModel>>();
+//Repository
+builder.Services.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
+//builder.Services.AddScoped<ILoggingRepository<ObjectStorageLog>, LoggingRepository<ObjectStorageLog>>();
+//builder.Services.AddScoped<ILoggingRepository<QueueLog>, LoggingRepository<QueueLog>>();
+//builder.Services.AddScoped<ILoggingRepository<RequestResponseLogModel>, LoggingRepository<RequestResponseLogModel>>();
 builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
 builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();
 builder.Services.AddScoped<ILogOtherRepository, LogOtherRepository>();
 
+//Service
 builder.Services.AddScoped<IQueueService, QueueService>();
 builder.Services.AddScoped<IMinioStorageService, MinioStorageService>();
 builder.Services.AddScoped<IHealthService, HealthService>();
 builder.Services.AddScoped<ILoggingService, LoggingService>();
 builder.Services.AddScoped<IPingHelper, PingHelper>();
+
+//Context
+builder.Services.AddScoped<IWebServiceContext, WebServiceContext>();
 
 ConnectionSettings? connection = new ConnectionSettings(new Uri(elkHost)).
    DefaultIndex(elkDefaultIndex).
@@ -99,7 +105,7 @@ if (app.Environment.IsDevelopment())
 
 //app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapControllers();
 
