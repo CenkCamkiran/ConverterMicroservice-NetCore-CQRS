@@ -29,7 +29,7 @@ namespace DataAccess.Repository
             _converterRepository = converterRepository;
         }
 
-        public async List<QueueMessage> ConsumeQueue(string queue)
+        public List<QueueMessage> ConsumeQueue(string queue)
         {
             try
             {
