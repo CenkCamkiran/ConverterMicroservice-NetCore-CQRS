@@ -14,17 +14,17 @@ namespace DataAccess.Repository
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         private readonly IConnection _connection;
-        private readonly ILoggingRepository _loggingRepository;
+        private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
 
         uint msgCount = 0;
         uint counter = 0;
 
-        public QueueRepository(IConnection connection, ILoggingRepository loggingRepository, IObjectStorageRepository objectStorageRepository, IConverterRepository converterRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository, IConverterRepository converterRepository)
         {
             _connection = connection;
-            _loggingRepository = loggingRepository;
+            _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _converterRepository = converterRepository;
         }
@@ -73,8 +73,8 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
-
-                _loggingRepository.LogQueueError(errorLog);
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
 
                 return new List<QueueMessage>();
             }
@@ -119,8 +119,8 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
-
-                await _loggingRepository.LogQueueError(errorLog);
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
 
             }
         }
@@ -146,18 +146,19 @@ namespace DataAccess.Repository
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = "BasicPublish",
+                OperationType = "BasicConsume",
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "converter",
+                QueueName = "converter", //Bu nereden gelir?
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()
             {
                 queueLog = queueLog
             };
-            await _loggingRepository.LogQueueOther(otherLog);
+            string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+            _log4NetRepository.Info(logText);
 
             if (counter == msgCount)
             {

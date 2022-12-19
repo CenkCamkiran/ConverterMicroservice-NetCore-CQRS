@@ -1,6 +1,6 @@
 ﻿using Adapter.Interfaces;
 
-namespace Operation.Operations
+namespace Adapter.Adapters
 {
     public class LoggingOtherAdapter : ILoggingOtherAdapter
     {

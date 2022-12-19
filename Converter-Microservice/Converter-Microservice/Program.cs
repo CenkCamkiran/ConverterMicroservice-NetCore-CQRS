@@ -36,7 +36,6 @@ serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
 //serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
 //serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
 //serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
-serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
@@ -48,7 +47,6 @@ serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>))
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
-serviceProvider.AddScoped<ILoggingRepository, LoggingRepository>();
 
 var builder = serviceProvider.BuildServiceProvider();
 

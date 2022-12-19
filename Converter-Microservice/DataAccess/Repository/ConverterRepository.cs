@@ -1,17 +1,18 @@
 ﻿using DataAccess.Interfaces;
 using Models;
+using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
 namespace DataAccess.Repository
 {
     public class ConverterRepository : IConverterRepository
     {
-        private readonly ILoggingRepository _loggingRepository;
+        private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
 
-        public ConverterRepository(ILoggingRepository loggingRepository, IObjectStorageRepository objectStorageRepository)
+        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository)
         {
-            _loggingRepository = loggingRepository;
+            _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
         }
 
@@ -53,10 +54,10 @@ namespace DataAccess.Repository
                 {
                     converterLog = converterLog
                 };
+                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _log4NetRepository.Info(logText);
 
-                await _loggingRepository.LogConverterOther(otherLog);
-
-                return await Task.FromResult(msg);
+                return msg;
 
             }
             catch (Exception exception)
@@ -70,9 +71,10 @@ namespace DataAccess.Repository
                     converterLog = exceptionModel
                 };
 
-                await _loggingRepository.LogConverterError(errorLog);
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
 
-                return await Task.FromResult(msg);
+                return msg;
             }
         }
     }
