@@ -1,69 +1,42 @@
 ﻿using DataAccess.Interfaces;
+using Models;
+using Nest;
 
 namespace DataAccess.Repository
 {
-    public class LoggingRepository : ILoggingRepository
+    public class LoggingRepository<TModel> : ILoggingRepository<TModel> where TModel : class
     {
+        private readonly IElasticClient _elasticClient;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly IQueueRepository<ErrorLog> _errorLogQueueRepository;
-        private readonly IQueueRepository<OtherLog> _otherLogQueueRepository;
 
-        public LoggingRepository(ILog4NetRepository log4NetRepository, IQueueRepository<ErrorLog> errorLogQueueRepository, IQueueRepository<OtherLog> otherLogQueueRepository)
+        public LoggingRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository)
         {
+            _elasticClient = elasticClient;
             _log4NetRepository = log4NetRepository;
-            _errorLogQueueRepository = errorLogQueueRepository;
-            _otherLogQueueRepository = otherLogQueueRepository;
         }
 
-        public async Task LogStorageOther(OtherLog log)
+        public async Task<bool> IndexDocAsync(string indexName, TModel model)
         {
-            await _otherLogQueueRepository.QueueMessageDirectAsync(log, "otherlogs", "log_exchange.direct", "other_log");
+            try
+            {
+                //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
+                IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Info(logText);
-            await Task.FromResult(true);
+                string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
+                _log4NetRepository.Info(elkResponse);
+
+                return indexDocument.IsValid;
+
+            }
+            catch (Exception exception)
+            {
+                ConsumerExceptionModel error = new ConsumerExceptionModel();
+                error.ErrorMessage = exception.Message.ToString();
+
+                _log4NetRepository.Error(exception.Message.ToString());
+
+                return false;
+            }
         }
-
-        public async Task LogStorageError(ErrorLog log)
-        {
-            await _errorLogQueueRepository.QueueMessageDirectAsync(log, "errorlogs", "log_exchange.direct", "error_log");
-
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Error(logText);
-            await Task.FromResult(true);
-        }
-
-        public async Task LogConverterError(ErrorLog log)
-        {
-            await _errorLogQueueRepository.QueueMessageDirectAsync(log, "errorlogs", "log_exchange.direct", "error_log");
-
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Error(logText);
-            await Task.FromResult(true);
-        }
-
-        public async Task LogConverterOther(OtherLog log)
-        {
-            await _otherLogQueueRepository.QueueMessageDirectAsync(log, "otherlogs", "log_exchange.direct", "other_log");
-
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Info(logText);
-            await Task.FromResult(true);
-        }
-
-        public async Task LogQueueOther(OtherLog log)
-        {
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Info(logText);
-            await Task.FromResult(true);
-        }
-
-        public async Task LogQueueError(ErrorLog log)
-        {
-            string logText = $"{JsonConvert.SerializeObject(log)}";
-            _log4NetRepository.Error(logText);
-            await Task.FromResult(true);
-        }
-
     }
 }

@@ -1,14 +1,7 @@
-﻿using Models;
-
-namespace DataAccess.Interfaces
+﻿namespace DataAccess.Interfaces
 {
-    public interface ILoggingRepository
+    public interface ILoggingRepository<TModel> where TModel : class
     {
-        Task LogStorageOther(OtherLog objectStorageLog);
-        Task LogStorageError(ErrorLog errorLog);
-        Task LogConverterError(ErrorLog errorLog);
-        Task LogConverterOther(OtherLog otherLog);
-        Task LogQueueOther(OtherLog otherLog);
-        Task LogQueueError(ErrorLog errorLog);
+        Task<bool> IndexDocAsync(string indexName, TModel model);
     }
 }

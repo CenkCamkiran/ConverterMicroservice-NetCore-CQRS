@@ -14,15 +14,20 @@ namespace DataAccess.Repository
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         private readonly IConnection _connection;
-        private readonly ILoggingRepository _loggingRepository;
+        private readonly ILog4NetRepository _log4NetRepository;
+        private readonly IObjectStorageRepository _objectStorageRepository;
 
-        public QueueRepository(IConnection connection, ILoggingRepository loggingRepository)
+        uint msgCount = 0;
+        uint counter = 0;
+
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository)
         {
             _connection = connection;
-            _loggingRepository = loggingRepository;
+            _log4NetRepository = log4NetRepository;
+            _objectStorageRepository = objectStorageRepository;
         }
 
-        public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
+        public List<QueueMessage> ConsumeQueue(string queue)
         {
             try
             {
@@ -39,42 +44,8 @@ namespace DataAccess.Repository
 
                     var consumer = new EventingBasicConsumer(channel);
 
-                    uint msgCount = queueResult.MessageCount;
-                    uint counter = 0;
+                    consumer.Received += NotifQueue_ReceivedEvent;
 
-                    consumer.Received += async (sender, ea) =>
-                    {
-                        counter++;
-
-                        var body = ea.Body.ToArray();
-                        var message = Encoding.UTF8.GetString(body);
-
-                        QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
-                        messageList.Add(queueMsg);
-
-                        //channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-                        QueueLog queueLog = new QueueLog()
-                        {
-                            Date = DateTime.Now,
-                            Message = message,
-                            QueueName = queue
-                        };
-                        OtherLog otherLog = new OtherLog()
-                        {
-                            queueLog = queueLog
-                        };
-
-                        await _loggingRepository.LogQueueOther(otherLog);
-
-                        if (msgCount == counter)
-                        {
-                            msgsRecievedGate.Set();
-
-                            return;
-                        }
-
-                    };
 
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
@@ -100,70 +71,52 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
 
-                await _loggingRepository.LogQueueError(errorLog);
-
-                return await Task.FromResult(new List<QueueMessage>());
+                return new List<QueueMessage>();
             }
         }
 
-        public async Task QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
+        public async void NotifQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
-            try
+            counter++;
+
+            var e = (EventingBasicConsumer)se;
+            var body = ea.Body.ToArray();
+            var message = Encoding.UTF8.GetString(body);
+
+            msgCount = e.Model.MessageCount("converter");
+            QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
+
+            ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
+            //await _queueRepository.QueueMessageDirectAsync(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
+
+            //await Task.WhenAll(converterResult);
+
+            e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+            QueueLog queueLog = new QueueLog()
             {
-                var channel = _connection.CreateModel();
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
-
-                channel.QueueDeclare(queue: queue,
-                                     durable: true,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
-
-                string serializedObj = JsonConvert.SerializeObject(message);
-                var body = Encoding.UTF8.GetBytes(serializedObj);
-
-                channel.BasicPublish(exchange: exchange,
-                                     routingKey: routingKey,
-                                     basicProperties: properties,
-                                     body: body);
-
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicPublish",
-                    Date = DateTime.Now,
-                    ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
-                    QueueName = queue,
-                    RoutingKey = routingKey
-                };
-                OtherLog otherLog = new OtherLog()
-                {
-                    queueLog = queueLog
-                };
-                await _loggingRepository.LogQueueOther(otherLog);
-
-            }
-            catch (Exception exception)
+                OperationType = "BasicConsume",
+                Date = DateTime.Now,
+                ExchangeName = ea.Exchange,
+                Message = JsonConvert.SerializeObject(message),
+                QueueName = "converter", //Bu nereden gelir?
+                RoutingKey = ea.RoutingKey
+            };
+            OtherLog otherLog = new OtherLog()
             {
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicPublish",
-                    Date = DateTime.Now,
-                    ExchangeName = exchange,
-                    Message = JsonConvert.SerializeObject(message),
-                    QueueName = queue,
-                    RoutingKey = routingKey,
-                    ExceptionMessage = exception.Message.ToString()
-                };
-                ErrorLog errorLog = new ErrorLog()
-                {
-                    queueLog = queueLog
-                };
+                queueLog = queueLog
+            };
+            string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+            _log4NetRepository.Info(logText);
 
-                await _loggingRepository.LogQueueError(errorLog);
+            if (counter == msgCount)
+            {
+                msgsRecievedGate.Set();
 
+                return;
             }
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Models
+﻿using Minio.DataModel;
+
+namespace Models
 {
     public class ObjectDataModel
     {

@@ -1,16 +1,20 @@
 ﻿using DataAccess.Interfaces;
+using Minio;
+using Minio.DataModel;
+using Models;
+using Newtonsoft.Json;
 
 namespace DataAccess.Repository
 {
     public class ObjectStorageRepository : IObjectStorageRepository
     {
         private readonly IMinioClient _minioClient;
-        private readonly ILoggingRepository _loggingOtherRepository;
+        private readonly ILog4NetRepository _log4NetRepository;
 
-        public ObjectStorageRepository(IMinioClient minioClient, ILoggingRepository loggingOtherRepository)
+        public ObjectStorageRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository)
         {
             _minioClient = minioClient;
-            _loggingOtherRepository = loggingOtherRepository;
+            _log4NetRepository = log4NetRepository;
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
@@ -69,7 +73,8 @@ namespace DataAccess.Repository
                     storageLog = objectStorageLog
                 };
 
-                await _loggingOtherRepository.LogStorageOther(otherLog);
+                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -88,14 +93,13 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
-
-                await _loggingOtherRepository.LogStorageError(errorLog);
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
             }
         }
 
         public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
         {
-
             ObjectDataModel? objDataModel = null;
             ServerSideEncryption? sse = null;
 
@@ -138,8 +142,8 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
-
-                await _loggingOtherRepository.LogStorageOther(otherLog);
+                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -156,8 +160,8 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
-
-                await _loggingOtherRepository.LogStorageError(errorLog);
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
 
             }
 

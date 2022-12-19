@@ -1,16 +1,8 @@
 ﻿using Helper.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Helper.Helpers
 {
-    public class MailSenderHelper: IMailSenderHelper
+    public class MailSenderHelper : IMailSenderHelper
     {
         //public void SendMailToDepartments(string ID, string Message, BsonDocument receipt)
         //{

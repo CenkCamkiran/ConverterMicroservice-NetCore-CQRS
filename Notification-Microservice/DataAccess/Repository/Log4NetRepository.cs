@@ -1,4 +1,7 @@
 ﻿using DataAccess.Interfaces;
+using log4net;
+using log4net.Config;
+using log4net.Repository;
 using System.Reflection;
 
 namespace DataAccess.Repository

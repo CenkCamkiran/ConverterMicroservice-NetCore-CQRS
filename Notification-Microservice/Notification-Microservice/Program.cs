@@ -1,6 +1,4 @@
-﻿
-
-using Configuration;
+﻿using Configuration;
 using DataAccess.Interfaces;
 using DataAccess.Repository;
 using Elasticsearch.Net;
@@ -48,19 +46,21 @@ serviceProvider.AddSingleton(rabbitConnection);
 
 //Operations
 serviceProvider.AddScoped<IObjectStorageOperation, ObjectStorageOperation>();
-serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
-serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
-serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
-serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
-serviceProvider.AddScoped<ILoggingOperation, LoggingOperation>();
-serviceProvider.AddScoped<IConverterOperation, ConverterOperation>();
+serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
+//serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
+//serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
+//serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
 
 //Repositories
-serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
-serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
-serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
+serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
+//serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
+//serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
+//serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
-serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
 serviceProvider.BuildServiceProvider();
+
+//var _queueOperation = builder.GetService<IQueueOperation<object>>();
+//var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();
+//_queueOperation.ConsumeQueue("converter");
