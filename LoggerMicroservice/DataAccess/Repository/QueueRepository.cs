@@ -130,7 +130,7 @@ namespace DataAccess.Repository
             }
         }
 
-        public async void OtherLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public void OtherLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             counter++;
 
@@ -167,7 +167,7 @@ namespace DataAccess.Repository
             }
         }
 
-        public async void ErrorLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public void ErrorLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             counter++;
 
