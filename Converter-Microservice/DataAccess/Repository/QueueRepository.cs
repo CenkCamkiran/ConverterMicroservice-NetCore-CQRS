@@ -29,7 +29,7 @@ namespace DataAccess.Repository
             _converterRepository = converterRepository;
         }
 
-        public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
+        public async List<QueueMessage> ConsumeQueue(string queue)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace DataAccess.Repository
             }
         }
 
-        public async Task QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
         {
             try
             {

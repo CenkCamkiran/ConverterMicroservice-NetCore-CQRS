@@ -13,14 +13,14 @@ namespace Operation.Operations
             _queueRepository = queueRepository;
         }
 
-        public async Task<List<QueueMessage>> ConsumeQueueAsync(string queue)
+        public List<QueueMessage> ConsumeQueue(string queue)
         {
-            return await _queueRepository.ConsumeQueueAsync(queue);
+            return _queueRepository.ConsumeQueue(queue);
         }
 
-        public async Task QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
         {
-            await _queueRepository.QueueMessageDirectAsync(message, queue, exchange, routingKey);
+            _queueRepository.QueueMessageDirect(message, queue, exchange, routingKey);
         }
     }
 }

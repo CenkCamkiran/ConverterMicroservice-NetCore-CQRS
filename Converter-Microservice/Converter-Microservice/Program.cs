@@ -50,9 +50,9 @@ serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
 var builder = serviceProvider.BuildServiceProvider();
 
-var _queueOperation = builder.GetService<IQueueRepository<object>>();
+var _queueOperation = builder.GetService<IQueueOperation<object>>();
 var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();
-await _queueOperation.ConsumeQueueAsync("converter");
+_queueOperation.ConsumeQueue("converter");
 
 
 //Console.ReadLine();
