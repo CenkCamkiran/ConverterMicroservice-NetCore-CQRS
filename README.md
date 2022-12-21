@@ -6,21 +6,21 @@
 
 - Web service'de Farklı index'lere log atmayı öğren. (param olarak indexName) (OK!)
 - Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. (OK!)
-- Sonra bu log dosyalarını k8s'de ve dockerfile'da??? volume olarak tanımla.
+- Sonra bu log dosyalarını k8s'de ve dockerfile'da??? volume olarak tanımla. (ARAŞTIR!)
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
-- Request ve response date'leri almaya çalış. (ARAŞTIR!)
+- Request ve response date'leri almaya çalış. (OK!)
 - ELK logging'deki 2 ayrı fonksiyonu teke indirgemeye çalış. (OK!)
 
 ## Consumer Yapılacaklar
 
 - Farklı index'lere log atmayı öğren. (param olarak indexName) (OK!)
 - Web service'de elk logging hata vermesi durumda Log4Net ile dosyaya log yaz. (OK!)
-- Sonra bu log dosyalarını k8s'de ve dockerfile'da??? volume olarak tanımla.
-- Batch mi ya da farklı bişey olarak mı çalışacak? Karar ver. (ARAŞTIR!)
-- MP4'ten Mp3'e convert eden library bul! (KODU YAZ!)
-- Web service'deki gibi Singleton yapısında connection'lar kur! (ARAŞTIR!)
+- Sonra bu log dosyalarını k8s'de ve dockerfile'da??? volume olarak tanımla. (ARAŞTIR!)
+- Batch mi ya da farklı bişey olarak mı çalışacak? Karar ver. (OK!)
+- MP4'ten Mp3'e convert eden library bul! (OK!)
+- Web service'deki gibi Singleton yapısında connection'lar kur! (OK!)
 - Web service'de file logging için elk da yaptığın gibi info log'ları ekle (OK!)
-- Temp olarak açılan dosyaları en son sil (ARAŞTIR!)
+- Temp olarak açılan dosyaları en son sil (OK!)
 
 # İş tanımı
 
@@ -33,9 +33,9 @@
 ## Logging Yapılacaklar
 
 - Logging microservice'i draw.io'da çiz! (ARAŞTIR!)
-- otherlogs ve errorlogs kuyrukların attığın model tiplerine karar ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek) (OK!)
 - Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet! (ARAŞTIR!)
 - Kuyruktan gelen modellere göre ELK'da index'leri oluştur. (ARAŞTIR!)
+- - otherlogs ve errorlogs kuyrukların attığın model tiplerine karar ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek) (OK!)
 
 ## K8S
 
