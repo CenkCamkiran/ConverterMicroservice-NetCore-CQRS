@@ -1,5 +1,6 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
+using DataAccess.Providers;
 using DataAccess.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
@@ -50,8 +51,10 @@ serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
 var builder = serviceProvider.BuildServiceProvider();
 
-var _queueOperation = builder.GetService<IQueueOperation<object>>();
-var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();
+QueueProviders queueProviders = new QueueProviders();
+queueProviders.SetServices(builder);
+
+var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
 _queueOperation.ConsumeQueue("converter");
 
 

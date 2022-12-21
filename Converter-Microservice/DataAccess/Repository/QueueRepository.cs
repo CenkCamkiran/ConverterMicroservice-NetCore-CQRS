@@ -1,4 +1,5 @@
 ﻿using DataAccess.Interfaces;
+using DataAccess.Providers;
 using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -17,6 +18,7 @@ namespace DataAccess.Repository
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
+        //private readonly IQueueRepository<QueueMessage> _queueRepository;
 
         uint msgCount = 0;
         uint counter = 0;
@@ -137,8 +139,11 @@ namespace DataAccess.Repository
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
             ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
-            var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
-            //await _queueRepository.QueueMessageDirectAsync(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
+            var converterResult = await _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
+
+            var cenk = QueueProviders.Current;
+
+            //_queueRepository.QueueMessageDirect(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
 
             //await Task.WhenAll(converterResult);
 

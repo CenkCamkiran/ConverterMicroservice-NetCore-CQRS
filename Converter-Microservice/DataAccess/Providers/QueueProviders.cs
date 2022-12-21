@@ -2,11 +2,11 @@
 {
     public class QueueProviders
     {
-        private IServiceProvider serviceProvider { get; set; }
+        private IServiceProvider ServiceProvider { get; set; }
 
         public void SetServices(IServiceProvider serviceProvider)
         {
-            this.serviceProvider = serviceProvider;
+            this.ServiceProvider = serviceProvider;
         }
 
         public static QueueProviders Current
