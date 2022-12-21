@@ -4,6 +4,7 @@ using Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
 using System.Text;
 using IConnection = RabbitMQ.Client.IConnection;
 
@@ -86,23 +87,26 @@ namespace DataAccess.Repository
         {
             try
             {
-                var channel = _connection.CreateModel();
-                var properties = channel.CreateBasicProperties();
-                properties.Persistent = true;
 
-                channel.QueueDeclare(queue: queue,
-                                     durable: true,
-                                     exclusive: false,
-                                     autoDelete: false,
-                                     arguments: null);
+                using(var channel = _connection.CreateModel())
+                {
+                    var properties = channel.CreateBasicProperties();
+                    properties.Persistent = true;
 
-                string serializedObj = JsonConvert.SerializeObject(message);
-                var body = Encoding.UTF8.GetBytes(serializedObj);
+                    channel.QueueDeclare(queue: queue,
+                                         durable: true,
+                                         exclusive: false,
+                                         autoDelete: false,
+                                         arguments: null);
 
-                channel.BasicPublish(exchange: exchange,
-                                     routingKey: routingKey,
-                                     basicProperties: properties,
-                                     body: body);
+                    string serializedObj = JsonConvert.SerializeObject(message);
+                    var body = Encoding.UTF8.GetBytes(serializedObj);
+
+                    channel.BasicPublish(exchange: exchange,
+                                         routingKey: routingKey,
+                                         basicProperties: properties,
+                                         body: body);
+                }       
 
             }
             catch (Exception exception)
@@ -139,15 +143,13 @@ namespace DataAccess.Repository
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
             ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
-            var converterResult = await _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
+            var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
 
-            var cenk = QueueProviders.Current;
-
-            //_queueRepository.QueueMessageDirect(converterResult, "notification", "notification_exchange.direct", "mp4_to_notif");
-
-            //await Task.WhenAll(converterResult);
+            await Task.WhenAll(converterResult);
 
             e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+
+            File.Delete(objModel.FileFullPath);
 
             QueueLog queueLog = new QueueLog()
             {

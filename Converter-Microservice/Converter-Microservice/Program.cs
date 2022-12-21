@@ -49,10 +49,8 @@ serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
+serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
-
-QueueProviders queueProviders = new QueueProviders();
-queueProviders.SetServices(builder);
 
 var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
 _queueOperation.ConsumeQueue("converter");

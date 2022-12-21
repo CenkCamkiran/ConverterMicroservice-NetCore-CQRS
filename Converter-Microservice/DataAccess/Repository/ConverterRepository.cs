@@ -9,11 +9,13 @@ namespace DataAccess.Repository
     {
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
+        private readonly Lazy<IQueueRepository<QueueMessage>> _queueRepository;
 
-        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository)
+        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository, Lazy<IQueueRepository<QueueMessage>> queueRepository)
         {
             _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
+            _queueRepository = queueRepository;
         }
 
         public async Task<QueueMessage> ConvertMP4_to_MP3(ObjectDataModel objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
@@ -43,8 +45,12 @@ namespace DataAccess.Repository
                             fileGuid = guid
                         };
 
+                        _queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+
                     }
                 }
+
+                File.Delete(ConvertToFilePath);
 
                 ConverterLog converterLog = new ConverterLog()
                 {
