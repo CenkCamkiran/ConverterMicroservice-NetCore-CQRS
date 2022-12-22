@@ -170,12 +170,13 @@ namespace DataAccess.Repository
                 return;
             }
 
-            var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
+            var converterResult = _converterRepository.ConvertMP4_to_MP3_Async(objModel, queueMsg);
 
-            await Task.WhenAll(converterResult);
-
-            //Şuraya Bak
-            e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            if (converterResult.Wait(60000))
+            {
+                e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                File.Delete(objModel.FileFullPath);
+            }
 
             QueueLog queueLog = new QueueLog()
             {

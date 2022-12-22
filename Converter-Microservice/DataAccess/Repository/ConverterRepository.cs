@@ -22,7 +22,7 @@ namespace DataAccess.Repository
             _queueOtherRepository = queueOtherRepository;
         }
 
-        public async Task<QueueMessage> ConvertMP4_to_MP3(ObjectDataModel objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
+        public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectDataModel objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
         {
             QueueMessage? msg = null;
 
