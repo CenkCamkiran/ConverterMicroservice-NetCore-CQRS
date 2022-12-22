@@ -34,16 +34,9 @@ serviceProvider.AddSingleton(rabbitConnection);
 //Operations
 serviceProvider.AddScoped<IObjectStorageOperation, ObjectStorageOperation>();
 serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
-//serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
-//serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
-//serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
-//serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
-//serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
-//serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
-//serviceProvider.AddScoped<IQueueRepository<QueueMessage>, QueueRepository<QueueMessage>>();
 
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
@@ -54,17 +47,3 @@ var builder = serviceProvider.BuildServiceProvider();
 
 var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
 _queueOperation.ConsumeQueue("converter");
-
-
-//Console.ReadLine();
-
-/* ************************************************************************************************* */
-
-//Consume queue (get guid and email from message)
-//Convert mp4 to mp3 (get mp4 object from videos bucket using guid)
-//Get stream data of mp3
-//Put stream data of mp3 as object to minio (audio bucket)
-//send message to notification queue (message consists of guid of mp3 file and email)
-//Write notif microservice!
-
-/* ************************************************************************************************* */
