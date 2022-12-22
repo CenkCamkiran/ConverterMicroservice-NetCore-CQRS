@@ -45,7 +45,6 @@ serviceProvider.AddScoped<IQueueOperation, QueueOperation>();
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
 serviceProvider.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
-serviceProvider.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
 //serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
 //serviceProvider.AddScoped<ILoggingRepository<OtherLog>, LoggingRepository<OtherLog>>();
 //serviceProvider.AddScoped<ILoggingRepository<ErrorLog>, LoggingRepository<ErrorLog>>();

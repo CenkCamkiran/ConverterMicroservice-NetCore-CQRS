@@ -10,6 +10,6 @@ namespace Models
         public string ContentType { get; set; } = string.Empty;
         public long ContentLength { get; set; }
         public DateTime Date { get; set; }
-        public string ExceptionMessage { get; set; } = String.Empty;
+        public string ExceptionMessage { get; set; } = string.Empty;
     }
 }
