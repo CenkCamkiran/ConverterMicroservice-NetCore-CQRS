@@ -13,9 +13,8 @@ namespace DataAccess.Repository
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
-        private List<QueueMessage> messageList = new List<QueueMessage>();
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
-
+        private List<TMessage> messageList = new List<TMessage>();
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
 
@@ -28,7 +27,7 @@ namespace DataAccess.Repository
             _log4NetRepository = log4NetRepository;
         }
 
-        public async Task<List<QueueMessage>> ConsumeErrorLogsQueueAsync(string queue)
+        public List<TMessage> ConsumeQueue(string queue)
         {
             try
             {
@@ -43,10 +42,9 @@ namespace DataAccess.Repository
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-                    var consumer = new EventingBasicConsumer(channel);
+                    var consumer = new AsyncEventingBasicConsumer(channel); //EventingBasicConsumer
 
-                    consumer.Received += ErrorLogsQueue_ReceivedEvent;
-
+                    consumer.Received += QueueReceivedEvent;
 
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
@@ -75,62 +73,11 @@ namespace DataAccess.Repository
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
 
-                return new List<QueueMessage>();
+                return new List<TMessage>();
             }
-        }
+        }   
 
-        public async Task<List<QueueMessage>> ConsumeOtherLogsQueueAsync(string queue)
-        {
-            try
-            {
-
-                using (var channel = _connection.CreateModel())
-                {
-                    var queueResult = channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
-                    channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
-
-                    var consumer = new EventingBasicConsumer(channel);
-
-                    consumer.Received += OtherLogsQueue_ReceivedEvent;
-
-
-                    channel.BasicConsume(queue: queue,
-                                         autoAck: false,
-                                         consumer: consumer);
-
-                    // Wait here until all messages are retrieved
-                    msgsRecievedGate.Wait();
-
-                    return messageList;
-                }
-            }
-            catch (Exception exception)
-            {
-                QueueLog queueLog = new QueueLog()
-                {
-                    OperationType = "BasicConsume",
-                    Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(""),
-                    QueueName = queue,
-                    ExceptionMessage = exception.Message.ToString()
-                };
-                ErrorLog errorLog = new ErrorLog()
-                {
-                    queueLog = queueLog
-                };
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
-
-                return new List<QueueMessage>();
-            }
-        }
-
-        public void OtherLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public async Task QueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             counter++;
 
@@ -159,42 +106,7 @@ namespace DataAccess.Repository
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 
-            if (counter == msgCount)
-            {
-                msgsRecievedGate.Set();
-
-                return;
-            }
-        }
-
-        public void ErrorLogsQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
-        {
-            counter++;
-
-            var e = (EventingBasicConsumer)se;
-            var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
-
-            msgCount = e.Model.MessageCount("errorlogs");
-            ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
-
-            e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-            QueueLog queueLog = new QueueLog()
-            {
-                OperationType = "BasicConsume",
-                Date = DateTime.Now,
-                ExchangeName = ea.Exchange,
-                Message = JsonConvert.SerializeObject(message),
-                QueueName = "converter", //Bu nereden gelir?
-                RoutingKey = ea.RoutingKey
-            };
-            OtherLog otherLog = new OtherLog()
-            {
-                queueLog = queueLog
-            };
-            string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-            _log4NetRepository.Info(logText);
+            await Task.Yield();
 
             if (counter == msgCount)
             {

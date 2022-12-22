@@ -6,7 +6,6 @@ namespace DataAccess.Interfaces
 {
     public interface IQueueRepository<TMessage> where TMessage : class
     {
-        Task<List<QueueMessage>> ConsumeOtherLogsQueueAsync(string queue);
-        Task<List<QueueMessage>> ConsumeErrorLogsQueueAsync(string queue);
+        List<TMessage> ConsumeQueue(string queue);
     }
 }

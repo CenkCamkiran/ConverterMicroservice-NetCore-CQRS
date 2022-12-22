@@ -40,7 +40,7 @@ serviceProvider.AddSingleton(rabbitConnection);
 serviceProvider.AddScoped(typeof(ILoggingOperation<>), typeof(LoggingOperation<>));
 //serviceProvider.AddScoped<ILoggingOperation<OtherLog>, LoggingOperation<OtherLog>>();
 //serviceProvider.AddScoped<ILoggingOperation<ErrorLog>, LoggingOperation<ErrorLog>>();
-serviceProvider.AddScoped<IQueueOperation, QueueOperation>();
+serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
 
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
@@ -50,4 +50,9 @@ serviceProvider.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository
 //serviceProvider.AddScoped<ILoggingRepository<ErrorLog>, LoggingRepository<ErrorLog>>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-serviceProvider.BuildServiceProvider();
+var builder = serviceProvider.BuildServiceProvider();
+
+var _queueOperation = builder.GetService<IQueueOperation<ErrorLog>>();
+
+List<ErrorLog> errorLog = _queueOperation.ConsumeQueue("");
+//List<ErrorLog> errorLogs = 

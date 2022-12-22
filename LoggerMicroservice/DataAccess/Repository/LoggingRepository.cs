@@ -1,7 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using Models;
 using Nest;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 

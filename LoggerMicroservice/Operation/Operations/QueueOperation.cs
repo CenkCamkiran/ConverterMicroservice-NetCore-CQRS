@@ -4,23 +4,18 @@ using Operation.Interfaces;
 
 namespace Operation.Operations
 {
-    public class QueueOperation : IQueueOperation
+    public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {
-        IQueueRepository<object> _queueRepository;
+        IQueueRepository<TMessage> _queueRepository;
 
-        public QueueOperation(IQueueRepository<object> queueRepository)
+        public QueueOperation(IQueueRepository<TMessage> queueRepository)
         {
             _queueRepository = queueRepository;
         }
 
-        public List<QueueMessage> ConsumeErrorLogsQueue(string queue)
+        public async Task<List<TMessage>> ConsumeQueue(string queue)
         {
-            return _queueRepository.ConsumeQueue(queue);
-        }
-
-        public List<QueueMessage> ConsumeOtherLogsQueue(string queue)
-        {
-            return _queueRepository.ConsumeQueue(queue);
+            return await _queueRepository.ConsumeQueue(queue); 
         }
     }
 }
