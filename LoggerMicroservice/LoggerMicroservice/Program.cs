@@ -84,5 +84,3 @@ catch (Exception exception)
     _queueErrorLogsOperation.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
 }
-
-//List<ErrorLog> errorLogs = 
