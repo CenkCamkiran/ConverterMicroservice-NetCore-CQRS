@@ -2,9 +2,8 @@
 
 namespace Operation.Interfaces
 {
-    public interface IQueueOperation
+    public interface IQueueOperation<TMessage> where TMessage: class
     {
-        List<QueueMessage> ConsumeErrorLogsQueue(string queue);
-        List<QueueMessage> ConsumeOtherLogsQueue(string queue);
+        Task<List<TMessage>> ConsumeQueue(string queue);
     }
 }

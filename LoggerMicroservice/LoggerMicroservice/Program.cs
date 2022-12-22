@@ -45,4 +45,9 @@ serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>))
 serviceProvider.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-serviceProvider.BuildServiceProvider();
+var builder = serviceProvider.BuildServiceProvider();
+
+var _queueOperation = builder.GetService<IQueueOperation<ErrorLog>>();
+
+List<ErrorLog> errorLog = _queueOperation.ConsumeQueue("");
+//List<ErrorLog> errorLogs = 
