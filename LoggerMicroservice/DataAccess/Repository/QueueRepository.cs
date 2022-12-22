@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace DataAccess.Repository
 {
@@ -17,14 +16,18 @@ namespace DataAccess.Repository
         private List<TMessage> messageList = new List<TMessage>();
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
+        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
 
         uint msgCount = 0;
         uint counter = 0;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
         {
             _connection = connection;
             _log4NetRepository = log4NetRepository;
+            _queueErrorRepository = queueErrorRepository;
+            _queueOtherRepository = queueOtherRepository;
         }
 
         public List<TMessage> ConsumeQueue(string queue)
@@ -70,12 +73,82 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
 
                 return new List<TMessage>();
             }
-        }   
+        }
+
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        {
+            try
+            {
+
+                using (var channel = _connection.CreateModel())
+                {
+                    var properties = channel.CreateBasicProperties();
+                    properties.Persistent = true;
+
+                    channel.QueueDeclare(queue: queue,
+                                         durable: true,
+                                         exclusive: false,
+                                         autoDelete: false,
+                                         arguments: null);
+
+                    string serializedObj = JsonConvert.SerializeObject(message);
+                    var body = Encoding.UTF8.GetBytes(serializedObj);
+
+                    channel.BasicPublish(exchange: exchange,
+                                         routingKey: routingKey,
+                                         basicProperties: properties,
+                                         body: body);
+                }
+
+                QueueLog queueLog = new QueueLog()
+                {
+                    OperationType = "BasicPublish",
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
+                    Message = JsonConvert.SerializeObject(message),
+                    QueueName = queue,
+                    RoutingKey = routingKey
+                };
+                OtherLog otherLog = new OtherLog()
+                {
+                    queueLog = queueLog
+                };
+                _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
+
+                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _log4NetRepository.Info(logText);
+
+            }
+            catch (Exception exception)
+            {
+                QueueLog queueLog = new QueueLog()
+                {
+                    OperationType = "BasicPublish",
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
+                    Message = JsonConvert.SerializeObject(message),
+                    QueueName = queue,
+                    RoutingKey = routingKey,
+                    ExceptionMessage = exception.Message.ToString()
+                };
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    queueLog = queueLog
+                };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
+                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _log4NetRepository.Error(logText);
+
+            }
+        }
 
         public void QueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
@@ -103,6 +176,8 @@ namespace DataAccess.Repository
             {
                 queueLog = queueLog
             };
+            _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
+
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 

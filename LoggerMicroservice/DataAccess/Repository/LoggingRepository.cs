@@ -10,11 +10,13 @@ namespace DataAccess.Repository
     {
         private readonly IElasticClient _elasticClient;
         private readonly ILog4NetRepository _log4NetRepository;
+        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
 
-        public LoggingRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository)
+        public LoggingRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository)
         {
             _elasticClient = elasticClient;
             _log4NetRepository = log4NetRepository;
+            _queueErrorRepository = queueErrorRepository;
         }
 
         public async Task<bool> IndexDocAsync(string indexName, TModel model)
@@ -34,6 +36,11 @@ namespace DataAccess.Repository
             {
                 ConsumerExceptionModel error = new ConsumerExceptionModel();
                 error.ErrorMessage = exception.Message.ToString();
+                ErrorLog errorLog = new ErrorLog()
+                {
+                    exceptionModel = error
+                };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 _log4NetRepository.Error(exception.Message.ToString());
 

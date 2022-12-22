@@ -1,5 +1,4 @@
 ﻿using DataAccess.Interfaces;
-using Models;
 using Operation.Interfaces;
 
 namespace Operation.Operations
@@ -15,7 +14,12 @@ namespace Operation.Operations
 
         public List<TMessage> ConsumeQueue(string queue)
         {
-            return _queueRepository.ConsumeQueue(queue); 
+            return _queueRepository.ConsumeQueue(queue);
+        }
+
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        {
+            _queueRepository.QueueMessageDirect(message, queue, exchange, routingKey);
         }
     }
 }

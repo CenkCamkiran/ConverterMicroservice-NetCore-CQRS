@@ -158,18 +158,24 @@ namespace DataAccess.Repository
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
+            string consumerTag = e.ConsumerTags[0];
 
             msgCount = e.Model.MessageCount("converter");
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
             ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
+            if (objModel == null)
+            {
+                e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
+                return;
+            }
+
             var converterResult = _converterRepository.ConvertMP4_to_MP3(objModel, queueMsg);
 
             await Task.WhenAll(converterResult);
 
+            //Şuraya Bak
             e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-
-            File.Delete(objModel.FileFullPath);
 
             QueueLog queueLog = new QueueLog()
             {
