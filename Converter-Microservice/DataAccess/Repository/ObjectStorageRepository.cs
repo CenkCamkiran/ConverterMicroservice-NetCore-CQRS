@@ -10,11 +10,15 @@ namespace DataAccess.Repository
     {
         private readonly IMinioClient _minioClient;
         private readonly ILog4NetRepository _log4NetRepository;
+        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
 
-        public ObjectStorageRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository)
+        public ObjectStorageRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
         {
             _minioClient = minioClient;
             _log4NetRepository = log4NetRepository;
+            _queueErrorRepository = queueErrorRepository;
+            _queueOtherRepository = queueOtherRepository;
         }
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
@@ -58,7 +62,6 @@ namespace DataAccess.Repository
                 await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
-
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
                     OperationType = "PutObjectAsync",
@@ -72,6 +75,7 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
+                _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
@@ -93,6 +97,8 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
             }
@@ -142,6 +148,8 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
+                _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
+
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
 
@@ -160,6 +168,8 @@ namespace DataAccess.Repository
                 {
                     storageLog = objectStorageLog
                 };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
 

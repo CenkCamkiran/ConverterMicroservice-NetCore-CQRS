@@ -10,12 +10,16 @@ namespace DataAccess.Repository
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly Lazy<IQueueRepository<QueueMessage>> _queueRepository;
+        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
 
-        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository, Lazy<IQueueRepository<QueueMessage>> queueRepository)
+        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository, Lazy<IQueueRepository<QueueMessage>> queueRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
         {
             _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _queueRepository = queueRepository;
+            _queueErrorRepository = queueErrorRepository;
+            _queueOtherRepository = queueOtherRepository;
         }
 
         public async Task<QueueMessage> ConvertMP4_to_MP3(ObjectDataModel objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
@@ -60,6 +64,8 @@ namespace DataAccess.Repository
                 {
                     converterLog = converterLog
                 };
+                _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
+
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
 
@@ -76,6 +82,7 @@ namespace DataAccess.Repository
                 {
                     converterLog = exceptionModel
                 };
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);

@@ -1,6 +1,7 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Providers;
 using Models;
+using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -19,7 +20,6 @@ namespace DataAccess.Repository
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
-        //private readonly IQueueRepository<QueueMessage> _queueRepository;
 
         uint msgCount = 0;
         uint counter = 0;
@@ -51,7 +51,6 @@ namespace DataAccess.Repository
 
                     consumer.Received += ConverterQueue_ReceivedEvent;
 
-
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
                                          consumer: consumer);
@@ -76,6 +75,8 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
+                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
 
@@ -106,7 +107,24 @@ namespace DataAccess.Repository
                                          routingKey: routingKey,
                                          basicProperties: properties,
                                          body: body);
-                }       
+                }
+
+                QueueLog queueLog = new QueueLog()
+                {
+                    OperationType = "BasicPublish",
+                    Date = DateTime.Now,
+                    ExchangeName = exchange,
+                    Message = JsonConvert.SerializeObject(message),
+                    QueueName = queue,
+                    RoutingKey = routingKey
+                };
+                OtherLog otherLog = new OtherLog()
+                {
+                    queueLog = queueLog
+                };
+
+                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -125,13 +143,15 @@ namespace DataAccess.Repository
                 {
                     queueLog = queueLog
                 };
+                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
 
             }
         }
 
-        public async void ConverterQueue_ReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public async void ConverterQueue_ReceivedEvent(object? se, BasicDeliverEventArgs ea)
         {
             counter++;
 
@@ -164,6 +184,7 @@ namespace DataAccess.Repository
             {
                 queueLog = queueLog
             };
+
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 
