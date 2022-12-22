@@ -42,7 +42,7 @@ namespace DataAccess.Repository
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
-                    var consumer = new AsyncEventingBasicConsumer(channel); //EventingBasicConsumer
+                    var consumer = new EventingBasicConsumer(channel); //EventingBasicConsumer
 
                     consumer.Received += QueueReceivedEvent;
 
@@ -77,7 +77,7 @@ namespace DataAccess.Repository
             }
         }   
 
-        public async Task QueueReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public void QueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             counter++;
 
@@ -105,8 +105,6 @@ namespace DataAccess.Repository
             };
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
-
-            await Task.Yield();
 
             if (counter == msgCount)
             {

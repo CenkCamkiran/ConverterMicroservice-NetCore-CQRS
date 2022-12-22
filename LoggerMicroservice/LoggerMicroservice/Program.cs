@@ -38,7 +38,7 @@ serviceProvider.AddSingleton(rabbitConnection);
 
 //Operation
 serviceProvider.AddScoped(typeof(ILoggingOperation<>), typeof(LoggingOperation<>));
-serviceProvider.AddScoped<IQueueOperation, QueueOperation>();
+serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
 
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));

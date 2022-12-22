@@ -13,9 +13,9 @@ namespace Operation.Operations
             _queueRepository = queueRepository;
         }
 
-        public async Task<List<TMessage>> ConsumeQueue(string queue)
+        public List<TMessage> ConsumeQueue(string queue)
         {
-            return await _queueRepository.ConsumeQueue(queue); 
+            return _queueRepository.ConsumeQueue(queue); 
         }
     }
 }
