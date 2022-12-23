@@ -39,7 +39,7 @@
 - Mail server ve domain araştır. (ARAŞTIR!)
 - Notif service'de mail server için env variables'ları düzenle. (ARAŞTIR!)
 - Minio object ttl ekle! (ARAŞTIR!)
-- rabbitmq message ttl ekle, eklemeden önce eski kuyrukta kodu test et! (ARAŞTIR!)
+- rabbitmq message ttl ekle, eklemeden önce eski notif adındaki kuyrukta kodu test et! (ARAŞTIR!)
 
 ## K8S
 
