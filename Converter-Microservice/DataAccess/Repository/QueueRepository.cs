@@ -67,7 +67,6 @@ namespace DataAccess.Repository
                 {
                     OperationType = "BasicConsume",
                     Date = DateTime.Now,
-                    Message = JsonConvert.SerializeObject(""),
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
                 };
