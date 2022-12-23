@@ -57,7 +57,6 @@ var _loggingErrorLogsOperation = builder.GetService<ILoggingOperation<ErrorLog>>
 
 try
 {
-
     await Task.Run( () =>
     {
         _queueErrorLogsOperation.ConsumeErrorLogsQueue("errorlogs");

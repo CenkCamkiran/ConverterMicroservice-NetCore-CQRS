@@ -55,7 +55,8 @@ namespace DataAccess.Repository
                                          autoAck: false,
                                          consumer: consumer);
 
-                    if (channel.MessageCount(queue) == 0)
+                    uint msgCount = channel.MessageCount(queue);
+                    if (msgCount == 0)
                     {
                         msgsRecievedGate.Set();
 

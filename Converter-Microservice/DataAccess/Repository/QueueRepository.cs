@@ -64,7 +64,6 @@ namespace DataAccess.Repository
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
 
-                    return messageList;
                 }
             }
             catch (Exception exception)
@@ -84,8 +83,6 @@ namespace DataAccess.Repository
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
-
-                return new List<QueueMessage>();
             }
         }
 
