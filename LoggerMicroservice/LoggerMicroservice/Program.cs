@@ -61,13 +61,11 @@ try
     await Task.Run( () =>
     {
         _queueErrorLogsOperation.ConsumeErrorLogsQueue("errorlogs");
-        return;
     });
 
     await Task.Run( () =>
     {
         _queueOtherLogsOperation.ConsumeOtherLogsQueue("otherlogs");
-        return;
     });
 
 }

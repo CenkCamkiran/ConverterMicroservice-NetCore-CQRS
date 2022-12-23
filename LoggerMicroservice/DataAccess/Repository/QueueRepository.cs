@@ -58,6 +58,8 @@ namespace DataAccess.Repository
 
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
+
+                    return;
                 }
             }
             catch (Exception exception)
@@ -106,6 +108,8 @@ namespace DataAccess.Repository
 
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
+
+                    return;
                 }
             }
             catch (Exception exception)
@@ -201,8 +205,14 @@ namespace DataAccess.Repository
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-
             msgCount = e.Model.MessageCount("errorlogs");
+            if (msgCount == 0)
+            {
+                msgsRecievedGate.Set();
+
+                return;
+            }
+
             ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
 
             var task = _loggingErrorLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
@@ -243,11 +253,17 @@ namespace DataAccess.Repository
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-
             msgCount = e.Model.MessageCount("otherlogs");
+            if (msgCount == 0)
+            {
+                msgsRecievedGate.Set();
+
+                return;
+            }
+
             OtherLog queueMsg = JsonConvert.DeserializeObject<OtherLog>(message);
 
-            var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
+            var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_otherlogs", queueMsg);
             if (task.Result && task.Wait(60000))
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
