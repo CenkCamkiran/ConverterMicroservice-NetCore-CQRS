@@ -1,6 +1,4 @@
-﻿using Models;
-
-namespace Operation.Interfaces
+﻿namespace Operation.Interfaces
 {
     public interface ILoggingOperation<TModel> where TModel : class
     {

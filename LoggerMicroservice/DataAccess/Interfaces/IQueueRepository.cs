@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace DataAccess.Interfaces
+﻿namespace DataAccess.Interfaces
 {
     public interface IQueueRepository<TMessage> where TMessage : class
     {

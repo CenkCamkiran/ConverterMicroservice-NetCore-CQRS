@@ -2,8 +2,6 @@
 using Models;
 using Nest;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repository
@@ -42,7 +40,7 @@ namespace DataAccess.Repository
                 error.Date = DateTime.Now;
                 ErrorLog errorLog = new ErrorLog()
                 {
-                    loggerLog = error     
+                    loggerLog = error
                 };
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 

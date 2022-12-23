@@ -1,5 +1,6 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
+using DataAccess.Providers;
 using DataAccess.Repository;
 using Elasticsearch.Net;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +9,7 @@ using Nest;
 using Operation.Interfaces;
 using Operation.Operations;
 using RabbitMQ.Client;
-using DataAccess.Providers;
 using IConnection = RabbitMQ.Client.IConnection;
-using Newtonsoft.Json;
 
 var serviceProvider = new ServiceCollection();
 EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
@@ -57,12 +56,12 @@ var _loggingErrorLogsOperation = builder.GetService<ILoggingOperation<ErrorLog>>
 
 try
 {
-    await Task.Run( () =>
+    await Task.Run(() =>
     {
         _queueErrorLogsOperation.ConsumeErrorLogsQueue("errorlogs");
     });
 
-    await Task.Run( () =>
+    await Task.Run(() =>
     {
         _queueOtherLogsOperation.ConsumeOtherLogsQueue("otherlogs");
     });
