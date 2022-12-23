@@ -58,7 +58,8 @@ namespace DataAccess.Repository
 
                 ConverterLog converterLog = new ConverterLog()
                 {
-                    Info = "Conversion finished!"
+                    Info = "Conversion finished!",
+                    Date = DateTime.Now
                 };
                 OtherLog otherLog = new OtherLog()
                 {
@@ -76,7 +77,8 @@ namespace DataAccess.Repository
             {
                 ConverterLog exceptionModel = new ConverterLog()
                 {
-                    Error = exception.Message.ToString()
+                    Error = exception.Message.ToString(),
+                    Date = DateTime.Now
                 };
                 ErrorLog errorLog = new ErrorLog()
                 {
