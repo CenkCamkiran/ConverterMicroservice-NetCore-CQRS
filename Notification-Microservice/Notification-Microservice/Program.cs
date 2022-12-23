@@ -1,7 +1,10 @@
 ﻿using Configuration;
 using DataAccess.Interfaces;
+using DataAccess.Providers;
 using DataAccess.Repository;
 using Elasticsearch.Net;
+using Helper.Helpers;
+using Helper.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Models;
@@ -43,23 +46,25 @@ var connectionFactory = new ConnectionFactory
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
 
-
 //Operations
 serviceProvider.AddScoped<IObjectStorageOperation, ObjectStorageOperation>();
+serviceProvider.AddScoped<IMailSenderOperation, MailSenderOperation>();
 serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
-//serviceProvider.AddScoped<IQueueOperation<OtherLog>, QueueOperation<OtherLog>>();
-//serviceProvider.AddScoped<IQueueOperation<ErrorLog>, QueueOperation<ErrorLog>>();
-//serviceProvider.AddScoped<IQueueOperation<object>, QueueOperation<object>>();
+
+//Helpers
+serviceProvider.AddScoped<IMailSenderRepository, MailSenderRepository>();
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
-//serviceProvider.AddScoped<IQueueRepository<object>, QueueRepository<object>>();
-//serviceProvider.AddScoped<IQueueRepository<OtherLog>, QueueRepository<OtherLog>>();
-//serviceProvider.AddScoped<IQueueRepository<ErrorLog>, QueueRepository<ErrorLog>>();
 serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-serviceProvider.BuildServiceProvider();
+serviceProvider.AddLazyResolution();
+
+var builder = serviceProvider.BuildServiceProvider();
+var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
+
+_queueOperation.ConsumeQueue("notification");
 
 //var _queueOperation = builder.GetService<IQueueOperation<object>>();
 //var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();

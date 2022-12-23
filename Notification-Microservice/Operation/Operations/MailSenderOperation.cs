@@ -1,6 +1,8 @@
-﻿namespace Operation.Operations
+﻿using Operation.Interfaces;
+
+namespace Operation.Operations
 {
-    public class MailSenderOperation
+    public class MailSenderOperation : IMailSenderOperation
     {
     }
 }
