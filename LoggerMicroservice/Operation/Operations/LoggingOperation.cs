@@ -17,15 +17,5 @@ namespace Operation.Operations
         {
             return await _loggingRepository.IndexDocAsync(indexName, model);
         }
-
-        public async Task LogError(ErrorLog errorLog)
-        {
-            await _loggingRepository.LogError(errorLog);
-        }
-
-        public async Task LogOther(OtherLog otherLog)
-        {
-            await _loggingRepository.LogOther(otherLog);
-        }
     }
 }

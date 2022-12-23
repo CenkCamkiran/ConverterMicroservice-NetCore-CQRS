@@ -2,6 +2,8 @@
 using Models;
 using Nest;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repository
@@ -24,6 +26,7 @@ namespace DataAccess.Repository
             try
             {
                 //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
+                //BulkResponse bulkDocuments = await _elasticClient.BulkAsync(elk => elk.Index(indexName).IndexMany(model));
                 IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";

@@ -52,20 +52,22 @@ var builder = serviceProvider.BuildServiceProvider();
 
 var _queueErrorLogsOperation = builder.GetService<IQueueOperation<ErrorLog>>();
 var _queueOtherLogsOperation = builder.GetService<IQueueOperation<OtherLog>>();
+var _loggingOtherLogsOperation = builder.GetService<ILoggingOperation<OtherLog>>();
+var _loggingErrorLogsOperation = builder.GetService<ILoggingOperation<ErrorLog>>();
 
 try
 {
 
-    await Task.Run(() =>
+    await Task.Run( () =>
     {
-        List<ErrorLog> errorLogs = _queueErrorLogsOperation.ConsumeQueue("errorlogs");
-
+        _queueErrorLogsOperation.ConsumeErrorLogsQueue("errorlogs");
+        return;
     });
 
-    await Task.Run(() =>
+    await Task.Run( () =>
     {
-        List<OtherLog> otherLogs = _queueOtherLogsOperation.ConsumeQueue("otherlogs");
-
+        _queueOtherLogsOperation.ConsumeOtherLogsQueue("otherlogs");
+        return;
     });
 
 }

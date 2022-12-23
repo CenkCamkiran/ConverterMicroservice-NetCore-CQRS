@@ -12,9 +12,14 @@ namespace Operation.Operations
             _queueRepository = queueRepository;
         }
 
-        public List<TMessage> ConsumeQueue(string queue)
+        public void ConsumeErrorLogsQueue(string queue)
         {
-            return _queueRepository.ConsumeQueue(queue);
+            _queueRepository.ConsumeErrorLogsQueue(queue);
+        }
+
+        public void ConsumeOtherLogsQueue(string queue)
+        {
+            _queueRepository.ConsumeOtherLogsQueue(queue);
         }
 
         public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
