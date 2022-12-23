@@ -22,7 +22,6 @@ namespace DataAccess.Repository
         private readonly IConverterRepository _converterRepository;
 
         uint msgCount = 0;
-        uint counter = 0;
 
         public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectStorageRepository objectStorageRepository, IConverterRepository converterRepository)
         {
@@ -152,8 +151,6 @@ namespace DataAccess.Repository
 
         public async void ConverterQueue_ReceivedEvent(object? se, BasicDeliverEventArgs ea)
         {
-            counter++;
-
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
@@ -194,7 +191,7 @@ namespace DataAccess.Repository
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 
-            if (counter == msgCount)
+            if (msgCount == 0)
             {
                 msgsRecievedGate.Set();
 

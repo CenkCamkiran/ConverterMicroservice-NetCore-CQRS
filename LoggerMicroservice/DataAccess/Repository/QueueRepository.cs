@@ -14,7 +14,6 @@ namespace DataAccess.Repository
     {
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
         uint msgCount = 0;
-        uint counter = 0;
 
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
@@ -106,6 +105,7 @@ namespace DataAccess.Repository
                                          autoAck: false,
                                          consumer: consumer);
 
+                    //throw new Exception();
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
 
@@ -200,18 +200,10 @@ namespace DataAccess.Repository
 
         public void ErrorLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
-            counter++;
-
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             msgCount = e.Model.MessageCount("errorlogs");
-            if (msgCount == 0)
-            {
-                msgsRecievedGate.Set();
-
-                return;
-            }
 
             ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
 
@@ -238,7 +230,7 @@ namespace DataAccess.Repository
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 
-            if (counter == msgCount)
+            if (msgCount == 0)
             {
                 msgsRecievedGate.Set();
 
@@ -248,18 +240,10 @@ namespace DataAccess.Repository
 
         public void OtherLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
-            counter++;
-
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
             msgCount = e.Model.MessageCount("otherlogs");
-            if (msgCount == 0)
-            {
-                msgsRecievedGate.Set();
-
-                return;
-            }
 
             OtherLog queueMsg = JsonConvert.DeserializeObject<OtherLog>(message);
 
@@ -286,7 +270,7 @@ namespace DataAccess.Repository
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
             _log4NetRepository.Info(logText);
 
-            if (counter == msgCount)
+            if (msgCount == 0)
             {
                 msgsRecievedGate.Set();
 
