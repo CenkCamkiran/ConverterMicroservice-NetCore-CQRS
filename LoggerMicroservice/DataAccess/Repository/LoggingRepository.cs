@@ -37,11 +37,12 @@ namespace DataAccess.Repository
             }
             catch (Exception exception)
             {
-                ConsumerExceptionModel error = new ConsumerExceptionModel();
+                LoggerLog error = new LoggerLog();
                 error.ErrorMessage = exception.Message.ToString();
+                error.Date = DateTime.Now;
                 ErrorLog errorLog = new ErrorLog()
                 {
-                    exceptionModel = error
+                    loggerLog = error     
                 };
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
