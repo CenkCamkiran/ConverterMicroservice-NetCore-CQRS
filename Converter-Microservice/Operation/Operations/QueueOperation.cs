@@ -13,9 +13,9 @@ namespace Operation.Operations
             _queueRepository = queueRepository;
         }
 
-        public List<QueueMessage> ConsumeQueue(string queue)
+        public void ConsumeQueue(string queue)
         {
-            return _queueRepository.ConsumeQueue(queue);
+            _queueRepository.ConsumeQueue(queue);
         }
 
         public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)

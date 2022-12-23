@@ -31,7 +31,7 @@ namespace DataAccess.Repository
             _converterRepository = converterRepository;
         }
 
-        public List<QueueMessage> ConsumeQueue(string queue)
+        public void ConsumeQueue(string queue)
         {
             try
             {
@@ -53,6 +53,13 @@ namespace DataAccess.Repository
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
                                          consumer: consumer);
+
+                    if (channel.MessageCount(queue) == 0)
+                    {
+                        msgsRecievedGate.Set();
+
+                        return;
+                    }
 
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
