@@ -31,14 +31,13 @@
 ## Logging Yapılacaklar
 
 - Logging microservice'i draw.io'da çiz! (ARAŞTIR!)
-- Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet! (ARAŞTIR!)
-- Kuyruktan gelen modellere göre ELK'da index'leri oluştur. (ARAŞTIR!)
+- Logging microservice'de kuyrukları consume etmeyi async ya da thread ile paralel hallet! (OK!)
+- Kuyruktan gelen modellere göre ELK'da index'leri oluştur. (OK!)
 - otherlogs ve errorlogs kuyrukların attığın model tiplerine karar ver. modeller farklı olursa ne olacak (Logging service'deki converter ve objStorage modelleri farklı, neye göre deserialize edilecek) (OK!)
 
-- otherlogs ve errorlogs kuyurkları için açılan elk indexlerini ingest pipeline ile reindex yap. yeni index'e taşı. eski index leri sil. (ARAŞTIR!)
+- otherlogs ve errorlogs kuyrukları için açılan elk indexlerini ingest pipeline ile reindex yap. yeni index'e taşı. eski index leri sil. (OK!)
 - Mail server ve domain araştır. (ARAŞTIR!)
 - Notif service'de mail server için env variables'ları düzenle. (ARAŞTIR!)
-- Minio object ttl ekle! (ARAŞTIR!)
 - rabbitmq message ttl ekle, eklemeden önce eski notif adındaki kuyrukta kodu test et! (ARAŞTIR!)
 
 ## K8S
