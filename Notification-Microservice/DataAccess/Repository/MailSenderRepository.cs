@@ -24,7 +24,7 @@ namespace Helper.Helpers
         {
             try
             {
-                string body = $"<p style=\"color: rgb(0, 0, 0); font-size: 16px;\">Here is your cenverted file ({AttachmentFilePath}) </p>";
+                string body = $"<p style=\"color: rgb(0, 0, 0); font-size: 16px;\">Here is your cenverted file ({Path.GetFileName(AttachmentFilePath)}) </p>";
 
                 MailMessage mail = new MailMessage();
                 SmtpClient client = new SmtpClient();
