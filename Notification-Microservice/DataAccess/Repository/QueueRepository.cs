@@ -174,7 +174,9 @@ namespace DataAccess.Repository
             if (taskResult)
             {
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                File.Delete(objModel.FileFullPath);
+                
+                if(File.Exists(objModel.FileFullPath))
+                    File.Delete(objModel.FileFullPath);
             }
 
             QueueLog queueLog = new QueueLog()

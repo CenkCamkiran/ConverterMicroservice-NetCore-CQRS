@@ -24,17 +24,6 @@ MinioClient minioClient = new MinioClient()
                         .WithSSL(false);
 serviceProvider.AddSingleton<IMinioClient>(minioClient);
 
-ElkConfiguration elkConfiguration = envVariablesHandler.GetElkEnvVariables();
-ConnectionSettings connection = new ConnectionSettings(new Uri(elkConfiguration.ElkHost)).
-DefaultIndex(elkConfiguration.ElkDefaultIndex).
-ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-ThrowExceptions(true).
-PrettyJson().
-RequestTimeout(TimeSpan.FromSeconds(300)).
-BasicAuthentication(elkConfiguration.ElkUsername, elkConfiguration.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
-ElasticClient elasticClient = new ElasticClient(connection);
-serviceProvider.AddSingleton<IElasticClient>(elasticClient);
-
 RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
 var connectionFactory = new ConnectionFactory
 {

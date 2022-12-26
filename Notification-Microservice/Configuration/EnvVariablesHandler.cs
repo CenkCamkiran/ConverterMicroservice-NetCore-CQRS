@@ -57,5 +57,25 @@ namespace Configuration
             return rabbitMqConfiguration;
         }
 
+        public SmtpConfiguration GetSmtpEnvVariables()
+        {
+            string? smtpHost = Environment.GetEnvironmentVariable("SMTP_HOST");
+            string? smtpPort = Environment.GetEnvironmentVariable("SMTP_PORT");
+            string? smtpMailFrom = Environment.GetEnvironmentVariable("SMTP_MAIL_FROM");
+            string? smtpMailPassword = Environment.GetEnvironmentVariable("SMTP_MAIL_PASSWORD");
+            string? smtpMailUsername = Environment.GetEnvironmentVariable("SMTP_MAIL_USERNAME");
+
+            SmtpConfiguration smtpConfiguration = new SmtpConfiguration()
+            {
+                SmtpHost = smtpHost,
+                SmtpPort = smtpPort,
+                SmtpMailFrom = smtpMailFrom,
+                SmtpMailPassword = smtpMailPassword,
+                SmtpMailUsername = smtpMailUsername
+            };
+
+            return smtpConfiguration;
+        }
+
     }
 }

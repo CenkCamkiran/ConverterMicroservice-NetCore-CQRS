@@ -22,6 +22,8 @@ namespace Helper.Helpers
 
         public Task<bool> SendMailToUser(string email, string AttachmentFilePath)
         {
+            SmtpConfiguration smtpConfiguration = envVariablesHandler.GetSmtpEnvVariables();
+
             try
             {
                 string body = $"<p style=\"color: rgb(0, 0, 0); font-size: 16px;\">Here is your cenverted file ({Path.GetFileName(AttachmentFilePath)}) </p>";
@@ -29,16 +31,17 @@ namespace Helper.Helpers
                 MailMessage mail = new MailMessage();
                 SmtpClient client = new SmtpClient();
 
-                client.Port = 25;
+                client.Port = Convert.ToInt32(smtpConfiguration.SmtpPort);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
-                client.Host = "";
-                client.Credentials = new NetworkCredential("", "");
+                client.EnableSsl= true;    
+                client.Host = smtpConfiguration.SmtpHost;
+                client.Credentials = new NetworkCredential(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailPassword);
                 mail.IsBodyHtml = true;
                 mail.To.Add(email);
                 //mail.CC.Add(new MailAddress(""));
-                mail.From = (new MailAddress("mail@mail.com", "Name Surname"));
-                mail.Subject = "";
+                mail.From = (new MailAddress(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailUsername));
+                mail.Subject = "About Your Converted File";
                 mail.Attachments.Add(new Attachment(AttachmentFilePath));
                 mail.Body = body;
 
@@ -48,6 +51,7 @@ namespace Helper.Helpers
                     return Task.FromResult(true);
 
                 return Task.FromResult(false);
+                //return Task.FromResult(true);
 
             }
             catch (Exception exception)

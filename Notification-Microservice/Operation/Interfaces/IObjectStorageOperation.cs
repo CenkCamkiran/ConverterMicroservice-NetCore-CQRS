@@ -1,4 +1,6 @@
-﻿namespace Operation.Interfaces
+﻿using Models;
+
+namespace Operation.Interfaces
 {
     public interface IObjectStorageOperation
     {
