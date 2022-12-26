@@ -54,7 +54,8 @@ namespace DataAccess.Repository
                     }
                 }
 
-                File.Delete(ConvertToFilePath);
+                if(File.Exists(ConvertToFilePath))
+                    File.Delete(ConvertToFilePath);
 
                 ConverterLog converterLog = new ConverterLog()
                 {
