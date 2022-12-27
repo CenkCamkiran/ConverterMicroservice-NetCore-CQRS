@@ -53,7 +53,7 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
 
-_queueOperation.ConsumeQueue("notification");
+_queueOperation.ConsumeQueue("notification", 3600000);
 
 //var _queueOperation = builder.GetService<IQueueOperation<object>>();
 //var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();

@@ -168,11 +168,14 @@ namespace DataAccess.Repository
                 return;
             }
 
-            await _mailSenderHelper.Value.SendMailToUser(queueMsg.email, objModel.FileFullPath);
-            e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            using (FileStream fs = File.OpenRead(objModel.FileFullPath))
+            {
+                _mailSenderHelper.Value.SendMailToUser(queueMsg.email, Path.GetFileName(objModel.FileFullPath), fs);
+                e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
-            if (File.Exists(objModel.FileFullPath))
-                File.Delete(objModel.FileFullPath);
+                if (File.Exists(objModel.FileFullPath))
+                    File.Delete(objModel.FileFullPath);
+            }
 
             QueueLog queueLog = new QueueLog()
             {
