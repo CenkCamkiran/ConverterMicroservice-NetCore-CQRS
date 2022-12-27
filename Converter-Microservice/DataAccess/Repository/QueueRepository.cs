@@ -158,7 +158,6 @@ namespace DataAccess.Repository
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            string consumerTag = e.ConsumerTags[0];
 
             msgCount = e.Model.MessageCount("converter");
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
