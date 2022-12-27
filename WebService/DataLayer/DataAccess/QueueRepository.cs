@@ -19,7 +19,7 @@ namespace DataLayer.DataAccess
             _logOtherRepository = logOtherRepository;
         }
 
-        public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey)
+        public async Task QueueMessageDirectAsync(QueueMessage message, string queue, string exchange, string routingKey, long messageTtl = 0)
         {
             try
             {
@@ -31,7 +31,12 @@ namespace DataLayer.DataAccess
                                      durable: true,
                                      exclusive: false,
                                      autoDelete: false,
-                                     arguments: null);
+                                     arguments: new Dictionary<string, object>()
+                                     {
+                                         {
+                                             "x-message-ttl", 43200000
+                                         }
+                                     });
 
                 string serializedObj = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(serializedObj);

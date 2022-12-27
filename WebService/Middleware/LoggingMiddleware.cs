@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Middleware.Contexts.Interfaces;
 using ServiceLayer.Interfaces;
 using System.Text.RegularExpressions;
-using Middleware.Contexts;
-using Middleware.Contexts.Interfaces;
 
 namespace Middleware
 {

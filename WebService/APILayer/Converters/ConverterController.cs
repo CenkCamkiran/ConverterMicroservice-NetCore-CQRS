@@ -33,7 +33,7 @@ namespace APILayer.Converters
                 fileGuid = guid
             };
 
-            await _queueRepository.QueueMessageDirectAsync(message, "converter", "converter_exchange.direct", "mp4_to_mp3");
+            await _queueRepository.QueueMessageDirectAsync(message, "converter", "converter_exchange.direct", "mp4_to_mp3", 43200000);
 
             var stream = file.OpenReadStream();
             try
