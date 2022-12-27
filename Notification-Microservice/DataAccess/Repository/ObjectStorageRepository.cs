@@ -3,6 +3,7 @@ using Minio;
 using Minio.DataModel;
 using Models;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace DataAccess.Repository
 {
@@ -23,6 +24,7 @@ namespace DataAccess.Repository
 
         public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
+
             ServerSideEncryption? sse = null;
             stream.Position = 0;
 

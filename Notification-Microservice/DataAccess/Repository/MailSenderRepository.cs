@@ -20,7 +20,7 @@ namespace Helper.Helpers
             _log4NetRepository = log4NetRepository;
         }
 
-        public Task<bool> SendMailToUser(string email, string AttachmentFilePath)
+        public async Task SendMailToUser(string email, string AttachmentFilePath)
         {
             SmtpConfiguration smtpConfiguration = envVariablesHandler.GetSmtpEnvVariables();
 
@@ -44,14 +44,9 @@ namespace Helper.Helpers
                 mail.Subject = "About Your Converted File";
                 mail.Attachments.Add(new Attachment(AttachmentFilePath));
                 mail.Body = body;
+                //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 
-                var senderTask = client.SendMailAsync(mail);
-
-                if (senderTask.Wait(60000) & senderTask.IsCompletedSuccessfully)
-                    return Task.FromResult(true);
-
-                return Task.FromResult(false);
-                //return Task.FromResult(true);
+                client.Send(mail);
 
             }
             catch (Exception exception)
@@ -69,8 +64,6 @@ namespace Helper.Helpers
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Value.Error(logText);
-
-                return Task.FromResult(false);
             }
 
         }

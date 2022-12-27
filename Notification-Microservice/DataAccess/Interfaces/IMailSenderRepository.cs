@@ -2,6 +2,6 @@
 {
     public interface IMailSenderRepository
     {
-        Task<bool> SendMailToUser(string email, string AttachmentFile);
+        Task SendMailToUser(string email, string AttachmentFile);
     }
 }
