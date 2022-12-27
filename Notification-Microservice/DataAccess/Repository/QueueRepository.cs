@@ -31,7 +31,7 @@ namespace DataAccess.Repository
             _objectStorageRepository = objectStorageRepository;
         }
 
-        public void ConsumeQueue(string queue)
+        public void ConsumeQueue(string queue, long messageTtl = 0  )
         {
             try
             {
@@ -42,7 +42,12 @@ namespace DataAccess.Repository
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
+                                         {
+                                             {
+                                                 "x-message-ttl", messageTtl
+                                             }
+                                         });
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 

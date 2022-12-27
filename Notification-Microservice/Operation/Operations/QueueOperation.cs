@@ -12,9 +12,9 @@ namespace Operation.Operations
             _queueRepository = queueRepository;
         }
 
-        public void ConsumeQueue(string queue)
+        public void ConsumeQueue(string queue, long messageTtl = 0)
         {
-            _queueRepository.ConsumeQueue(queue);
+            _queueRepository.ConsumeQueue(queue, messageTtl);
         }
 
         public void QueueMessageDirectAsync(TMessage message, string queue, string exchange, string routingKey)
