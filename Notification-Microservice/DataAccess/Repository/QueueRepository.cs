@@ -54,13 +54,6 @@ namespace DataAccess.Repository
                                          autoAck: false,
                                          consumer: consumer);
 
-                    if (channel.MessageCount(queue) == 0)
-                    {
-                        msgsRecievedGate.Set();
-
-                        return;
-                    }
-
                     //throw new Exception();
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
