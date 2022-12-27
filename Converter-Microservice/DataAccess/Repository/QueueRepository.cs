@@ -1,11 +1,8 @@
 ﻿using DataAccess.Interfaces;
-using DataAccess.Providers;
 using Models;
-using Nest;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
 using System.Text;
 using IConnection = RabbitMQ.Client.IConnection;
 
@@ -31,7 +28,7 @@ namespace DataAccess.Repository
             _converterRepository = converterRepository;
         }
 
-        public void ConsumeQueue(string queue)
+        public void ConsumeQueue(string queue, long messageTtl = 0)
         {
             try
             {
@@ -42,7 +39,12 @@ namespace DataAccess.Repository
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
+                                         {
+                                             {
+                                                 "x-message-ttl", messageTtl
+                                             }
+                                         });
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -53,13 +55,6 @@ namespace DataAccess.Repository
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
                                          consumer: consumer);
-
-                    if (channel.MessageCount(queue) == 0)
-                    {
-                        msgsRecievedGate.Set();
-
-                        return;
-                    }
 
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
@@ -86,12 +81,12 @@ namespace DataAccess.Repository
             }
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey, long messageTtl = 0)
         {
             try
             {
 
-                using(var channel = _connection.CreateModel())
+                using (var channel = _connection.CreateModel())
                 {
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
@@ -100,7 +95,12 @@ namespace DataAccess.Repository
                                          durable: true,
                                          exclusive: false,
                                          autoDelete: false,
-                                         arguments: null);
+                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
+                                         {
+                                             {
+                                                 "x-message-ttl", messageTtl
+                                             }
+                                         });
 
                     string serializedObj = JsonConvert.SerializeObject(message);
                     var body = Encoding.UTF8.GetBytes(serializedObj);

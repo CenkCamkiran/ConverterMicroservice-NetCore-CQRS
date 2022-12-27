@@ -49,12 +49,12 @@ namespace DataAccess.Repository
                             fileGuid = guid
                         };
 
-                        _queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif");
+                        _queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000);
 
                     }
                 }
 
-                if(File.Exists(ConvertToFilePath))
+                if (File.Exists(ConvertToFilePath))
                     File.Delete(ConvertToFilePath);
 
                 ConverterLog converterLog = new ConverterLog()

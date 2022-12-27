@@ -46,4 +46,4 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
-_queueOperation.ConsumeQueue("converter");
+_queueOperation.ConsumeQueue("converter", 43200000);
