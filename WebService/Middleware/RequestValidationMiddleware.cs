@@ -61,6 +61,16 @@ namespace Middleware
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
+            long fileLength = Convert.ToInt64(Environment.GetEnvironmentVariable("FILE_LENGTH_LIMIT"));
+            if(file.Length == fileLength)
+            {
+                UploadMp4Response error = new UploadMp4Response();
+                error.ErrorMessage = $"File length must be less than {fileLength} byte!";
+                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            }
+
             string emailFormData = httpContext.Request.Form["email"].ToString();
             EmailFormatHelper helper = new EmailFormatHelper();
             helper.ValidateEMail(emailFormData);
