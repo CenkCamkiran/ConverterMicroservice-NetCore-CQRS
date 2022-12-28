@@ -174,8 +174,6 @@ namespace DataAccess.Repository
             if (converterResult.Wait(60000))
             {
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                if (File.Exists(objModel.Mp4FileFullPath))
-                    File.Delete(objModel.Mp4FileFullPath);
             }
 
             QueueLog queueLog = new QueueLog()
@@ -184,7 +182,7 @@ namespace DataAccess.Repository
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "converter", //Bu nereden gelir?
+                QueueName = "converter",
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()

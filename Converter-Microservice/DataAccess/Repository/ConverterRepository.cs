@@ -57,6 +57,9 @@ namespace DataAccess.Repository
                 if (File.Exists(Mp3FileFullPath))
                     File.Delete(Mp3FileFullPath);
 
+                if (File.Exists(objDataModel.Mp4FileFullPath))
+                    File.Delete(objDataModel.Mp4FileFullPath);
+
                 ConverterLog converterLog = new ConverterLog()
                 {
                     Info = "Conversion finished!",
