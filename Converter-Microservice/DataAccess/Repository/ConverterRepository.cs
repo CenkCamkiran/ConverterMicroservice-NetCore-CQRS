@@ -29,14 +29,14 @@ namespace DataAccess.Repository
             try
             {
                 string guid = Guid.NewGuid().ToString();
-                string ConvertToFilePath = Path.Combine(Path.GetTempPath(), guid + ".mp3");
+                string Mp3FileFullPath = Path.Combine(Path.GetTempPath(), guid + ".mp3");
 
-                var conversion = await FFmpeg.Conversions.FromSnippet.ExtractAudio(objDataModel.FileFullPath, ConvertToFilePath);
+                var conversion = await FFmpeg.Conversions.FromSnippet.ExtractAudio(objDataModel.Mp4FileFullPath, Mp3FileFullPath);
                 conversion.SetOverwriteOutput(false);
 
                 await conversion.Start();
 
-                using (FileStream fs = File.OpenRead(ConvertToFilePath))
+                using (FileStream fs = File.OpenRead(Mp3FileFullPath))
                 {
                     using (MemoryStream ms = new MemoryStream())
                     {
@@ -54,8 +54,8 @@ namespace DataAccess.Repository
                     }
                 }
 
-                if (File.Exists(ConvertToFilePath))
-                    File.Delete(ConvertToFilePath);
+                if (File.Exists(Mp3FileFullPath))
+                    File.Delete(Mp3FileFullPath);
 
                 ConverterLog converterLog = new ConverterLog()
                 {

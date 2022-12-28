@@ -121,17 +121,17 @@ namespace DataAccess.Repository
                     await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
-                string filePath = Path.Combine(Path.GetTempPath(), objectName + ".mp4");
+                string mp4FileFullPath = Path.Combine(Path.GetTempPath(), objectName + ".mp4");
                 var args = new GetObjectArgs()
                                .WithBucket(bucketName)
                                .WithObject(objectName)
-                               .WithFile(filePath);
+                               .WithFile(mp4FileFullPath);
 
                 ObjectStat objStat = await _minioClient.Build().GetObjectAsync(args);
 
                 objDataModel = new ObjectDataModel()
                 {
-                    FileFullPath = filePath,
+                    Mp4FileFullPath = mp4FileFullPath,
                     ObjectStats = objStat
                 };
 

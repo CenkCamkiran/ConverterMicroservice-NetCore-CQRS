@@ -174,8 +174,8 @@ namespace DataAccess.Repository
             if (converterResult.Wait(60000))
             {
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
-                if (File.Exists(objModel.FileFullPath))
-                    File.Delete(objModel.FileFullPath);
+                if (File.Exists(objModel.Mp4FileFullPath))
+                    File.Delete(objModel.Mp4FileFullPath);
             }
 
             QueueLog queueLog = new QueueLog()
