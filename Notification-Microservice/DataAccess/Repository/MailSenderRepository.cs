@@ -20,13 +20,13 @@ namespace Helper.Helpers
             _log4NetRepository = log4NetRepository;
         }
 
-        public void SendMailToUser(string email, string AttachmentFile, Stream attachmentFileStream)
+        public void SendMailToUser(string email, string attachmentFile, Stream attachmentFileStream)
         {
             SmtpConfiguration smtpConfiguration = envVariablesHandler.GetSmtpEnvVariables();
 
             try
             {
-                string body = $"<p style=\"color: rgb(0, 0, 0); font-size: 16px;\">Here is your cenverted file ({AttachmentFile}) </p>";
+                string body = $"<p style=\"color: rgb(0, 0, 0); font-size: 16px;\">Here is your cenverted file ({attachmentFile}) </p>";
 
                 MailMessage mail = new MailMessage();
                 SmtpClient client = new SmtpClient();
@@ -42,7 +42,7 @@ namespace Helper.Helpers
                 //mail.CC.Add(new MailAddress(""));
                 mail.From = (new MailAddress(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailUsername));
                 mail.Subject = "About Your Converted File";
-                mail.Attachments.Add(new Attachment(attachmentFileStream, AttachmentFile));
+                mail.Attachments.Add(new Attachment(attachmentFileStream, attachmentFile));
                 mail.Body = body;
                 //System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
 

@@ -2,6 +2,6 @@
 {
     public interface IMailSenderRepository
     {
-        void SendMailToUser(string email, string AttachmentFile, Stream attachmentFileStream);
+        void SendMailToUser(string email, string attachmentFile, Stream attachmentFileStream);
     }
 }

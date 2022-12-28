@@ -168,13 +168,13 @@ namespace DataAccess.Repository
                 return;
             }
 
-            using (FileStream fs = File.OpenRead(objModel.FileFullPath))
+            using (FileStream fs = File.OpenRead(objModel.Mp4FileFullPath))
             {
-                _mailSenderHelper.Value.SendMailToUser(queueMsg.email, Path.GetFileName(objModel.FileFullPath), fs);
+                _mailSenderHelper.Value.SendMailToUser(queueMsg.email, Path.GetFileName(objModel.Mp4FileFullPath), fs);
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
 
-                if (File.Exists(objModel.FileFullPath))
-                    File.Delete(objModel.FileFullPath);
+                if (File.Exists(objModel.Mp4FileFullPath))
+                    File.Delete(objModel.Mp4FileFullPath);
             }
 
             QueueLog queueLog = new QueueLog()
