@@ -133,7 +133,7 @@ namespace DataAccess.Repository
 
                 objDataModel = new ObjectDataModel()
                 {
-                    Mp4FileFullPath = filePath,
+                    Mp3FileFullPath = filePath,
                     ObjectStats = objStat
                 };
 
