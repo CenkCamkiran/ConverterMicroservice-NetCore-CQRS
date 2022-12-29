@@ -20,7 +20,7 @@
 
 ## Logging Yapılacaklar
 
-- Logging microservice'i draw.io'da çiz! (ARAŞTIR!)
+- Mimariyi draw.io'da çiz! (ARAŞTIR!)
 - cenk
 
 ## K8S
