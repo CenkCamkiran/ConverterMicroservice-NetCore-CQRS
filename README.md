@@ -518,7 +518,7 @@ volumes:
 
 ### Kong API Gateway Installation
 
-Use below docker-compose file.
+I followed instructions on this github repo: <https://github.com/Kuari/kong-konga-docker-compose> . Check readme, instructions are clear and simple.
 
 ### Install project with Docker Container ???
 
