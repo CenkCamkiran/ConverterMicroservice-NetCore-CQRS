@@ -520,8 +520,6 @@ volumes:
 
 Use below docker-compose file.
 
-Kong API Gateway
-
 ### Install project with Docker Container ???
 
 Follow the instructions below.
