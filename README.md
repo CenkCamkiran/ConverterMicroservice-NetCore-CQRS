@@ -159,88 +159,6 @@ PUT /loggerservice_otherlogs
     "mappings": {
         "properties": {
             "converterLog": {
-                "type": "nested"
-            },
-            "loggerLog": {
-                "type": "nested"
-            },
-            "notificationLog": {
-                "type": "nested"
-            },
-            "queueLog": {
-                "type": "nested",
-                "properties": {
-                    "date": {
-                        "type": "date"
-                    },
-                    "exceptionMessage": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword",
-                                "ignore_above": 256
-                            }
-                        }
-                    },
-                    "exchangeName": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword",
-                                "ignore_above": 256
-                            }
-                        }
-                    },
-                    "operationType": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword",
-                                "ignore_above": 256
-                            }
-                        }
-                    },
-                    "queueName": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword",
-                                "ignore_above": 256
-                            }
-                        }
-                    },
-                    "routingKey": {
-                        "type": "text",
-                        "fields": {
-                            "keyword": {
-                                "type": "keyword",
-                                "ignore_above": 256
-                            }
-                        }
-                    }
-                }
-            },
-            "storageLog": {
-                "type": "nested"
-            }
-        }
-    }
-}
-
-```
-
-```bash
-PUT /webservice_objstorage_logs
-{
-    "settings": {
-        "index": {
-            "number_of_shards": 1,
-            "number_of_replicas": 0
-        }
-    },
-    "mappings": {
-        "properties": {
-            "converterLog": {
                 "type": "nested",
                 "properties": {
                     "date": {
@@ -387,7 +305,37 @@ PUT /webservice_objstorage_logs
         }
     }
 }
+```
 
+```bash
+PUT /webservice_objstorage_logs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "bucketName": {
+                "type": "text"
+            },
+            "contentLength": {
+                "type": "long"
+            },
+            "contentType": {
+                "type": "text"
+            },
+            "date": {
+                "type": "date"
+            },
+            "objectName": {
+                "type": "text"
+            }
+        }
+    }
+}
 ```
 
 ```bash
@@ -448,6 +396,57 @@ PUT /webservice_requestresponse_logs
         }
     }
 } 
+```
+
+```bash
+PUT /webservice_queue_logs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "date": {
+                "type": "date"
+            },
+            "exchangeName": {
+                "type": "text"
+            },
+            "message": {
+                "type": "nested",
+                "properties": {
+                    "email": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "fileGuid": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
+                }
+            },
+            "queueName": {
+                "type": "text"
+            },
+            "routingKey": {
+                "type": "text"
+            }
+        }
+    }
+}
 
 ```
 
