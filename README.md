@@ -22,7 +22,7 @@ First of all i used Kong API Gateway. Because uploading a file to server might b
 
 Second, File uploading to webservice and converting process is resource consuming and response from webservice might be resolve as 'Timeout', you actually waited the response maybe a long time and you faced 'Timeout exception', this is bad and the person that use the webservice might be very angry about that. I find out that the solution is using queue well RabbitMQ. Actually you don't wait response, only send the request and do other work via asynchronous way. Eventually you will get desired result sound and safe. Timeout exception never gonna be problem. Sometimes maybe RabbitMQ Container gonna crash but this is not huge, you should use durable queues and persistent messages and this is important, you MUST use volumes on containers or you will lose everyting! With that way you will never lose requests and messages, the user eventually get the desired result late or early.
 
-Third, I used Minio S3 Object Storage to store MP4 and Mp3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
+Third, I used Minio S3 Object Storage to store MP4 and MP3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
 
 Fourth, i used ElasticSearch for logging purposes. Because ElasticSearch is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on Kibana. This is cool!
 
