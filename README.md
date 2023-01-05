@@ -66,391 +66,389 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
 2. Run commands below on Kibana Dev Console to create indexes.
 
 ```bash
-                $ PUT /loggerservice_errorlogs
-                {
-                "settings": {
-                    "index": {
-                        "number_of_shards": 1,
-                        "number_of_replicas": 0
-                    }
-                },
-                "mappings": {
-                    "properties": {
-                        "converterLog": {
-                            "type": "nested"
-                        },
-                        "loggerLog": {
-                            "type": "nested"
-                        },
-                        "notificationLog": {
-                            "type": "nested"
-                        },
-                        "queueLog": {
-                            "type": "nested",
-                            "properties": {
-                                "date": {
-                                    "type": "date"
-                                },
-                                "exceptionMessage": {
-                                    "type": "text",
-                                    "fields": {
-                                        "keyword": {
-                                            "type": "keyword",
-                                            "ignore_above": 256
-                                        }
-                                    }
-                                },
-                                "exchangeName": {
-                                    "type": "text",
-                                    "fields": {
-                                        "keyword": {
-                                            "type": "keyword",
-                                            "ignore_above": 256
-                                        }
-                                    }
-                                },
-                                "operationType": {
-                                    "type": "text",
-                                    "fields": {
-                                        "keyword": {
-                                            "type": "keyword",
-                                            "ignore_above": 256
-                                        }
-                                    }
-                                },
-                                "queueName": {
-                                    "type": "text",
-                                    "fields": {
-                                        "keyword": {
-                                            "type": "keyword",
-                                            "ignore_above": 256
-                                        }
-                                    }
-                                },
-                                "routingKey": {
-                                    "type": "text",
-                                    "fields": {
-                                        "keyword": {
-                                            "type": "keyword",
-                                            "ignore_above": 256
-                                        }
-                                    }
-                                }
+PUT /loggerservice_errorlogs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "converterLog": {
+                "type": "nested"
+            },
+            "loggerLog": {
+                "type": "nested"
+            },
+            "notificationLog": {
+                "type": "nested"
+            },
+            "queueLog": {
+                "type": "nested",
+                "properties": {
+                    "date": {
+                        "type": "date"
+                    },
+                    "exceptionMessage": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
                             }
-                        },
-                        "storageLog": {
-                            "type": "nested"
+                        }
+                    },
+                    "exchangeName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "operationType": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "queueName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "routingKey": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
                         }
                     }
                 }
+            },
+            "storageLog": {
+                "type": "nested"
             }
-```
-
-```bash
-                $ PUT /loggerservice_otherlogs
-                 {
-                     "settings": {
-                         "index": {
-                             "number_of_shards": 1,
-                             "number_of_replicas": 0
-                         }
-                     },
-                     "mappings": {
-                 "properties": {
-                   "converterLog": {
-                     "type": "nested",
-                     "properties": {
-                       "date": {
-                         "type": "date"
-                       },
-                       "error": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "info": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       }
-                     }
-                   },
-                   "queueLog": {
-                     "type": "nested",
-                     "properties": {
-                       "date": {
-                         "type": "date"
-                       },
-                       "exceptionMessage": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "exchangeName": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "message": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "operationType": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "queueName": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "routingKey": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       }
-                     }
-                   },
-                   "storageLog": {
-                     "type": "nested",
-                     "properties": {
-                       "bucketName": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "contentLength": {
-                         "type": "long"
-                       },
-                       "contentType": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "date": {
-                         "type": "date"
-                       },
-                       "exceptionMessage": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "objectName": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "operationType": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       }
-                     }
-                   }
-                 }
-                }
-                 }
+        }
+    }
+}
 
 ```
 
 ```bash
-                $ PUT /webservice_objstorage_logs
-
-                {
-            "settings": {
-                "index": {
-                    "number_of_shards": 1,
-                    "number_of_replicas": 0
+PUT /loggerservice_otherlogs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "converterLog": {
+                "type": "nested"
+            },
+            "loggerLog": {
+                "type": "nested"
+            },
+            "notificationLog": {
+                "type": "nested"
+            },
+            "queueLog": {
+                "type": "nested",
+                "properties": {
+                    "date": {
+                        "type": "date"
+                    },
+                    "exceptionMessage": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "exchangeName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "operationType": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "queueName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "routingKey": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
                 }
             },
-            "mappings": {
+            "storageLog": {
+                "type": "nested"
+            }
+        }
+    }
+}
+
+```
+
+```bash
+PUT /webservice_objstorage_logs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "converterLog": {
+                "type": "nested",
+                "properties": {
+                    "date": {
+                        "type": "date"
+                    },
+                    "error": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "info": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
+                }
+            },
+            "queueLog": {
+                "type": "nested",
+                "properties": {
+                    "date": {
+                        "type": "date"
+                    },
+                    "exceptionMessage": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "exchangeName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "operationType": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "queueName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "routingKey": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
+                }
+            },
+            "storageLog": {
+                "type": "nested",
                 "properties": {
                     "bucketName": {
-                        "type": "text"
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "contentLength": {
                         "type": "long"
                     },
                     "contentType": {
-                        "type": "text"
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
                     },
                     "date": {
                         "type": "date"
                     },
-                    "objectName": {
-                        "type": "text"
-                    }
-                }
-            }
-
-        }
-```
-
-```bash
-                $ PUT /webservice_queue_logs
-                 {
-                     "settings": {
-                         "index": {
-                             "number_of_shards": 1,
-                             "number_of_replicas": 0
-                         }
-                     },
-                         "mappings": {
-                 "properties": {
-                   "date": {
-                     "type": "date"
-                   },
-                   "exchangeName": {
-                     "type": "text"
-                   },
-                   "message": {
-                     "type": "nested",
-                     "properties": {
-                       "email": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       },
-                       "fileGuid": {
-                         "type": "text",
-                         "fields": {
-                           "keyword": {
-                             "type": "keyword",
-                             "ignore_above": 256
-                           }
-                         }
-                       }
-                     }
-                   },
-                   "queueName": {
-                     "type": "text"
-                   },
-                   "routingKey": {
-                     "type": "text"
-                   }
-                 }
-                }
-                 }
-```
-
-```bash
-                $ PUT /webservice_requestresponse_logs
-
-                {
-        "settings": {
-            "index": {
-                "number_of_shards": 1,
-                "number_of_replicas": 0
-            }
-        },
-        "mappings": {
-            "properties": {
-                "requestContentType": {
-                    "type": "text"
-                },
-                "requestDate": {
-                    "type": "date"
-                },
-                "requestFileDetails": {
-                    "type": "nested",
-                    "properties": {
-                        "createdDate": {
-                            "type": "date"
-                        },
-                        "length": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {
-                                    "type": "keyword",
-                                    "ignore_above": 256
-                                }
+                    "exceptionMessage": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
                             }
-                        },
-                        "name": {
-                            "type": "text",
-                            "fields": {
-                                "keyword": {
-                                    "type": "keyword",
-                                    "ignore_above": 256
-                                }
+                        }
+                    },
+                    "objectName": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "operationType": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
                             }
                         }
                     }
-                },
-                "responseContentType": {
-                    "type": "text"
-                },
-                "responseDate": {
-                    "type": "date"
-                },
-                "responseMessage": {
-                    "type": "text"
-                },
-                "responseStatusCode": {
-                    "type": "integer"
                 }
             }
         }
-
     }
+}
+
+```
+
+```bash
+PUT /webservice_requestresponse_logs
+{
+    "settings": {
+        "index": {
+            "number_of_shards": 1,
+            "number_of_replicas": 0
+        }
+    },
+    "mappings": {
+        "properties": {
+            "requestContentType": {
+                "type": "text"
+            },
+            "requestDate": {
+                "type": "date"
+            },
+            "requestFileDetails": {
+                "type": "nested",
+                "properties": {
+                    "createdDate": {
+                        "type": "date"
+                    },
+                    "length": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    },
+                    "name": {
+                        "type": "text",
+                        "fields": {
+                            "keyword": {
+                                "type": "keyword",
+                                "ignore_above": 256
+                            }
+                        }
+                    }
+                }
+            },
+            "responseContentType": {
+                "type": "text"
+            },
+            "responseDate": {
+                "type": "date"
+            },
+            "responseMessage": {
+                "type": "text"
+            },
+            "responseStatusCode": {
+                "type": "integer"
+            }
+        }
+    }
+} 
+
 ```
 
 3. Go Index Management on Kibana. Make sure that indexes created successfully.
