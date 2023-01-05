@@ -56,14 +56,14 @@ Docker Engine and Docker Compose must be installed. Check out on Docker's offica
 
 ### ElasticSearch Installation
 
-I followed instructions on this github repo: https://github.com/deviantony/docker-elk . Check readme, instructions are clear and simple.
+I followed instructions on this github repo: <https://github.com/deviantony/docker-elk> . Check readme, instructions are clear and simple.
 Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote this readme
 
 #### Creation of Index on ElasticSearch-Kibana
 
-1.  Open Dev Console on Kibana.
+1. Open Dev Console on Kibana.
 
-2.  Run commands below on Kibana Dev Console to create indexes.
+2. Run commands below on Kibana Dev Console to create indexes.
 
 ```bash
                 $ PUT /loggerservice_errorlogs
@@ -144,7 +144,9 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
                     }
                 }
             }
+```
 
+```bash
                 $ PUT /loggerservice_otherlogs
                  {
                      "settings": {
@@ -303,6 +305,9 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
                 }
                  }
 
+```
+
+```bash
                 $ PUT /webservice_objstorage_logs
 
                 {
@@ -333,7 +338,9 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
             }
 
         }
+```
 
+```bash
                 $ PUT /webservice_queue_logs
                  {
                      "settings": {
@@ -382,8 +389,9 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
                  }
                 }
                  }
+```
 
-
+```bash
                 $ PUT /webservice_requestresponse_logs
 
                 {
@@ -445,7 +453,7 @@ Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote t
     }
 ```
 
-3.  Go Index Management on Kibana. Make sure that indexes created successfully.
+3. Go Index Management on Kibana. Make sure that indexes created successfully.
 
 ### Minio Installation
 
@@ -522,7 +530,7 @@ Kong API Gateway
 Follow the instructions below.
 
 ```bash
-$ git clone
+git clone
 ```
 
 ## Structure
