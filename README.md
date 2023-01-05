@@ -10,13 +10,28 @@
 [![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Amain)
 [![Join the chat at https://gitter.im/deviantony/docker-elk](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/deviantony/docker-elk?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) -->
 
+## Asbtract
+
+I was curious about Microservice Architectures and Technologies like Docker, Kubernetes, RabbitMQ and Asynchronous Programming. So I developed simple Microservice via .Net Core 6.
+
 ## Philosophy
 
-I was curious about Microservice Architectures and Technologies like Docker, Kubernetes, RabbitMQ and Asynchronous Programming. So I developed simple microservice via .Net Core 6.
+Main goal was develop Mp4 to MP3 converter with Asynchronous way.
+
+First of all i used Kong API Gateway. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed .Net Core 6 but this is minor precaution)
+
+Second, File uploading to webservice and converting process is resource consuming and response from webservice might be resolve as 'Timeout', you actually waited the response maybe a long time and you faced 'Timeout exception', this is bad and the person that use the webservice might be very angry about that. I find out that the solution is using queue well RabbitMQ. Actually you don't wait response, only send the request and do other work via asynchronous way. Eventually you will get desired result sound and safe. Timeout exception never gonna be problem. Sometimes maybe RabbitMQ Container gonna crash but this is not huge, you should use durable queues and persistent messages and this is important, you MUST use volumes on containers or you will lose everyting! With that way you will never lose requests and messages, the user eventually get the desired result late or early.
+
+Third, I used Minio S3 Object Storage to store MP4 and Mp3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
+
+Fourth, i used ElasticSearch for logging purposes. Because ElasticSearch is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on Kibana. This is cool!
+
+Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technologies.
 
 ## Contents
 
 - [Microservice Project with .NET Core 6](#microservice-project-with-net-core-6)
+  - [Asbtract](#asbtract)
   - [Philosophy](#philosophy)
   - [Contents](#contents)
   - [Features](#features)
@@ -28,7 +43,7 @@ I was curious about Microservice Architectures and Technologies like Docker, Kub
     - [Postman Collection](#postman-collection)
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
-    - [Install project with Docker Container ???](#install-project-with-docker-container-)
+    - [Install project with Docker Container](#install-project-with-docker-container)
   - [Structure](#structure)
   - [Contributing](#contributing)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
@@ -41,7 +56,7 @@ I was curious about Microservice Architectures and Technologies like Docker, Kub
 - Uses Minio S3 Object Storage for store files
 - Uses Kong API Gateway for security
 - Easy to deploy, just use Dockerfile
-- Can run on any platform (Mac, Linux ve Windows)
+- Can run on any platform (Mac, Linux and Windows wherever you want!)
 
 ## Requirements
 
@@ -447,7 +462,6 @@ PUT /webservice_queue_logs
         }
     }
 }
-
 ```
 
 3. Go Index Management on Kibana. Make sure that indexes created successfully.
@@ -520,7 +534,7 @@ volumes:
 
 I followed instructions on this github repo: <https://github.com/Kuari/kong-konga-docker-compose> . Check readme, instructions are clear and simple.
 
-### Install project with Docker Container ???
+### Install project with Docker Container
 
 Follow the instructions below.
 
