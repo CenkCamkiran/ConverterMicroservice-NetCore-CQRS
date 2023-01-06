@@ -45,6 +45,10 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
     - [Install project with Docker Container](#install-project-with-docker-container)
   - [Structure](#structure)
+    - [Converter Microservice](#converter-microservice)
+    - [Logger Microservice](#logger-microservice)
+    - [Web Service](#web-service)
+    - [Notification Microservice](#notification-microservice)
   - [Contributing](#contributing)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
 
@@ -54,7 +58,8 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
 - Uses RabbitMQ for Asynchronous Communication
 - Uses ElasticSearch for logging request, responses, error messages and info messages
 - Uses Minio S3 Object Storage for store files
-- Uses Kong API Gateway for security
+- Uses Kong API Gateway for API security
+- Uses FFMpeg to convert processes
 - Easy to deploy, just use Dockerfile
 - Can run on any platform (Mac, Linux and Windows wherever you want!)
 
@@ -622,6 +627,35 @@ git clone
 
 ## Structure
 
+### Converter Microservice
+
+- Uses RabbitMQ for Asynchronous Communication
+- Gets messages that contains email and file guid data from queue
+- Fetches MP4 file's stream data from Minio Object storage via File Guid data that exists in queue message
+- Converts MP4 file's stream data to MP3 stream data via FFMpeg library (Basically converts MP4 file to MP3 file)
+- New Guid is generated and MP3 stream data is saved as MP3 file in Minio Object Storage
+- Email and New File Guid is sent to queue as message
+- Complete convert process until new message arrives to queue
+
+### Logger Microservice
+
+- Uses RabbitMQ for Asynchronous Communication
+- Uses ElasticSearch for logging request, responses, error messages and info messages
+- Uses Minio S3 Object Storage for store files
+- Uses Kong API Gateway for security
+- Easy to deploy, just use Dockerfile
+- Can run on any platform (Mac, Linux and Windows wherever you want!)
+
+### Web Service
+
+- Easy to deploy, just use Dockerfile
+- Can run on any platform (Mac, Linux and Windows wherever you want!)
+
+### Notification Microservice
+
+- Easy to deploy, just use Dockerfile
+- Can run on any platform (Mac, Linux and Windows wherever you want!)
+
 ````bash
 root:.
 |   cenk.doc
@@ -932,7 +966,7 @@ root:.
 
 ## Contributing
 
-I am open every advice for my project. I am planning to improve myself on .NET Core 6. So don't hesitate comment on my project.
+I am open every advice for my project. I am planning to improve myself on .NET Core 6, Microservices and Container Technologies. So don't hesitate comment on my project.
 
 ## Bug Reports & Feature Requests
 
