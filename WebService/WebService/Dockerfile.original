@@ -2,18 +2,12 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 4080
-EXPOSE 4443
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["WebService/WebService.csproj", "WebService/"]
-COPY ["APILayer/APILayer.csproj", "APILayer/"]
-COPY ["Models/Models.csproj", "Models/"]
-COPY ["ServiceLayer/ServiceLayer.csproj", "ServiceLayer/"]
-COPY ["DataLayer/DataLayer.csproj", "DataLayer/"]
-COPY ["Helpers/Helpers.csproj", "Helpers/"]
-COPY ["Middleware/Middleware.csproj", "Middleware/"]
 RUN dotnet restore "WebService/WebService.csproj"
 COPY . .
 WORKDIR "/src/WebService"
