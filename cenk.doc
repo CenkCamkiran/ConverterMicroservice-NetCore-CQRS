@@ -1,0 +1,452 @@
+Folder PATH listing
+Volume serial number is C0000100 92A2:47DB
+C:.
+³   cenk.doc
+³   README.md
+³   
+ÃÄÄÄConverter-Microservice
+³   ³   .dockerignore
+³   ³   .gitignore
+³   ³   Converter-Microservice.sln
+³   ³   
+³   ÃÄÄÄAdapter
+³   ³   ³   Adapter.csproj
+³   ³   ³   Class1.cs
+³   ³   ³   
+³   ³   ÃÄÄÄAdapters
+³   ³   ³       LoggingOtherAdapter.cs
+³   ³   ³       
+³   ³   ÀÄÄÄInterfaces
+³   ³           ILoggingOtherAdapter.cs
+³   ³           
+³   ÃÄÄÄConfiguration
+³   ³       Configuration.csproj
+³   ³       EnvVariablesHandler.cs
+³   ³       
+³   ÃÄÄÄConverter-Microservice
+³   ³   ³   Converter-Microservice.csproj
+³   ³   ³   Program.cs
+³   ³   ³   
+³   ³   ÀÄÄÄProperties
+³   ³           launchSettings.json
+³   ³           
+³   ÃÄÄÄDataAccess
+³   ³   ³   DataAccess.csproj
+³   ³   ³   
+³   ³   ÃÄÄÄInterfaces
+³   ³   ³       IConverterRepository.cs
+³   ³   ³       ILog4NetRepository.cs
+³   ³   ³       IObjectStorageRepository.cs
+³   ³   ³       IQueueRepository.cs
+³   ³   ³       
+³   ³   ÃÄÄÄProviders
+³   ³   ³       LazyResolutionMiddlewareExtensions.cs
+³   ³   ³       QueueProviders.cs
+³   ³   ³       
+³   ³   ÀÄÄÄRepository
+³   ³           App.config
+³   ³           ConverterRepository.cs
+³   ³           Log4NetRepository.cs
+³   ³           ObjectStorageRepository.cs
+³   ³           QueueRepository.cs
+³   ³           
+³   ÃÄÄÄModels
+³   ³       ConsumerException.cs
+³   ³       ConverterLog.cs
+³   ³       ElkConfiguration.cs
+³   ³       ErrorLog.cs
+³   ³       LoggerLog.cs
+³   ³       MinioConfiguration.cs
+³   ³       Models.csproj
+³   ³       NotificationLog.cs
+³   ³       ObjectDataModel.cs
+³   ³       ObjectStorageLog.cs
+³   ³       OtherLog.cs
+³   ³       QueueLog.cs
+³   ³       QueueMessage.cs
+³   ³       RabbitMqConfiguration.cs
+³   ³       
+³   ÀÄÄÄOperation
+³       ³   Operation.csproj
+³       ³   
+³       ÃÄÄÄInterfaces
+³       ³       IObjectStorageOperation.cs
+³       ³       IQueueOperation.cs
+³       ³       
+³       ÀÄÄÄOperations
+³               ObjectStorageOperation.cs
+³               QueueOperation.cs
+³               
+ÃÄÄÄLoggerMicroservice
+³   ³   .dockerignore
+³   ³   .gitignore
+³   ³   LoggerMicroservice.sln
+³   ³   
+³   ÃÄÄÄConfiguration
+³   ³       Configuration.csproj
+³   ³       EnvVariablesHandler.cs
+³   ³       
+³   ÃÄÄÄDataAccess
+³   ³   ³   App.config
+³   ³   ³   DataAccess.csproj
+³   ³   ³   
+³   ³   ÃÄÄÄInterfaces
+³   ³   ³       IILog4NetRepository.cs
+³   ³   ³       ILoggingRepository.cs
+³   ³   ³       IQueueRepository.cs
+³   ³   ³       
+³   ³   ÃÄÄÄProviders
+³   ³   ³       LazyResolutionMiddlewareExtensions.cs
+³   ³   ³       
+³   ³   ÀÄÄÄRepository
+³   ³           Log4NetRepository.cs
+³   ³           LoggingRepository.cs
+³   ³           QueueRepository.cs
+³   ³           
+³   ÃÄÄÄLoggerMicroservice
+³   ³   ³   LoggerMicroservice.csproj
+³   ³   ³   Program.cs
+³   ³   ³   
+³   ³   ÀÄÄÄProperties
+³   ³           launchSettings.json
+³   ³           
+³   ÃÄÄÄModels
+³   ³       ConsumerException.cs
+³   ³       ConverterLog.cs
+³   ³       ElkConfiguration.cs
+³   ³       ErrorLog.cs
+³   ³       LoggerLog.cs
+³   ³       Models.csproj
+³   ³       NotificationLog.cs
+³   ³       ObjectStorageLog.cs
+³   ³       OtherLog.cs
+³   ³       QueueLog.cs
+³   ³       QueueMessage.cs
+³   ³       RabbitMqConfiguration.cs
+³   ³       
+³   ÀÄÄÄOperation
+³       ³   Operation.csproj
+³       ³   
+³       ÃÄÄÄInterfaces
+³       ³       ILoggingOperation.cs
+³       ³       IQueueOperation.cs
+³       ³       
+³       ÀÄÄÄOperations
+³               LoggingOperation.cs
+³               QueueOperation.cs
+³               
+ÃÄÄÄNotification-Microservice
+³   ³   .dockerignore
+³   ³   .gitignore
+³   ³   Notification-Microservice.sln
+³   ³   
+³   ÃÄÄÄConfiguration
+³   ³       Configuration.csproj
+³   ³       EnvVariablesHandler.cs
+³   ³       
+³   ÃÄÄÄDataAccess
+³   ³   ³   DataAccess.csproj
+³   ³   ³   
+³   ³   ÃÄÄÄInterfaces
+³   ³   ³       ILog4NetRepository.cs
+³   ³   ³       IMailSenderRepository.cs
+³   ³   ³       IObjectStorageRepository.cs
+³   ³   ³       IQueueRepository.cs
+³   ³   ³       
+³   ³   ÃÄÄÄProviders
+³   ³   ³       LazyResolutionMiddlewareExtensions.cs
+³   ³   ³       QueueProviders.cs
+³   ³   ³       
+³   ³   ÀÄÄÄRepository
+³   ³           App.config
+³   ³           Log4NetRepository.cs
+³   ³           MailSenderRepository.cs
+³   ³           ObjectStorageRepository.cs
+³   ³           QueueRepository.cs
+³   ³           
+³   ÃÄÄÄHelpers
+³   ³       Helper.csproj
+³   ³       
+³   ÃÄÄÄModels
+³   ³       ConsumerException.cs
+³   ³       ConsumerExceptionModel.cs
+³   ³       ConverterLog.cs
+³   ³       ElkConfiguration.cs
+³   ³       ErrorLog.cs
+³   ³       LoggerLog.cs
+³   ³       MinioConfiguration.cs
+³   ³       Models.csproj
+³   ³       NotificationLog.cs
+³   ³       ObjectDataModel.cs
+³   ³       ObjectStorageLog.cs
+³   ³       OtherLog.cs
+³   ³       QueueLog.cs
+³   ³       QueueMessage.cs
+³   ³       RabbitMqConfiguration.cs
+³   ³       SmtpConfiguration.cs
+³   ³       
+³   ÃÄÄÄNotification-Microservice
+³   ³   ³   Notification-Microservice.csproj
+³   ³   ³   Program.cs
+³   ³   ³   
+³   ³   ÀÄÄÄProperties
+³   ³           launchSettings.json
+³   ³           
+³   ÀÄÄÄOperation
+³       ³   Operation.csproj
+³       ³   
+³       ÃÄÄÄInterfaces
+³       ³       IMailSenderOperation.cs
+³       ³       IObjectStorageOperation.cs
+³       ³       IQueueOperation.cs
+³       ³       
+³       ÀÄÄÄOperations
+³               MailSenderOperation.cs
+³               ObjectStorageOperation.cs
+³               QueueOperation.cs
+³               
+ÀÄÄÄWebService
+    ³   .dockerignore
+    ³   .gitignore
+    ³   WebService.sln
+    ³   
+    ÃÄÄÄAPILayer
+    ³   ³   APILayer.csproj
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÃÄÄÄConverters
+    ³   ³       ConverterController.cs
+    ³   ³       
+    ³   ÃÄÄÄHealth
+    ³   ³       HealthController.cs
+    ³   ³       
+    ³   ÀÄÄÄobj
+    ³       ³   APILayer.csproj.nuget.dgspec.json
+    ³       ³   APILayer.csproj.nuget.g.props
+    ³       ³   APILayer.csproj.nuget.g.targets
+    ³       ³   project.assets.json
+    ³       ³   project.nuget.cache
+    ³       ³   
+    ³       ÀÄÄÄDebug
+    ³           ÀÄÄÄnet6.0
+    ³               ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³               ³   APILayer.AssemblyInfo.cs
+    ³               ³   APILayer.AssemblyInfoInputs.cache
+    ³               ³   APILayer.assets.cache
+    ³               ³   APILayer.csproj.AssemblyReference.cache
+    ³               ³   APILayer.GeneratedMSBuildEditorConfig.editorconfig
+    ³               ³   APILayer.GlobalUsings.g.cs
+    ³               ³   
+    ³               ÀÄÄÄref
+    ÃÄÄÄDataLayer
+    ³   ³   App.config
+    ³   ³   DataLayer.csproj
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÃÄÄÄDataAccess
+    ³   ³       Log4NetRepository.cs
+    ³   ³       LoggingRepository.cs
+    ³   ³       LogOtherRepository.cs
+    ³   ³       MinioStorageRepository.cs
+    ³   ³       QueueRepository.cs
+    ³   ³       
+    ³   ÃÄÄÄInterfaces
+    ³   ³       ILog4NetRepository.cs
+    ³   ³       ILoggingRepository.cs
+    ³   ³       ILogOtherRepository.cs
+    ³   ³       IMinioStorageRepository.cs
+    ³   ³       IQueueRepository.cs
+    ³   ³       
+    ³   ÀÄÄÄobj
+    ³       ³   DataLayer.csproj.nuget.dgspec.json
+    ³       ³   DataLayer.csproj.nuget.g.props
+    ³       ³   DataLayer.csproj.nuget.g.targets
+    ³       ³   project.assets.json
+    ³       ³   project.nuget.cache
+    ³       ³   
+    ³       ÀÄÄÄDebug
+    ³           ÀÄÄÄnet6.0
+    ³               ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³               ³   DataLayer.AssemblyInfo.cs
+    ³               ³   DataLayer.AssemblyInfoInputs.cache
+    ³               ³   DataLayer.assets.cache
+    ³               ³   DataLayer.csproj.AssemblyReference.cache
+    ³               ³   DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+    ³               ³   DataLayer.GlobalUsings.g.cs
+    ³               ³   
+    ³               ÀÄÄÄref
+    ÃÄÄÄHelpers
+    ³   ³   EmailFormatHelper.cs
+    ³   ³   Helpers.csproj
+    ³   ³   PingHelper.cs
+    ³   ³   WebServiceException.cs
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÃÄÄÄInterfaces
+    ³   ³       IPingHelper.cs
+    ³   ³       
+    ³   ÀÄÄÄobj
+    ³       ³   Helpers.csproj.nuget.dgspec.json
+    ³       ³   Helpers.csproj.nuget.g.props
+    ³       ³   Helpers.csproj.nuget.g.targets
+    ³       ³   project.assets.json
+    ³       ³   project.nuget.cache
+    ³       ³   
+    ³       ÀÄÄÄDebug
+    ³           ÀÄÄÄnet6.0
+    ³               ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³               ³   Helpers.AssemblyInfo.cs
+    ³               ³   Helpers.AssemblyInfoInputs.cache
+    ³               ³   Helpers.assets.cache
+    ³               ³   Helpers.csproj.AssemblyReference.cache
+    ³               ³   Helpers.GeneratedMSBuildEditorConfig.editorconfig
+    ³               ³   Helpers.GlobalUsings.g.cs
+    ³               ³   
+    ³               ÀÄÄÄref
+    ÃÄÄÄMiddleware
+    ³   ³   ErrorHandlerMiddleware.cs
+    ³   ³   LoggingMiddleware.cs
+    ³   ³   Middleware.csproj
+    ³   ³   ReadableResponseStreamMiddleware.cs
+    ³   ³   RequestValidationMiddleware.cs
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÃÄÄÄContexts
+    ³   ³   ³   WebServiceContext.cs
+    ³   ³   ³   
+    ³   ³   ÀÄÄÄInterfaces
+    ³   ³           IWebServiceContext.cs
+    ³   ³           
+    ³   ÀÄÄÄobj
+    ³       ³   Middleware.csproj.nuget.dgspec.json
+    ³       ³   Middleware.csproj.nuget.g.props
+    ³       ³   Middleware.csproj.nuget.g.targets
+    ³       ³   project.assets.json
+    ³       ³   project.nuget.cache
+    ³       ³   
+    ³       ÀÄÄÄDebug
+    ³           ÀÄÄÄnet6.0
+    ³               ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³               ³   Middleware.AssemblyInfo.cs
+    ³               ³   Middleware.AssemblyInfoInputs.cache
+    ³               ³   Middleware.assets.cache
+    ³               ³   Middleware.csproj.AssemblyReference.cache
+    ³               ³   Middleware.GeneratedMSBuildEditorConfig.editorconfig
+    ³               ³   Middleware.GlobalUsings.g.cs
+    ³               ³   
+    ³               ÀÄÄÄref
+    ÃÄÄÄModels
+    ³   ³   ExceptionLogModel.cs
+    ³   ³   HealthResponse.cs
+    ³   ³   Models.csproj
+    ³   ³   ObjectStorageLog.cs
+    ³   ³   QueueLog.cs
+    ³   ³   QueueMessage.cs
+    ³   ³   RequestResponseLogModel.cs
+    ³   ³   UploadMp4Response.cs
+    ³   ³   WebServiceErrors.cs
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÀÄÄÄobj
+    ³       ³   Models.csproj.nuget.dgspec.json
+    ³       ³   Models.csproj.nuget.g.props
+    ³       ³   Models.csproj.nuget.g.targets
+    ³       ³   project.assets.json
+    ³       ³   project.nuget.cache
+    ³       ³   
+    ³       ÀÄÄÄDebug
+    ³           ÀÄÄÄnet6.0
+    ³               ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³               ³   Models.AssemblyInfo.cs
+    ³               ³   Models.AssemblyInfoInputs.cache
+    ³               ³   Models.assets.cache
+    ³               ³   Models.csproj.AssemblyReference.cache
+    ³               ³   Models.GeneratedMSBuildEditorConfig.editorconfig
+    ³               ³   Models.GlobalUsings.g.cs
+    ³               ³   
+    ³               ÀÄÄÄref
+    ÃÄÄÄServiceLayer
+    ³   ³   ServiceLayer.csproj
+    ³   ³   
+    ³   ÃÄÄÄbin
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ÀÄÄÄref
+    ³   ÃÄÄÄInterfaces
+    ³   ³       IHealthService.cs
+    ³   ³       ILoggingService.cs
+    ³   ³       IMinioStorageService.cs
+    ³   ³       IQueueService.cs
+    ³   ³       
+    ³   ÃÄÄÄobj
+    ³   ³   ³   project.assets.json
+    ³   ³   ³   project.nuget.cache
+    ³   ³   ³   ServiceLayer.csproj.nuget.dgspec.json
+    ³   ³   ³   ServiceLayer.csproj.nuget.g.props
+    ³   ³   ³   ServiceLayer.csproj.nuget.g.targets
+    ³   ³   ³   
+    ³   ³   ÀÄÄÄDebug
+    ³   ³       ÀÄÄÄnet6.0
+    ³   ³           ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+    ³   ³           ³   ServiceLayer.AssemblyInfo.cs
+    ³   ³           ³   ServiceLayer.AssemblyInfoInputs.cache
+    ³   ³           ³   ServiceLayer.assets.cache
+    ³   ³           ³   ServiceLayer.csproj.AssemblyReference.cache
+    ³   ³           ³   ServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
+    ³   ³           ³   ServiceLayer.GlobalUsings.g.cs
+    ³   ³           ³   
+    ³   ³           ÀÄÄÄref
+    ³   ÀÄÄÄServices
+    ³           HealthService.cs
+    ³           LoggingService.cs
+    ³           MinioStorageService.cs
+    ³           QueueService.cs
+    ³           
+    ÀÄÄÄWebService
+        ³   appsettings.Development.json
+        ³   appsettings.json
+        ³   Dockerfile
+        ³   Program.cs
+        ³   WebService.csproj
+        ³   
+        ÃÄÄÄbin
+        ³   ÀÄÄÄDebug
+        ³       ÀÄÄÄnet6.0
+        ³           ÀÄÄÄref
+        ÃÄÄÄobj
+        ³   ³   project.assets.json
+        ³   ³   project.nuget.cache
+        ³   ³   WebService.csproj.nuget.dgspec.json
+        ³   ³   WebService.csproj.nuget.g.props
+        ³   ³   WebService.csproj.nuget.g.targets
+        ³   ³   
+        ³   ÀÄÄÄDebug
+        ³       ÀÄÄÄnet6.0
+        ³           ³   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+        ³           ³   WebService.AssemblyInfo.cs
+        ³           ³   WebService.AssemblyInfoInputs.cache
+        ³           ³   WebService.assets.cache
+        ³           ³   WebService.csproj.AssemblyReference.cache
+        ³           ³   WebService.GeneratedMSBuildEditorConfig.editorconfig
+        ³           ³   WebService.GlobalUsings.g.cs
+        ³           ³   
+        ³           ÃÄÄÄref
+        ³           ÀÄÄÄstaticwebassets
+        ÀÄÄÄProperties
+                launchSettings.json
+                
