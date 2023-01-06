@@ -51,6 +51,7 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [Notification Microservice](#notification-microservice)
   - [Structure](#structure)
   - [Contributing](#contributing)
+  - [Helper Documents](#helper-documents)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
   - [RoadMap](#roadmap)
 
@@ -987,6 +988,10 @@ root:.
 ## Contributing
 
 I am open every advice for my project. I am planning to improve myself on .NET Core 6, Microservices and Container Technologies. So don't hesitate comment on my project., every idea is plus for me.
+
+## Helper Documents
+
+Postman Collection folder, ELK script and Docker Compose files added to project. Folder names are 'YAML Files', 'Postman Collection' and 'ELK Scripts'.
 
 ## Bug Reports & Feature Requests
 
