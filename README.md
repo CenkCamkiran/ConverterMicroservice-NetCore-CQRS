@@ -657,7 +657,7 @@ git clone
 
 ### Web Service
 
-- It is web service that you can upload MP4 file (Max size of file is around 30MB is limited).
+- It is web service that you can upload MP4 file (Max size of file is around 30MB is limited, this is handled by Environment Variable as well).
 - It has only two controller (route). Health Controller is checking the health of API and its tools like ELK, RabbitMQ. Converter Controller is the main thing of the project, you can upload MP4 file for convert process.
 - It is REST API.
 - It uses RabbitMQ for queue the message that contains of email and Guid of uploaded MP4 file with TTL (I used 3600000 milliseconds = 1 hour as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
