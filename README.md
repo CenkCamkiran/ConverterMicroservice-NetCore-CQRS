@@ -623,7 +623,8 @@ git clone
 ## Structure
 
 ````bash
-root:.
+C:.
+|   cenk.doc
 |   README.md
 |   
 +---Converter-Microservice
@@ -631,39 +632,35 @@ root:.
 |   |   .gitignore
 |   |   Converter-Microservice.sln
 |   |   
-|   +---Adapter
-|   |   |   Adapter.csproj
-|   |   |   Class1.cs
-|   |   |   
-|   |   +---Adapters
-|   |   |       LoggingOtherAdapter.cs
-|   |   |       
-|   |   \---Interfaces
-|   |           ILoggingOtherAdapter.cs
-|   |           
 |   +---Configuration
-|   |       Configuration.csproj
-|   |       EnvVariablesHandler.cs
-|   |       
+|   |   |   Configuration.csproj
+|   |   |   EnvVariablesHandler.cs  
+|   |                       
 |   +---Converter-Microservice
 |   |   |   Converter-Microservice.csproj
-|   |   |   Program.cs
-|   |   |   
+|   |   |   Program.cs                            
+|   |   |                   
 |   |   \---Properties
 |   |           launchSettings.json
 |   |           
 |   +---DataAccess
 |   |   |   DataAccess.csproj
 |   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net6.0
+|   |   |           |   
+|   |   |           \---Repository
+|   |   |                   App.config
+|   |   |                   
 |   |   +---Interfaces
 |   |   |       IConverterRepository.cs
 |   |   |       ILog4NetRepository.cs
 |   |   |       IObjectStorageRepository.cs
-|   |   |       IQueueRepository.cs
-|   |   |       
+|   |   |       IQueueRepository.cs     
+|   |   |                   
 |   |   +---Providers
 |   |   |       LazyResolutionMiddlewareExtensions.cs
-|   |   |       QueueProviders.cs
 |   |   |       
 |   |   \---Repository
 |   |           App.config
@@ -673,28 +670,43 @@ root:.
 |   |           QueueRepository.cs
 |   |           
 |   +---Models
-|   |       ConsumerException.cs
-|   |       ConverterLog.cs
-|   |       ElkConfiguration.cs
-|   |       ErrorLog.cs
-|   |       LoggerLog.cs
-|   |       MinioConfiguration.cs
-|   |       Models.csproj
-|   |       NotificationLog.cs
-|   |       ObjectDataModel.cs
-|   |       ObjectStorageLog.cs
-|   |       OtherLog.cs
-|   |       QueueLog.cs
-|   |       QueueMessage.cs
-|   |       RabbitMqConfiguration.cs
-|   |       
+|   |   |   ConsumerException.cs
+|   |   |   ConverterLog.cs
+|   |   |   ElkConfiguration.cs
+|   |   |   ErrorLog.cs
+|   |   |   LoggerLog.cs
+|   |   |   MinioConfiguration.cs
+|   |   |   Models.csproj
+|   |   |   NotificationLog.cs
+|   |   |   ObjectDataModel.cs
+|   |   |   ObjectStorageLog.cs
+|   |   |   OtherLog.cs
+|   |   |   QueueLog.cs
+|   |   |   QueueMessage.cs
+|   |   |   RabbitMqConfiguration.cs
+|   |   |   
+|   |   +---bin
+|   |   |   \---Debug
+|   |   |       \---net6.0
+|   |   |               Models.deps.json
+|   |   |               Models.dll
+|   |   |               Models.pdb
+|   |                  
+|   |                       
 |   \---Operation
 |       |   Operation.csproj
 |       |   
+|       +---bin
+|       |   \---Debug
+|       |       \---net6.0
+|       |           |   
+|       |           \---Repository
+|       |                   App.config
+|       |                   
 |       +---Interfaces
 |       |       IObjectStorageOperation.cs
-|       |       IQueueOperation.cs
-|       |       
+|       |       IQueueOperation.cs     
+|       |                   
 |       \---Operations
 |               ObjectStorageOperation.cs
 |               QueueOperation.cs
@@ -835,42 +847,15 @@ root:.
     +---APILayer
     |   |   APILayer.csproj
     |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
     |   +---Converters
     |   |       ConverterController.cs
     |   |       
     |   +---Health
     |   |       HealthController.cs
-    |   |       
-    |   \---obj
-    |       |   APILayer.csproj.nuget.dgspec.json
-    |       |   APILayer.csproj.nuget.g.props
-    |       |   APILayer.csproj.nuget.g.targets
-    |       |   project.assets.json
-    |       |   project.nuget.cache
-    |       |   
-    |       \---Debug
-    |           \---net6.0
-    |               |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |               |   APILayer.AssemblyInfo.cs
-    |               |   APILayer.AssemblyInfoInputs.cache
-    |               |   APILayer.assets.cache
-    |               |   APILayer.csproj.AssemblyReference.cache
-    |               |   APILayer.GeneratedMSBuildEditorConfig.editorconfig
-    |               |   APILayer.GlobalUsings.g.cs
-    |               |   
-    |               \---ref
+    |          
     +---DataLayer
     |   |   App.config
-    |   |   DataLayer.csproj
-    |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
+    |   |   DataLayer.csproj 
     |   +---DataAccess
     |   |       Log4NetRepository.cs
     |   |       LoggingRepository.cs
@@ -884,91 +869,28 @@ root:.
     |   |       ILogOtherRepository.cs
     |   |       IMinioStorageRepository.cs
     |   |       IQueueRepository.cs
-    |   |       
-    |   \---obj
-    |       |   DataLayer.csproj.nuget.dgspec.json
-    |       |   DataLayer.csproj.nuget.g.props
-    |       |   DataLayer.csproj.nuget.g.targets
-    |       |   project.assets.json
-    |       |   project.nuget.cache
-    |       |   
-    |       \---Debug
-    |           \---net6.0
-    |               |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |               |   DataLayer.AssemblyInfo.cs
-    |               |   DataLayer.AssemblyInfoInputs.cache
-    |               |   DataLayer.assets.cache
-    |               |   DataLayer.csproj.AssemblyReference.cache
-    |               |   DataLayer.GeneratedMSBuildEditorConfig.editorconfig
-    |               |   DataLayer.GlobalUsings.g.cs
-    |               |   
-    |               \---ref
+    |          
     +---Helpers
     |   |   EmailFormatHelper.cs
     |   |   Helpers.csproj
     |   |   PingHelper.cs
-    |   |   WebServiceException.cs
-    |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
+    |   |   WebServiceException.cs  
     |   +---Interfaces
     |   |       IPingHelper.cs
-    |   |       
-    |   \---obj
-    |       |   Helpers.csproj.nuget.dgspec.json
-    |       |   Helpers.csproj.nuget.g.props
-    |       |   Helpers.csproj.nuget.g.targets
-    |       |   project.assets.json
-    |       |   project.nuget.cache
-    |       |   
-    |       \---Debug
-    |           \---net6.0
-    |               |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |               |   Helpers.AssemblyInfo.cs
-    |               |   Helpers.AssemblyInfoInputs.cache
-    |               |   Helpers.assets.cache
-    |               |   Helpers.csproj.AssemblyReference.cache
-    |               |   Helpers.GeneratedMSBuildEditorConfig.editorconfig
-    |               |   Helpers.GlobalUsings.g.cs
-    |               |   
-    |               \---ref
+    |          
     +---Middleware
     |   |   ErrorHandlerMiddleware.cs
     |   |   LoggingMiddleware.cs
     |   |   Middleware.csproj
     |   |   ReadableResponseStreamMiddleware.cs
     |   |   RequestValidationMiddleware.cs
-    |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
+    |      
     |   +---Contexts
     |   |   |   WebServiceContext.cs
     |   |   |   
     |   |   \---Interfaces
-    |   |           IWebServiceContext.cs
-    |   |           
-    |   \---obj
-    |       |   Middleware.csproj.nuget.dgspec.json
-    |       |   Middleware.csproj.nuget.g.props
-    |       |   Middleware.csproj.nuget.g.targets
-    |       |   project.assets.json
-    |       |   project.nuget.cache
-    |       |   
-    |       \---Debug
-    |           \---net6.0
-    |               |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |               |   Middleware.AssemblyInfo.cs
-    |               |   Middleware.AssemblyInfoInputs.cache
-    |               |   Middleware.assets.cache
-    |               |   Middleware.csproj.AssemblyReference.cache
-    |               |   Middleware.GeneratedMSBuildEditorConfig.editorconfig
-    |               |   Middleware.GlobalUsings.g.cs
-    |               |   
-    |               \---ref
+    |   |           IWebServiceContext.cs  
+    |     
     +---Models
     |   |   ExceptionLogModel.cs
     |   |   HealthResponse.cs
@@ -979,60 +901,16 @@ root:.
     |   |   RequestResponseLogModel.cs
     |   |   UploadMp4Response.cs
     |   |   WebServiceErrors.cs
-    |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
-    |   \---obj
-    |       |   Models.csproj.nuget.dgspec.json
-    |       |   Models.csproj.nuget.g.props
-    |       |   Models.csproj.nuget.g.targets
-    |       |   project.assets.json
-    |       |   project.nuget.cache
-    |       |   
-    |       \---Debug
-    |           \---net6.0
-    |               |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |               |   Models.AssemblyInfo.cs
-    |               |   Models.AssemblyInfoInputs.cache
-    |               |   Models.assets.cache
-    |               |   Models.csproj.AssemblyReference.cache
-    |               |   Models.GeneratedMSBuildEditorConfig.editorconfig
-    |               |   Models.GlobalUsings.g.cs
-    |               |   
-    |               \---ref
+    |
     +---ServiceLayer
     |   |   ServiceLayer.csproj
     |   |   
-    |   +---bin
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           \---ref
     |   +---Interfaces
     |   |       IHealthService.cs
     |   |       ILoggingService.cs
     |   |       IMinioStorageService.cs
     |   |       IQueueService.cs
     |   |       
-    |   +---obj
-    |   |   |   project.assets.json
-    |   |   |   project.nuget.cache
-    |   |   |   ServiceLayer.csproj.nuget.dgspec.json
-    |   |   |   ServiceLayer.csproj.nuget.g.props
-    |   |   |   ServiceLayer.csproj.nuget.g.targets
-    |   |   |   
-    |   |   \---Debug
-    |   |       \---net6.0
-    |   |           |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-    |   |           |   ServiceLayer.AssemblyInfo.cs
-    |   |           |   ServiceLayer.AssemblyInfoInputs.cache
-    |   |           |   ServiceLayer.assets.cache
-    |   |           |   ServiceLayer.csproj.AssemblyReference.cache
-    |   |           |   ServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
-    |   |           |   ServiceLayer.GlobalUsings.g.cs
-    |   |           |   
-    |   |           \---ref
     |   \---Services
     |           HealthService.cs
     |           LoggingService.cs
@@ -1045,30 +923,9 @@ root:.
         |   Dockerfile
         |   Program.cs
         |   WebService.csproj
-        |   
-        +---bin
-        |   \---Debug
-        |       \---net6.0
-        |           \---ref
+        |
         +---obj
-        |   |   project.assets.json
-        |   |   project.nuget.cache
-        |   |   WebService.csproj.nuget.dgspec.json
-        |   |   WebService.csproj.nuget.g.props
-        |   |   WebService.csproj.nuget.g.targets
-        |   |   
-        |   \---Debug
-        |       \---net6.0
-        |           |   .NETCoreApp,Version=v6.0.AssemblyAttributes.cs
-        |           |   WebService.AssemblyInfo.cs
-        |           |   WebService.AssemblyInfoInputs.cache
-        |           |   WebService.assets.cache
-        |           |   WebService.csproj.AssemblyReference.cache
-        |           |   WebService.GeneratedMSBuildEditorConfig.editorconfig
-        |           |   WebService.GlobalUsings.g.cs
-        |           |   
-        |           +---ref
-        |           \---staticwebassets
+        |
         \---Properties
                 launchSettings.json
 ````
