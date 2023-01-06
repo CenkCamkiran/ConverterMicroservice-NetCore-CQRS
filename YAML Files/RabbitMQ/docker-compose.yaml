@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    volumes:
+      - rabbitmq-volume:/var/lib/rabbitmq
+    #networks:
+      #- overlay
+    restart: always
+    hostname: my_rabbitmq
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${MQUSER}
+      RABBITMQ_DEFAULT_PASS: ${MQPWD}
+    ports:
+      - 15672:15672
+      - 5672:5672
+volumes:
+  rabbitmq-volume:
