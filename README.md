@@ -623,7 +623,7 @@ git clone
 ## Structure
 
 ````bash
-C:.
+root:.
 |   cenk.doc
 |   README.md
 |   
