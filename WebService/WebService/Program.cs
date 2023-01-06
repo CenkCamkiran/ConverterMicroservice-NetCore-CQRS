@@ -35,9 +35,6 @@ string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
 
 //Repository
 builder.Services.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
-//builder.Services.AddScoped<ILoggingRepository<ObjectStorageLog>, LoggingRepository<ObjectStorageLog>>();
-//builder.Services.AddScoped<ILoggingRepository<QueueLog>, LoggingRepository<QueueLog>>();
-//builder.Services.AddScoped<ILoggingRepository<RequestResponseLogModel>, LoggingRepository<RequestResponseLogModel>>();
 builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
 builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();

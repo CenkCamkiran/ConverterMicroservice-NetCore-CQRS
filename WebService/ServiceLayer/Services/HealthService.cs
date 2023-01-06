@@ -15,17 +15,14 @@ namespace ServiceLayer.Services
             _pingHelper = pingHelper;
         }
 
-        public HealthResponse CheckHealthStatus(string RabbitMQHost, string ElasticHost, string StorageHost)
+        public HealthResponse CheckHealthStatus()
         {
-            PingReply rabbitMQStatus = _pingHelper.PingRabbitMQ(RabbitMQHost);
-            PingReply elasticSearchStatus = _pingHelper.PingElasticSearch(ElasticHost);
-            PingReply storageStatus = _pingHelper.PingStorage(ElasticHost);
+
+            PingReply hostHealth = _pingHelper.PingVMHost();
 
             HealthResponse healthResponse = new HealthResponse();
 
-            healthResponse.StorageStatus = storageStatus.Status == (int)IPStatus.Success ? "S3 Storage is working!" : "S3 Storage is not working!";
-            healthResponse.RabbitMQStatus = rabbitMQStatus.Status == (int)IPStatus.Success ? "RabbitMQ is working!" : "RabbitMQ is not working!";
-            healthResponse.ElasticSearchStatus = elasticSearchStatus.Status == (int)IPStatus.Success ? "ElasticSearch is working!" : "ElasticSearch is not working!";
+            healthResponse.HostStatus = hostHealth.Status == (int)IPStatus.Success ? "Host is working!" : "Host is not working!";
 
             return healthResponse;
 

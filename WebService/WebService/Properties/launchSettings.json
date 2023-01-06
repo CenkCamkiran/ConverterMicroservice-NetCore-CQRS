@@ -7,9 +7,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "RABBITMQ_HOST": "34.89.179.82",
+        "RABBITMQ_PORT": "5672",
         "RABBITMQ_USERNAME": "rabbitmq_admin",
         "RABBITMQ_PASSWORD": "eXHdZbgQWRa7Tw#Vp5",
-        "RABBITMQ_PORT": "5672",
         "MINIO_HOST": "34.89.179.82:9000",
         "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
         "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F",

@@ -1,4 +1,8 @@
 ﻿using Helpers.Interfaces;
+using Models;
+using Newtonsoft.Json;
+using System;
+using System.Net;
 using System.Net.NetworkInformation;
 
 namespace Helpers
@@ -6,33 +10,27 @@ namespace Helpers
     public class PingHelper : IPingHelper
     {
 
-        public PingReply PingElasticSearch(string Host)
+        public PingReply PingVMHost()
         {
+            Uri uri = new Uri(Environment.GetEnvironmentVariable("ELK_HOST"));
 
-            Ping ping = new Ping();
+            try
+            {
+                Ping ping = new Ping();
+                Task<PingReply> pingResult = ping.SendPingAsync(uri.Host, 60000);
 
-            Task<PingReply> pingResult = ping.SendPingAsync(Host, 15);
+                return pingResult.Result;
+            }
+            catch (Exception exception)
+            {
+                UploadMp4Response error = new UploadMp4Response();
+                error.ErrorMessage = exception.Message.ToString();
+                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
 
-            return pingResult.Result;
+                throw new WebServiceException(JsonConvert.SerializeObject(error));
+            }
+
         }
 
-        public PingReply PingRabbitMQ(string Host)
-        {
-
-            Ping ping = new Ping();
-
-            Task<PingReply> pingResult = ping.SendPingAsync(Host, 15);
-
-            return pingResult.Result;
-        }
-
-        public PingReply PingStorage(string Host)
-        {
-            Ping ping = new Ping();
-
-            Task<PingReply> pingResult = ping.SendPingAsync(Host, 15);
-
-            return pingResult.Result;
-        }
     }
 }

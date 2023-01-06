@@ -8,7 +8,6 @@ namespace APILayer.Health
     [ApiController]
     public class HealthController : ControllerBase
     {
-
         private IHealthService _healthService;
 
         public HealthController(IHealthService healthService)
@@ -19,11 +18,7 @@ namespace APILayer.Health
         [HttpGet]
         public HealthResponse GetHealthStatus()
         {
-            string RabbitMQHost = "";
-            string ElasticHost = "";
-            string StorageHost = "";
-
-            return _healthService.CheckHealthStatus(RabbitMQHost, ElasticHost, StorageHost);
+            return _healthService.CheckHealthStatus();
         }
     }
 }

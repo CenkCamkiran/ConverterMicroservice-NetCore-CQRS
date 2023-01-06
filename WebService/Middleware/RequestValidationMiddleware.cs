@@ -62,7 +62,7 @@ namespace Middleware
             }
 
             long fileLength = Convert.ToInt64(Environment.GetEnvironmentVariable("FILE_LENGTH_LIMIT"));
-            if(file.Length == fileLength)
+            if (file.Length == fileLength)
             {
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = $"File length must be less than {fileLength} byte!";
