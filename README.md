@@ -44,23 +44,27 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
     - [Install project with Docker Container](#install-project-with-docker-container)
-  - [Structure](#structure)
+  - [Business Logic](#business-logic)
     - [Converter Microservice](#converter-microservice)
     - [Logger Microservice](#logger-microservice)
     - [Web Service](#web-service)
     - [Notification Microservice](#notification-microservice)
+  - [Structure](#structure)
   - [Contributing](#contributing)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
+  - [RoadMap](#roadmap)
 
 ## Features
 
 - Developed via .Net Core 6
 - Uses RabbitMQ for Asynchronous Communication
 - Uses ElasticSearch for logging request, responses, error messages and info messages
+- Uses Log4Net File Logging due to missed ElasticSearch logs. The logs never missed.
 - Uses Minio S3 Object Storage for store files
 - Uses Kong API Gateway for API security
-- Uses FFMpeg to convert processes
-- Easy to deploy, just use Dockerfile
+- Uses FFMpeg to convert MP4 to MP3
+- Easy to deploy, just use Dockerfile to build image and use Docker Compose to deploy microservices
+- Uses Environment Variables to more dynamic development (Test and Production environments)
 - Can run on any platform (Mac, Linux and Windows wherever you want!)
 
 ## Requirements
@@ -625,36 +629,52 @@ Follow the instructions below.
 git clone
 ```
 
-## Structure
+## Business Logic
 
 ### Converter Microservice
 
-- Uses RabbitMQ for Asynchronous Communication
-- Gets messages that contains email and file guid data from queue
-- Fetches MP4 file's stream data from Minio Object storage via File Guid data that exists in queue message
-- Converts MP4 file's stream data to MP3 stream data via FFMpeg library (Basically converts MP4 file to MP3 file)
-- New Guid is generated and MP3 stream data is saved as MP3 file in Minio Object Storage
-- Email and New File Guid is sent to queue as message
-- Complete convert process until new message arrives to queue
+- Uses RabbitMQ for Asynchronous Communication.
+- Gets messages that contains email and file guid data from queue.
+- Fetches MP4 file's stream data from Minio Object storage via File Guid data that exists in queue message.
+- Converts MP4 file's stream data to MP3 stream data via FFMpeg library (Basically converts MP4 file to MP3 file).
+- New Guid is generated and MP3 stream data is saved as MP3 file in Minio Object Storage.
+- Email and New File Guid is sent to queue as message with TTL. (I used 43200000 milliseconds = 12 hours as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
+- Complete convert process until new message arrives to queue.
+- Also error logs are sent to queue called errorlogs and info logs are sent to queue called otherlogs. They are ready to consumed by Logger Microservice.
+- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Logger Microservice
 
-- Uses RabbitMQ for Asynchronous Communication
-- Uses ElasticSearch for logging request, responses, error messages and info messages
-- Uses Minio S3 Object Storage for store files
-- Uses Kong API Gateway for security
-- Easy to deploy, just use Dockerfile
-- Can run on any platform (Mac, Linux and Windows wherever you want!)
+- Uses RabbitMQ for Asynchronous Communication.
+- Uses ElasticSearch for saving logs into indexes.
+- Fetches message from two different queues. They called 'errorlogs' and 'otherlogs' queues.
+- Saves logs into two different indexes in ElasticSearch. Errorlogs are saved into index that called 'loggerservice_errorlogs'. Infologs (Otherlogs) are saved into index that called 'loggerservice_otherlogs'.
+- It is bassically logger.
+- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Web Service
 
-- Easy to deploy, just use Dockerfile
-- Can run on any platform (Mac, Linux and Windows wherever you want!)
+- It is web service that you can upload MP4 file (Max size of file is around 30MB is limited).
+- It has only two controller (route). Health Controller is checking the health of API and its tools like ELK, RabbitMQ. Converter Controller is the main thing of the project, you can upload MP4 file for convert process.
+- It is REST API.
+- It uses RabbitMQ for queue the message that contains of email and Guid of uploaded MP4 file with TTL (I used 3600000 milliseconds = 1 hour as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
+- It uses Minio Object Storage to store MP4 files.
+- It uses ElasticSearch to log errors and infos.
+- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Notification Microservice
 
-- Easy to deploy, just use Dockerfile
-- Can run on any platform (Mac, Linux and Windows wherever you want!)
+- It uses RabbitMQ to fetch message that contains email address and MP3 File Guid from queue. Guid is generated in Converter Microservice.
+- It uses Minio Object Storage to fetch MP3 files via Guid.
+- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses Google Gmail to send MP3 file in the attachment as email to user. This configuration is based on Environment Variables as well. You can pass working SMTP Host, Username, Password and Port to project via using Environment Variables.
+- Error logs are sent to queue called errorlogs and info logs are sent to queue called otherlogs. They are ready to consumed by Logger Microservice.
+- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
+
+## Structure
 
 ````bash
 root:.
@@ -966,8 +986,13 @@ root:.
 
 ## Contributing
 
-I am open every advice for my project. I am planning to improve myself on .NET Core 6, Microservices and Container Technologies. So don't hesitate comment on my project.
+I am open every advice for my project. I am planning to improve myself on .NET Core 6, Microservices and Container Technologies. So don't hesitate comment on my project., every idea is plus for me.
 
 ## Bug Reports & Feature Requests
 
 Please use the Github issues.
+
+## RoadMap
+
+- In the Future, i am planning to use Kubernetes.
+- Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
