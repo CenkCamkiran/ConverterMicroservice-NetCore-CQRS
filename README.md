@@ -630,11 +630,7 @@ networks:
 
 ### Install project with Docker Container
 
-Follow the instructions below.
-
-```bash
-git clone
-```
+Just use the DOckerfile to build image. After that use **"docker run"** command to run microservices.
 
 ## Business Logic
 
