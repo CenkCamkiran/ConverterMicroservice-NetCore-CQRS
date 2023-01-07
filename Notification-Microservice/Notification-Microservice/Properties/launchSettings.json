@@ -10,12 +10,15 @@
         "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
         "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F",
         "RABBITMQ_PORT": "5672",
-        "SMTP_HOST": "smtp.gmail.com", //smtp.gmail.com
+        "SMTP_HOST": "smtp.gmail.com",
         "SMTP_PORT": "587",
         "SMTP_MAIL_FROM": "cenkcamkiran01@gmail.com",
         "SMTP_MAIL_PASSWORD": "hkbrvfezufqljxmz",
         "SMTP_MAIL_USERNAME": "Cenk Camkiran"
       }
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }

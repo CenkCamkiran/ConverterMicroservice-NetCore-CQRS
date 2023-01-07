@@ -15,6 +15,9 @@
         "MINIO_ACCESSKEY": "Aw8oLAyVKnsgTmhx",
         "MINIO_SECRETKEY": "YlMYiCrkxJtF4MELSPhcp4cyxV4RH65F"
       }
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
