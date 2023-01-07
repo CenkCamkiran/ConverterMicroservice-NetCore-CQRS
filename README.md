@@ -44,6 +44,7 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
     - [Install project with Docker Container](#install-project-with-docker-container)
+  - [Overall Architecture](#overall-architecture)
   - [Business Logic](#business-logic)
     - [Converter Microservice](#converter-microservice)
     - [Logger Microservice](#logger-microservice)
@@ -631,6 +632,10 @@ networks:
 ### Install project with Docker Container
 
 Just use the DOckerfile to build image. After that use **"docker run"** command to run microservices.
+
+## Overall Architecture
+
+<img src="./ProjectArch.drawio.png" >
 
 ## Business Logic
 
