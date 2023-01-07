@@ -57,13 +57,13 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
 
 ## Features
 
-- Developed via .Net Core 6
-- Uses RabbitMQ for Asynchronous Communication
-- Uses ElasticSearch for logging request, responses, error messages and info messages
-- Uses Log4Net File Logging due to missed ElasticSearch logs. The logs never missed.
-- Uses Minio S3 Object Storage for store files
-- Uses Kong API Gateway for API security
-- Uses FFMpeg to convert MP4 to MP3
+- Developed via **.Net Core 6**
+- Uses **RabbitMQ** for Asynchronous Communication
+- Uses **ElasticSearch** for logging request, responses, error messages and info messages
+- Uses **Log4Net** File Logging due to missed ElasticSearch logs. The logs never missed.
+- Uses **Minio S3 Object Storage** for store files
+- Uses **Kong API Gateway** for API security
+- Uses **FFMpeg** to convert MP4 to MP3
 - Easy to deploy, just use Dockerfile to build image and use Docker Compose to deploy microservices
 - Uses Environment Variables to more dynamic development (Test and Production environments)
 - Can run on any platform (Mac, Linux and Windows wherever you want!)
@@ -82,7 +82,7 @@ Docker Engine and Docker Compose must be installed. Check out on Docker's offica
 ### ElasticSearch Installation
 
 I followed instructions on this github repo: <https://github.com/deviantony/docker-elk> . Check readme, instructions are clear and simple.
-Note: I used Elastic, Logstash and Kibana version 8.5.1 at the time of i wrote this readme
+Note: I used Elastic, Logstash and Kibana version **8.5.1** at the time of i wrote this readme
 
 #### Creation of Index on ElasticSearch-Kibana
 
@@ -509,11 +509,11 @@ volumes:
 
 ### Postman Collection
 
-Collection file is in Docs/Postman Collection. Import and test API!
+Collection file is in Project. Import and test API!
 
 ### RabbitMQ Installation
 
-Use below docker-compose file.
+1. Use below docker-compose file.
 
 ```bash
 
@@ -539,6 +539,12 @@ volumes:
   rabbitmq-volume:
 
 ```
+
+2. Create exchange called **'converter_exchange.direct'**. Type must be direct. After that, create queue called **'converter'** with properties of **"x-message-ttl: 43200000"** and **"durable: true"**. Bind queue to **'converter_exchange.direct'** exchange.
+
+3. Create exchange called **'log_exchange.direct'**. Type must be direct. After that, create queue called **'errorlogs'** with property of **"durable: true"** and create queue **'otherlogs'** with property of **"durable: true"**. Bind queue to **'log_exchange.direct'** exchange.
+
+4. Create exchange called **'notification_exchange.direct'**. Type must be direct. After that, create queue called **'notification'** with properties of **"x-message-ttl: 3600000"** and **"durable: true"**. Bind queue to **'notification_exchange.direct'** exchange.
 
 ### Kong API Gateway Installation
 
