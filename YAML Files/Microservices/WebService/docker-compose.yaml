@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  webservice:
+    image: cenkcamkiran/gcloud-projects:netcore_webservice
+    #volumes:
+      #- webservice:/example
+    #networks:
+      #- microservices
+    restart: on-failure
+    container_name: netcore_webservice
+    environment:
+      RABBITMQ_HOST: ${RABBITMQHOST},
+      RABBITMQ_PORT: ${RABBITMQPORT},
+      RABBITMQ_USERNAME: ${RABBITMQUSERNAME},
+      RABBITMQ_PASSWORD: ${RABBITMQPASSWORD},
+      MINIO_HOST: ${MINIOHOST},
+      MINIO_ACCESSKEY: ${MINIOACCESSKEY},
+      MINIO_SECRETKEY: ${MINIOSECRETKEY},
+      ELK_HOST: ${ELKHOST},
+      ELK_USERNAME: ${ELKUSERNAME},
+      ELK_PASSWORD: ${ELKPASSWORD},
+      ELK_DEFAULT_INDEX: webservice_requestresponse_logs,
+      FILE_LENGTH_LIMIT: 30000000
+    ports:
+      - 4080
+      - 4443
+#volumes:
+  #webservice-volume:
+
+#networks:
+  #microservices:
+
+
+
