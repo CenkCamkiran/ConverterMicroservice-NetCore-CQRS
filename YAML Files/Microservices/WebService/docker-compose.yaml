@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   webservice:
-    image: cenkcamkiran/gcloud-projects:netcore_webservice
+    image: cenkcamkiran/gcloud-projects:webservice_v1.0
     #volumes:
       #- webservice:/example
     #networks:
