@@ -17,7 +17,12 @@ using IConnection = RabbitMQ.Client.IConnection;
 var serviceProvider = new ServiceCollection();
 
 EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
+
 MinioConfiguration minioConfiguration = envVariablesHandler.GetMinioEnvVariables();
+Console.WriteLine($"MINIO_HOST {minioConfiguration.MinioHost}");
+Console.WriteLine($"MINIO_ACCESSKEY {minioConfiguration.MinioAccessKey}");
+Console.WriteLine($"MINIO_SECRETKEY {minioConfiguration.MinioSecretKey}");
+
 MinioClient minioClient = new MinioClient()
                         .WithEndpoint(minioConfiguration.MinioHost)
                         .WithCredentials(minioConfiguration.MinioAccessKey, minioConfiguration.MinioSecretKey)
@@ -25,6 +30,11 @@ MinioClient minioClient = new MinioClient()
 serviceProvider.AddSingleton<IMinioClient>(minioClient);
 
 RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
+Console.WriteLine($"RABBITMQ_HOST {rabbitMqConfiguration.RabbitMqHost}");
+Console.WriteLine($"RABBITMQ_PORT {rabbitMqConfiguration.RabbitMqPort}");
+Console.WriteLine($"RABBITMQ_USERNAME {rabbitMqConfiguration.RabbitMqUsername}");
+Console.WriteLine($"RABBITMQ_PASSWORD {rabbitMqConfiguration.RabbitMqPassword}");
+
 var connectionFactory = new ConnectionFactory
 {
     HostName = rabbitMqConfiguration.RabbitMqHost,
@@ -51,6 +61,9 @@ serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddLazyResolution();
 
 var builder = serviceProvider.BuildServiceProvider();
+
+Console.WriteLine("Program Started!");
+
 var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
 
 _queueOperation.ConsumeQueue("notification", 3600000);

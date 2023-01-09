@@ -11,6 +11,7 @@ using Nest;
 using RabbitMQ.Client;
 using ServiceLayer.Interfaces;
 using ServiceLayer.Services;
+using System;
 //using MongoDB.Driver;
 //using StackExchange.Redis;
 using IConnection = RabbitMQ.Client.IConnection;
@@ -32,6 +33,20 @@ string? elkHost = Environment.GetEnvironmentVariable("ELK_HOST");
 string? elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX");
 string? elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
 string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
+
+Console.WriteLine($"RABBITMQ_HOST {rabbitmqHost}");
+Console.WriteLine($"RABBITMQ_PORT {rabbitmqPort}");
+Console.WriteLine($"RABBITMQ_USERNAME {rabbitmqUsername}");
+Console.WriteLine($"RABBITMQ_PASSWORD {rabbitmqPassword}");
+
+Console.WriteLine($"MINIO_HOST {minioHost}");
+Console.WriteLine($"MINIO_ACCESSKEY {minioAccessKey}");
+Console.WriteLine($"MINIO_SECRETKEY {minioSecretKey}");
+
+Console.WriteLine($"ELK_HOST {elkHost}");
+Console.WriteLine($"ELK_DEFAULT_INDEX {elkDefaultIndex}");
+Console.WriteLine($"ELK_USERNAME {elkUsername}");
+Console.WriteLine($"ELK_PASSWORD {elkPassword}");
 
 //Repository
 builder.Services.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
@@ -107,3 +122,5 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
+
+Console.WriteLine("Program Started!");

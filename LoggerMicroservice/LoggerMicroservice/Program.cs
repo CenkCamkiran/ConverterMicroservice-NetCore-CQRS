@@ -9,12 +9,18 @@ using Nest;
 using Operation.Interfaces;
 using Operation.Operations;
 using RabbitMQ.Client;
+using System;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
 EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
 
 ElkConfiguration elkConfiguration = envVariablesHandler.GetElkEnvVariables();
+Console.WriteLine($"ELK_HOST {elkConfiguration.ElkHost}");
+Console.WriteLine($"ELK_DEFAULT_INDEX {elkConfiguration.ElkDefaultIndex}");
+Console.WriteLine($"ELK_USERNAME {elkConfiguration.ElkUsername}");
+Console.WriteLine($"ELK_PASSWORD {elkConfiguration.ElkPassword}");
+
 ConnectionSettings connection = new ConnectionSettings(new Uri(elkConfiguration.ElkHost)).
 DefaultIndex(elkConfiguration.ElkDefaultIndex).
 ServerCertificateValidationCallback(CertificateValidations.AllowAll).
@@ -27,6 +33,11 @@ serviceProvider.AddSingleton<IElasticClient>(elasticClient);
 
 
 RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
+Console.WriteLine($"RABBITMQ_HOST {rabbitMqConfiguration.RabbitMqHost}");
+Console.WriteLine($"RABBITMQ_PORT {rabbitMqConfiguration.RabbitMqPort}");
+Console.WriteLine($"RABBITMQ_USERNAME {rabbitMqConfiguration.RabbitMqUsername}");
+Console.WriteLine($"RABBITMQ_PASSWORD {rabbitMqConfiguration.RabbitMqPassword}");
+
 var connectionFactory = new ConnectionFactory
 {
     HostName = rabbitMqConfiguration.RabbitMqHost,
@@ -48,6 +59,8 @@ serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
+
+Console.WriteLine("Program Started!");
 
 var _queueErrorLogsOperation = builder.GetService<IQueueOperation<ErrorLog>>();
 var _queueOtherLogsOperation = builder.GetService<IQueueOperation<OtherLog>>();
