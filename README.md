@@ -51,6 +51,7 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [Web Service](#web-service)
     - [Notification Microservice](#notification-microservice)
   - [Structure](#structure)
+  - [Installation](#installation)
   - [Contributing](#contributing)
   - [Helper Documents](#helper-documents)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
@@ -991,6 +992,12 @@ root:.
         \---Properties
                 launchSettings.json
 ````
+
+## Installation
+
+At the root of project, there is a folder called 'YAML Files'. Each folder name represents technologies that i used in this project. In that folders, there are docker-compose files corresponds to each related folder. Use them to install on Docker Compose Linux.
+
+To install the Microservices, go to Microservices folder and each Microservice are represented as folder name. Inside of that folders there is docker-compose file. Use them via creating .env file in your workspace or what ever you want!
 
 ## Contributing
 
