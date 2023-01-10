@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  webservice:
+    image: cenkcamkiran/gcloud-projects:loggingservice_v1.0
+    #volumes:
+    #- webservice:/example
+    #networks:
+    #- microservices
+    restart: on-failure
+    container_name: netcore_loggingservice
+    environment:
+      RABBITMQ_HOST: ${RABBITMQHOST}
+      RABBITMQ_PORT: ${RABBITMQPORT}
+      RABBITMQ_USERNAME: ${RABBITMQUSERNAME}
+      RABBITMQ_PASSWORD: ${RABBITMQPASSWORD}
+      ELK_HOST: ${ELKHOST}
+      ELK_USERNAME: ${ELKUSERNAME}
+      ELK_PASSWORD: ${ELKPASSWORD}
+      ELK_DEFAULT_INDEX: webservice_requestresponse_logs
+#volumes:
+#webservice-volume:
+
+#networks:
+#microservices:
+
