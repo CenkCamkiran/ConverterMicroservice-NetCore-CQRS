@@ -1,9 +1,11 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+#4080 HTTP - 4443 HTTPS
+
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 4080 #HTTP
-EXPOSE 4443 #HTTPS
+EXPOSE 4080 
+EXPOSE 4443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
