@@ -3,8 +3,6 @@ version: "3.9"
 services:
   webservice:
     image: cenkcamkiran/gcloud-projects:webservice_v1.0
-    #volumes:
-      #- webservice:/example
     #networks:
       #- microservices
     restart: on-failure
@@ -23,15 +21,9 @@ services:
       ELK_DEFAULT_INDEX: webservice_requestresponse_logs
       FILE_LENGTH_LIMIT: 30000000
       ASPNETCORE_ENVIRONMENT: Development
-      #ASPNETCORE_URLS: https://+:4443;http://+:4080
       ASPNETCORE_URLS: http://+:4080
     ports:
       - 4080:4080
-      #- 4443:4443
-    #volumes:
-      #- ~/.aspnet/https:/https:ro
-#volumes:
-  #webservice-volume:
   
 #networks:
   #microservices:
