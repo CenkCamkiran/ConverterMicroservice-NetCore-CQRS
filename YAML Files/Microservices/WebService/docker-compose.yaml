@@ -22,15 +22,14 @@ services:
       ELK_PASSWORD: ${ELKPASSWORD}
       ELK_DEFAULT_INDEX: webservice_requestresponse_logs
       FILE_LENGTH_LIMIT: 30000000
-      ASPNETCORE_ENVIRONMENT: Production
-      ASPNETCORE_URLS: https://+:4443;http://+:4080
-      ASPNETCORE_Kestrel__Certificates__Default__Password: Pass@*****
-      ASPNETCORE_Kestrel__Certificates__Default__Path: /https/dockerdemo.pfx
+      ASPNETCORE_ENVIRONMENT: Development
+      #ASPNETCORE_URLS: https://+:4443;http://+:4080
+      ASPNETCORE_URLS: http://+:4080
     ports:
       - 4080:4080
-      - 4443:4443
-    volumes:
-      - ~/.aspnet/https:/https:ro
+      #- 4443:4443
+    #volumes:
+      #- ~/.aspnet/https:/https:ro
 #volumes:
   #webservice-volume:
   
