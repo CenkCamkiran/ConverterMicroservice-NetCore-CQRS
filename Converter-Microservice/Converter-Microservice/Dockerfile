@@ -3,6 +3,8 @@
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
 WORKDIR /app
 
+RUN apt-get update && apt-get install ffmpeg -y
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Converter-Microservice/Converter-Microservice.csproj", "Converter-Microservice/"]
