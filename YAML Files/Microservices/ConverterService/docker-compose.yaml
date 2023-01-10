@@ -2,11 +2,11 @@ version: "3.9"
 
 services:
   webservice:
-    image: cenkcamkiran/gcloud-projects:converterservice_v1.0
+    image: cenkcamkiran/gcloud-projects:webservice_v1.0
     #volumes:
-    #- webservice:/example
+      #- webservice:/example
     #networks:
-    #- microservices
+      #- microservices
     restart: on-failure
     container_name: netcore_webservice
     environment:
@@ -18,8 +18,7 @@ services:
       MINIO_ACCESSKEY: ${MINIOACCESSKEY}
       MINIO_SECRETKEY: ${MINIOSECRETKEY}
 #volumes:
-#webservice-volume:
-
+  #webservice-volume:
+  
 #networks:
-#microservices:
-
+  #microservices:

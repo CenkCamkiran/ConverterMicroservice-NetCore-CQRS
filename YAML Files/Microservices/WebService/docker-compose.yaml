@@ -23,11 +23,10 @@ services:
       ELK_DEFAULT_INDEX: webservice_requestresponse_logs
       FILE_LENGTH_LIMIT: 30000000
     ports:
-      - 4080
-      - 4443
+      - 4080:4080
+      - 4443:4443
 #volumes:
   #webservice-volume:
-
+  
 #networks:
   #microservices:
-

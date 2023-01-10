@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   webservice:
-    image: cenkcamkiran/gcloud-projects:notificationservice_v1.0
+    image: cenkcamkiran/gcloud-projects:webservice_v1.0
     #volumes:
-    #- webservice:/example
+      #- webservice:/example
     #networks:
-    #- microservices
+      #- microservices
     restart: on-failure
-    container_name: netcore_notificationservice
+    container_name: netcore_webservice
     environment:
       RABBITMQ_HOST: ${RABBITMQHOST}
       RABBITMQ_PORT: ${RABBITMQPORT}
@@ -17,9 +17,14 @@ services:
       MINIO_HOST: ${MINIOHOST}
       MINIO_ACCESSKEY: ${MINIOACCESSKEY}
       MINIO_SECRETKEY: ${MINIOSECRETKEY}
+      SMTP_HOST: ${SMTPHOST}
+      SMTP_PORT: ${SMTPPORT}
+      SMTP_MAIL_FROM: ${SMTPMAILFROM}
+      SMTP_MAIL_PASSWORD: ${SMTPMAILPASSWORD}
+      SMTP_MAIL_USERNAME: ${SMTPMAILUSERNAME}
+      
 #volumes:
-#webservice-volume:
-
+  #webservice-volume:
+  
 #networks:
-#microservices:
-
+  #microservices:
