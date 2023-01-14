@@ -27,7 +27,7 @@ services:
         host_ip: 127.0.0.1
         published: 4080
         protocol: tcp
-        mode: host #host internal, ingress external. Is is similar to Kubernetes
+        mode: host #host internal, ingress external
   
 #networks:
   #microservices:
