@@ -1009,7 +1009,7 @@ I am open every advice for my project. I am planning to improve myself on .NET C
 
 ## Helper Documents
 
-Postman Collection folder, ELK script and Docker Compose files added to project. Folder names are 'YAML Files', 'Postman Collection' and 'ELK Scripts'.
+Postman Collection folder, ELK script and Docker Compose files added to project. Folder names are **'YAML Files'**, **'Postman Collection'** and **'ELK Scripts'**.
 
 ## Bug Reports & Feature Requests
 
@@ -1017,5 +1017,7 @@ Please use the Github issues.
 
 ## RoadMap
 
-- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab.
+- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab. And also i want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
+- Fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
+- Describe Kong route definition in readme
