@@ -31,7 +31,8 @@ services:
     expose:
       - "4080"
     networks:
-      - "converter-microservices"
+      default: null
 
 networks:
-  converter-microservices:
+  default:
+    name: kong_default
