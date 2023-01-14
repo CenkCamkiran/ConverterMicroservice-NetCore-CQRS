@@ -1013,5 +1013,5 @@ Please use the Github issues.
 
 ## RoadMap
 
-- In the Future, i am planning to use Kubernetes.
+- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
