@@ -1016,3 +1016,4 @@ Please use the Github issues.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
 - Fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
 - Describe Kong route definition in readme
+- Fix Kong Port to communicate with web service
