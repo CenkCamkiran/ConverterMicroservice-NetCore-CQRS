@@ -18,15 +18,17 @@ I was curious about Microservice Architectures and Technologies like Docker, Kub
 
 Main goal was develop Mp4 to MP3 converter with Asynchronous way.
 
-First of all i used Kong API Gateway. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed .Net Core 6 but this is minor precaution)
+- I used Kong API Gateway. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed .Net Core 6 but this is minor precaution)
 
-Second, File uploading to webservice and converting process is resource consuming and response from webservice might be resolve as 'Timeout', you actually waited the response maybe a long time and you faced 'Timeout exception', this is bad and the person that use the webservice might be very angry about that. I find out that the solution is using queue well RabbitMQ. Actually you don't wait response, only send the request and do other work via asynchronous way. Eventually you will get desired result sound and safe. Timeout exception never gonna be problem. Sometimes maybe RabbitMQ Container gonna crash but this is not huge, you should use durable queues and persistent messages and this is important, you MUST use volumes on containers or you will lose everyting! With that way you will never lose requests and messages, the user eventually get the desired result late or early.
+- File uploading to webservice and converting process is resource consuming and response from webservice might be resolve as 'Timeout', you actually waited the response maybe a long time and you faced 'Timeout exception', this is bad and the person that use the webservice might be very angry about that. I find out that the solution is using queue well RabbitMQ. Actually you don't wait response, only send the request and do other work via asynchronous way. Eventually you will get desired result sound and safe. Timeout exception never gonna be problem. Sometimes maybe RabbitMQ Container gonna crash but this is not huge, you should use durable queues and persistent messages and this is important, you MUST use volumes on containers or you will lose everyting! With that way you will never lose requests and messages, the user eventually get the desired result late or early.
 
-Third, I used Minio S3 Object Storage to store MP4 and MP3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
+- I used Minio S3 Object Storage to store MP4 and MP3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
 
-Fourth, i used ElasticSearch for logging purposes. Because ElasticSearch is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on Kibana. This is cool!
+- I used ElasticSearch for logging purposes. Because ElasticSearch is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on Kibana. This is cool!
 
-Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technologies.
+- I used .Net Core 6. Because I wanted to learn something from .Net Technologies.
+  
+- I used same network configuration on all containers (Kong, RabbitMQ, Minio, WebService and others). Because containers can communicate each other via same using same network.
 
 ## Contents
 
@@ -43,6 +45,7 @@ Fifth, I used .Net Core 6. Because I wanted to learn something from .Net Technol
     - [Postman Collection](#postman-collection)
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
+      - [Kong API Gateway Routes Configuration](#kong-api-gateway-routes-configuration)
     - [Install project with Docker Container](#install-project-with-docker-container)
   - [Overall Architecture](#overall-architecture)
   - [Business Logic](#business-logic)
@@ -490,8 +493,8 @@ services:
     image: quay.io/minio/minio
     volumes:
       - minio-volume:/data
-    #networks:
-      #- overlay
+    networks:
+      default: null
     restart: always
     container_name: minio_object_storage
     environment:
@@ -504,8 +507,9 @@ services:
 volumes:
   minio-volume:
 
-#networks:
-  #overlay:
+networks:
+  default:
+    name: kong_default
 
 ```
 
@@ -518,7 +522,6 @@ Collection file is in Project. Import and test API!
 1. Use below docker-compose file.
 
 ```bash
-
 version: "3.9"
 
 services:
@@ -526,8 +529,8 @@ services:
     image: rabbitmq:3-management
     volumes:
       - rabbitmq-volume:/var/lib/rabbitmq
-    #networks:
-      #- overlay
+    networks:
+      default: null
     restart: always
     hostname: my_rabbitmq
     container_name: rabbitmq
@@ -539,6 +542,10 @@ services:
       - 5672:5672
 volumes:
   rabbitmq-volume:
+
+networks:
+  default:
+    name: kong_default
 
 ```
 
@@ -562,12 +569,12 @@ services:
   kong-database:
     image: postgres:9.6
     container_name: kong-database
-    ports:
-      - 5432:5432
+    expose:
+      - "5432"
     environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
-      - POSTGRES_PASSWORD=kong
+      - POSTGRES_USER=${KONGDBUSER}
+      - POSTGRES_DB=${KONGDBNAME}
+      - POSTGRES_PASSWORD=${KONGPWD}
     volumes:
       - "db-data-kong-postgres:/var/lib/postgresql/data"
 
@@ -576,7 +583,7 @@ services:
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
-      - KONG_PG_PASSWORD=kong
+      - KONG_PG_PASSWORD=${KONGPWD}
       - KONG_CASSANDRA_CONTACT_POINTS=kong-database
     command: kong migrations bootstrap
     restart: on-failure
@@ -591,20 +598,20 @@ services:
       - LC_ALL=en_US.UTF-8
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=kong-database
-      - KONG_PG_USER=kong
-      - KONG_PG_PASSWORD=kong
+      - KONG_PG_USER=${KONGDBUSER}
+      - KONG_PG_PASSWORD=${KONGPWD}
       - KONG_CASSANDRA_CONTACT_POINTS=kong-database
       - KONG_PROXY_ACCESS_LOG=/dev/stdout
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_LISTEN=0.0.0.0:8001, 0.0.0.0:8444 ssl
+      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8003, ${KONG_ADMINHOST}:8445 ssl
     restart: on-failure
-    ports:
-      - 8000:8000
-      - 8443:8443
-      - 8001:8001
-      - 8444:8444
+    expose:
+      - "8003"
+      - "8445"
+      - "8002"
+      - "8444"
     links:
       - kong-database:kong-database
     depends_on:
@@ -613,22 +620,19 @@ services:
   konga:
     image: pantsel/konga
     ports:
-      - 1337:1337
+      - 1337:1337/tcp
     links:
       - kong:kong
     container_name: konga
     environment:
-      - NODE_ENV=production
+      - ${KONGA_ENVIRONMENT}
 
 volumes:
   db-data-kong-postgres:
 
-networks:
-    default:
-        external:
-            name: kong-net
-
 ```
+
+#### Kong API Gateway Routes Configuration
 
 ### Install project with Docker Container
 
