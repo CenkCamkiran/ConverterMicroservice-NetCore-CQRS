@@ -87,4 +87,4 @@ volumes:
   db-data-kong-postgres:
 
 networks:
-   kong-net:
+   kong-net
