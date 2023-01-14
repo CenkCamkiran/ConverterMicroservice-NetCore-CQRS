@@ -4,7 +4,7 @@ services:
   webservice:
     image: cenkcamkiran/gcloud-projects:webservice_v1.0
     #networks:
-      #- microservices
+    #- microservices
     restart: on-failure
     container_name: netcore_webservice
     environment:
@@ -22,12 +22,13 @@ services:
       FILE_LENGTH_LIMIT: 30000000
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:4080
-    ports:
-      - target: 4080
-        host_ip: 127.0.0.1
-        published: 4080
-        protocol: tcp
-        mode: host #host internal, ingress external. Is is similar to Kubernetes
-  
-#networks:
-  #microservices:
+    # ports:
+    #   - target: 4080
+    #     host_ip: 127.0.0.1
+    #     published: 4080
+    #     protocol: tcp
+    #     mode: host #host internal, ingress external. Is is similar to Kubernetes
+    expose:
+      - "4080"
+networks:
+  converter-micorservices:
