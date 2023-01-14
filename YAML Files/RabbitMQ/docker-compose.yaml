@@ -5,8 +5,8 @@ services:
     image: rabbitmq:3-management
     volumes:
       - rabbitmq-volume:/var/lib/rabbitmq
-    #networks:
-      #- overlay
+    networks:
+      default: null
     restart: always
     hostname: my_rabbitmq
     container_name: rabbitmq
@@ -18,3 +18,7 @@ services:
       - 5672:5672
 volumes:
   rabbitmq-volume:
+
+networks:
+  default:
+    name: kong_default
