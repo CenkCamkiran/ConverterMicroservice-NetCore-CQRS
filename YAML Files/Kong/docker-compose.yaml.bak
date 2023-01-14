@@ -5,12 +5,8 @@ services:
   kong-database:
     image: postgres:9.6
     container_name: kong-database
-    ports:
-      - target: 5432
-        published: 5432
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
+    expose:
+      - "5432"
     environment:
       - POSTGRES_USER=${KONGDBUSER}
       - POSTGRES_DB=${KONGDBNAME}
@@ -47,27 +43,11 @@ services:
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8003, ${KONG_ADMINHOST}:8445 ssl
     restart: on-failure
-    ports:
-      - target: 8003
-        published: 8003
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
-      - target: 8444
-        published: 8444
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
-      - target: 8002
-        published: 8002
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
-      - target: 8445
-        published: 8445
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
+    expose:
+      - "8003"
+      - "8445"
+      - "8002"
+      - "8444"
     links:
       - kong-database:kong-database
     depends_on:
@@ -85,6 +65,3 @@ services:
 
 volumes:
   db-data-kong-postgres:
-
-networks:
-   kong-net:
