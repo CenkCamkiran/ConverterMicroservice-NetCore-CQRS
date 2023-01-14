@@ -5,8 +5,8 @@ services:
     image: quay.io/minio/minio
     volumes:
       - minio-volume:/data
-    #networks:
-      #- overlay
+    networks:
+      default: null
     restart: always
     container_name: minio_object_storage
     environment:
@@ -19,5 +19,6 @@ services:
 volumes:
   minio-volume:
 
-#networks:
-  #overlay:
+networks:
+  default:
+    name: kong_default
