@@ -45,26 +45,26 @@ services:
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8001, ${KONG_ADMINHOST}:8444 ssl
+      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8003, ${KONG_ADMINHOST}:8445 ssl
     restart: on-failure
     ports:
-      - target: 8000
-        published: 8000
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
-      - target: 8443
-        published: 8443
-        host_ip: 127.0.0.1
-        protocol: tcp
-        mode: host
-      - target: 8001
-        published: 8001
+      - target: 8003
+        published: 8003
         host_ip: 127.0.0.1
         protocol: tcp
         mode: host
       - target: 8444
         published: 8444
+        host_ip: 127.0.0.1
+        protocol: tcp
+        mode: host
+      - target: 8002
+        published: 8002
+        host_ip: 127.0.0.1
+        protocol: tcp
+        mode: host
+      - target: 8445
+        published: 8445
         host_ip: 127.0.0.1
         protocol: tcp
         mode: host
