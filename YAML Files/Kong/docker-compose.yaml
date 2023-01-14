@@ -45,8 +45,9 @@ services:
     expose:
       - "8003"
       - "8445"
-      - "8002"
-      - "8444"
+    ports:
+      - 8002:8002
+      - 8444:8444
     links:
       - kong-database:kong-database
     depends_on:
