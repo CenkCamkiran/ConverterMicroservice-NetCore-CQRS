@@ -42,7 +42,6 @@ Main goal was develop Mp4 to MP3 converter with Asynchronous way.
     - [ElasticSearch Installation](#elasticsearch-installation)
       - [Creation of Index on ElasticSearch-Kibana](#creation-of-index-on-elasticsearch-kibana)
     - [Minio Installation](#minio-installation)
-    - [Postman Collection](#postman-collection)
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
       - [Kong API Gateway Routes Configuration](#kong-api-gateway-routes-configuration)
@@ -512,10 +511,6 @@ networks:
     name: kong_default
 
 ```
-
-### Postman Collection
-
-Collection file is in Project. Import and test API!
 
 ### RabbitMQ Installation
 
@@ -1009,7 +1004,7 @@ I am open every advice for my project. I am planning to improve myself on .NET C
 
 ## Helper Documents
 
-Postman Collection folder, ELK script and Docker Compose files added to project. Folder names are **'YAML Files'**, **'Postman Collection'** and **'ELK Scripts'**.
+ELK script and Docker Compose files added to project. Folder names are **'YAML Files'** and **'ELK Scripts'**.
 
 ## Bug Reports & Feature Requests
 
