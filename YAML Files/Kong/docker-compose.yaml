@@ -87,6 +87,4 @@ volumes:
   db-data-kong-postgres:
 
 networks:
-    default:
-        external:
-            name: kong-net
+   name: kong-net
