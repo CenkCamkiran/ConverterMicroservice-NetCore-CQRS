@@ -1012,8 +1012,10 @@ Please use the Github issues.
 
 ## RoadMap
 
-- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab. And also i want to use different branches for test and production environments.
+- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab. 
+- I want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
 - Fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
 - Describe Kong route definition in readme
-- Fix Kong configuration that should communicate with web service.
+- Fix Kong configuration that should communicate with web service. Refer old docs like Kong snapshot JSON file.
+
