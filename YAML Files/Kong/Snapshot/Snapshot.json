@@ -1,0 +1,420 @@
+{
+    "createdUser": null,
+    "updatedUser": null,
+    "name": "KongSnapshot",
+    "kong_node_name": "kong_admin_server",
+    "kong_node_url": "http://kong:8001",
+    "kong_version": "3.1.1",
+    "data": {
+        "services": [
+            {
+                "connect_timeout": 60000,
+                "read_timeout": 60000,
+                "enabled": true,
+                "host": "swapi.dev",
+                "name": "star_wars_api",
+                "tags": [
+                    "api",
+                    "service",
+                    "starwars",
+                    "people"
+                ],
+                "write_timeout": 60000,
+                "protocol": "https",
+                "retries": 5,
+                "path": "/api/people",
+                "tls_verify": null,
+                "created_at": 1673850561,
+                "updated_at": 1673874767,
+                "tls_verify_depth": null,
+                "port": 443,
+                "client_certificate": null,
+                "ca_certificates": null,
+                "id": "769a5924-c402-4ad1-9ca9-eca27527aa2f",
+                "extras": {
+                    "description": "Star Wars API service definition",
+                    "kong_node_id": "1",
+                    "service_id": "769a5924-c402-4ad1-9ca9-eca27527aa2f",
+                    "createdAt": "2023-01-16T13:12:47.895Z",
+                    "updatedAt": "2023-01-16T13:12:47.895Z",
+                    "id": 3,
+                    "createdUser": null,
+                    "updatedUser": null
+                }
+            },
+            {
+                "connect_timeout": 60000,
+                "read_timeout": 60000,
+                "enabled": true,
+                "host": "webservice",
+                "name": "converter_convert_web_service",
+                "tags": [
+                    "converter",
+                    "webservice",
+                    "netcore"
+                ],
+                "write_timeout": 60000,
+                "protocol": "http",
+                "retries": 5,
+                "path": "/api/v1/main/Converter",
+                "tls_verify": null,
+                "created_at": 1673714673,
+                "updated_at": 1673874719,
+                "tls_verify_depth": null,
+                "port": 4080,
+                "client_certificate": null,
+                "ca_certificates": null,
+                "id": "9da751ed-201c-4f9d-8bd4-ec32a400f822",
+                "extras": {
+                    "description": "Converter Web Service definition to use convert route",
+                    "kong_node_id": "1",
+                    "service_id": "9da751ed-201c-4f9d-8bd4-ec32a400f822",
+                    "createdAt": "2023-01-16T13:11:59.118Z",
+                    "updatedAt": "2023-01-16T13:11:59.118Z",
+                    "id": 2,
+                    "createdUser": null,
+                    "updatedUser": null
+                }
+            },
+            {
+                "connect_timeout": 60000,
+                "read_timeout": 60000,
+                "enabled": true,
+                "host": "webservice",
+                "name": "converter_health_web_service",
+                "tags": [
+                    "health",
+                    "webservice",
+                    "netcore"
+                ],
+                "write_timeout": 60000,
+                "protocol": "http",
+                "retries": 5,
+                "path": "/api/v1/Health",
+                "tls_verify": null,
+                "created_at": 1673719053,
+                "updated_at": 1673874667,
+                "tls_verify_depth": null,
+                "port": 4080,
+                "client_certificate": null,
+                "ca_certificates": null,
+                "id": "ad603dae-85e4-4b5c-b462-7b795f04d2f0",
+                "extras": {
+                    "description": "Converter Web Service definition to use health route",
+                    "kong_node_id": "1",
+                    "service_id": "ad603dae-85e4-4b5c-b462-7b795f04d2f0",
+                    "createdAt": "2023-01-16T13:10:43.762Z",
+                    "updatedAt": "2023-01-16T13:11:07.454Z",
+                    "id": 1,
+                    "createdUser": null,
+                    "updatedUser": null
+                }
+            }
+        ],
+        "routes": [
+            {
+                "paths": [
+                    "/convertFile"
+                ],
+                "hosts": null,
+                "sources": null,
+                "destinations": null,
+                "preserve_host": false,
+                "id": "0f5a625a-c86a-4beb-91e5-46bcf5671b4d",
+                "name": "web_service_convert_route",
+                "snis": null,
+                "regex_priority": 0,
+                "service": {
+                    "id": "9da751ed-201c-4f9d-8bd4-ec32a400f822"
+                },
+                "protocols": [
+                    "http",
+                    "https"
+                ],
+                "path_handling": "v1",
+                "created_at": 1673716722,
+                "updated_at": 1673874921,
+                "tags": [
+                    "webservice",
+                    "route",
+                    "health"
+                ],
+                "headers": null,
+                "methods": [
+                    "POST"
+                ],
+                "strip_path": true,
+                "https_redirect_status_code": 426,
+                "request_buffering": true,
+                "response_buffering": true
+            },
+            {
+                "paths": [
+                    "/starWars/peoples"
+                ],
+                "hosts": null,
+                "sources": null,
+                "destinations": null,
+                "preserve_host": false,
+                "id": "8a819f32-8272-4daa-a565-146e835d0e6a",
+                "name": "star_wars_people_route",
+                "snis": null,
+                "regex_priority": 0,
+                "service": {
+                    "id": "769a5924-c402-4ad1-9ca9-eca27527aa2f"
+                },
+                "protocols": [
+                    "http",
+                    "https"
+                ],
+                "path_handling": "v1",
+                "created_at": 1673850714,
+                "updated_at": 1673851815,
+                "tags": [
+                    "api",
+                    "starwars",
+                    "people",
+                    "route"
+                ],
+                "headers": null,
+                "methods": [
+                    "GET"
+                ],
+                "strip_path": true,
+                "https_redirect_status_code": 426,
+                "request_buffering": true,
+                "response_buffering": true
+            },
+            {
+                "paths": [
+                    "/checkConverterHealth"
+                ],
+                "hosts": null,
+                "sources": null,
+                "destinations": null,
+                "preserve_host": false,
+                "id": "ff672e32-f782-4cca-8428-f2a8a5a15fbc",
+                "name": "converter_health_route",
+                "snis": null,
+                "regex_priority": 0,
+                "service": {
+                    "id": "ad603dae-85e4-4b5c-b462-7b795f04d2f0"
+                },
+                "protocols": [
+                    "http",
+                    "https"
+                ],
+                "path_handling": "v1",
+                "created_at": 1673719216,
+                "updated_at": 1673874747,
+                "tags": [
+                    "converter",
+                    "health",
+                    "route"
+                ],
+                "headers": null,
+                "methods": [
+                    "GET"
+                ],
+                "strip_path": true,
+                "https_redirect_status_code": 426,
+                "request_buffering": true,
+                "response_buffering": true
+            }
+        ],
+        "consumers": [
+            {
+                "tags": [
+                    "converter",
+                    "microservices"
+                ],
+                "id": "bfba9bbf-540a-4d62-9ff2-3c4d6b0d5490",
+                "username": "converter_webservice",
+                "created_at": 1673716941,
+                "custom_id": "8fdff082-4aaa-4a33-97cc-96b04c905ef4",
+                "credentials": {
+                    "basic-auths": [
+                        {
+                            "tags": null,
+                            "id": "6aaf6d03-46b8-458a-9e40-a002fb7a7246",
+                            "username": "converter",
+                            "consumer": {
+                                "id": "bfba9bbf-540a-4d62-9ff2-3c4d6b0d5490"
+                            },
+                            "created_at": 1673717173,
+                            "password": "a0975c2f86f7c552fe3e2c010b453c6629e78dd6"
+                        }
+                    ],
+                    "key-auths": [
+                        {
+                            "tags": null,
+                            "key": "Gy21d2dj9YodqzgXMKg55kG8fpAEtkUO",
+                            "id": "1c81622a-feb9-4dfb-a4b2-ae45740c0b1a",
+                            "ttl": null,
+                            "created_at": 1673717212,
+                            "consumer": {
+                                "id": "bfba9bbf-540a-4d62-9ff2-3c4d6b0d5490"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "plugins": [
+            {
+                "tags": null,
+                "protocols": [
+                    "grpc",
+                    "grpcs",
+                    "http",
+                    "https"
+                ],
+                "created_at": 1673875789,
+                "enabled": true,
+                "config": {
+                    "hide_credentials": false,
+                    "anonymous": null
+                },
+                "consumer": null,
+                "id": "139d7520-13aa-4800-a109-4954c257a696",
+                "service": {
+                    "id": "9da751ed-201c-4f9d-8bd4-ec32a400f822"
+                },
+                "name": "basic-auth",
+                "route": null
+            },
+            {
+                "tags": null,
+                "protocols": [
+                    "grpc",
+                    "grpcs",
+                    "http",
+                    "https"
+                ],
+                "created_at": 1673875752,
+                "enabled": true,
+                "config": {
+                    "key_in_header": true,
+                    "key_in_query": true,
+                    "key_in_body": false,
+                    "hide_credentials": false,
+                    "key_names": [
+                        "ApiKey"
+                    ],
+                    "run_on_preflight": true,
+                    "anonymous": null
+                },
+                "consumer": null,
+                "id": "c4d16070-3a12-4d6c-af7c-8f51271a8889",
+                "service": {
+                    "id": "ad603dae-85e4-4b5c-b462-7b795f04d2f0"
+                },
+                "name": "key-auth",
+                "route": null
+            }
+        ],
+        "acls": [],
+        "upstreams": [
+            {
+                "algorithm": "round-robin",
+                "host_header": null,
+                "hash_on_cookie": null,
+                "hash_on_cookie_path": "/",
+                "id": "44e23cef-1df6-4464-b72a-8fc84dc83abd",
+                "hash_fallback": "none",
+                "hash_fallback_header": null,
+                "hash_fallback_query_arg": null,
+                "hash_fallback_uri_capture": null,
+                "tags": null,
+                "client_certificate": null,
+                "created_at": 1673852409,
+                "hash_on": "none",
+                "use_srv_name": false,
+                "slots": 1000,
+                "hash_on_header": null,
+                "hash_on_query_arg": null,
+                "healthchecks": {
+                    "active": {
+                        "http_path": "/",
+                        "https_sni": null,
+                        "type": "http",
+                        "concurrency": 10,
+                        "https_verify_certificate": true,
+                        "healthy": {
+                            "http_statuses": [
+                                200,
+                                302
+                            ],
+                            "successes": 0,
+                            "interval": 0
+                        },
+                        "unhealthy": {
+                            "http_failures": 0,
+                            "http_statuses": [
+                                429,
+                                404,
+                                500,
+                                501,
+                                502,
+                                503,
+                                504,
+                                505
+                            ],
+                            "interval": 0,
+                            "tcp_failures": 0,
+                            "timeouts": 0
+                        },
+                        "timeout": 1,
+                        "headers": null
+                    },
+                    "threshold": 0,
+                    "passive": {
+                        "type": "http",
+                        "unhealthy": {
+                            "http_failures": 0,
+                            "http_statuses": [
+                                429,
+                                500,
+                                503
+                            ],
+                            "tcp_failures": 0,
+                            "timeouts": 0
+                        },
+                        "healthy": {
+                            "http_statuses": [
+                                200,
+                                201,
+                                202,
+                                203,
+                                204,
+                                205,
+                                206,
+                                207,
+                                208,
+                                226,
+                                300,
+                                301,
+                                302,
+                                303,
+                                304,
+                                305,
+                                306,
+                                307,
+                                308
+                            ],
+                            "successes": 0
+                        }
+                    }
+                },
+                "name": "upstream",
+                "hash_on_uri_capture": null,
+                "targets": []
+            }
+        ],
+        "certificates": [],
+        "snis": []
+    },
+    "createdAt": "2023-01-16T13:30:57.254Z",
+    "updatedAt": "2023-01-16T13:30:57.254Z",
+    "id": 1
+}

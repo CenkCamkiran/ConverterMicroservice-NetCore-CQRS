@@ -629,6 +629,8 @@ volumes:
 
 #### Kong API Gateway Routes Configuration
 
+The Snapshot file is in "YAML Files/Kong/Snapshot" folder. File format is JSON and you can import it in your Kong instance using Konga Admin Dashboard.
+
 ### Install project with Docker Container
 
 Just use the DOckerfile to build image. After that use **"docker run"** command to run microservices.
@@ -1012,10 +1014,7 @@ Please use the Github issues.
 
 ## RoadMap
 
-- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab. 
+- In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab.
 - I want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
-- Fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
-- Describe Kong route definition in readme
-- Fix Kong configuration that should communicate with web service. Refer old docs like Kong snapshot JSON file.
-
+- I am gonna fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
