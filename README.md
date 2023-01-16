@@ -1018,3 +1018,5 @@ Please use the Github issues.
 - I want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
 - I am gonna fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
+- Kong pics will be added into readme
+- Tech amblems will be added into arch picture
