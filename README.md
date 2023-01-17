@@ -47,6 +47,7 @@ Main goal was develop MP4 to MP3 converter with Asynchronous way.
       - [Kong API Gateway Definitions](#kong-api-gateway-definitions)
         - [Kong API Snapshot](#kong-api-snapshot)
     - [Install project with Docker Container](#install-project-with-docker-container)
+  - [Crontab definition](#crontab-definition)
   - [Overall Architecture](#overall-architecture)
   - [Business Logic](#business-logic)
     - [Converter Microservice](#converter-microservice)
@@ -645,6 +646,18 @@ The Snapshot file is in "YAML Files/Kong/Snapshot" folder. File format is JSON a
 ### Install project with Docker Container
 
 Just use the Dockerfile to build image. After that use **"docker run"** command to run microservices.
+
+## Crontab definition
+
+You can use below crontab definition in your Linux Environment. You can edşt whatever you like.
+
+```bash
+*/7 * * * * docker restart notification_service #container name can be edited
+
+*/7 * * * * docker restart logger_service #container name can be edited
+
+*/7 * * * * docker restart converter_service #container name can be edited
+```
 
 ## Overall Architecture
 
