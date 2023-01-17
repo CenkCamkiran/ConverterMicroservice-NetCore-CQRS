@@ -649,7 +649,7 @@ Just use the Dockerfile to build image. After that use **"docker run"** command 
 
 ## Crontab definition
 
-You can use below crontab definition in your Linux Environment. You can edşt whatever you like.
+You can use below crontab definition in your Linux Environment. You can edit whatever you like.
 
 ```bash
 */7 * * * * docker restart notification_service #container name can be edited
