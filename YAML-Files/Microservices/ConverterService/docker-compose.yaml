@@ -8,7 +8,7 @@ services:
     #networks:
       #- microservices
     restart: on-failure
-    container_name: netcore_webservice
+    container_name: converter_service
     environment:
       RABBITMQ_HOST: ${RABBITMQHOST}
       RABBITMQ_PORT: ${RABBITMQPORT}

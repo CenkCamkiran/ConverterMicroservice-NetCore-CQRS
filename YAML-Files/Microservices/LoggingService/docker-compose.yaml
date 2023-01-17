@@ -2,13 +2,13 @@ version: "3.9"
 
 services:
   webservice:
-    image: cenkcamkiran/gcloud-projects:loggerservice_v1.0
+    image: cenkcamkiran/gcloud-projects:loggingservice_v1.0
     #volumes:
       #- webservice:/example
     #networks:
       #- microservices
     restart: on-failure
-    container_name: netcore_webservice
+    container_name: logging_service
     environment:
       RABBITMQ_HOST: ${RABBITMQHOST}
       RABBITMQ_PORT: ${RABBITMQPORT}
