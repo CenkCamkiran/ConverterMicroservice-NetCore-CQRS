@@ -12,7 +12,7 @@
 
 ## Asbtract
 
-I was curious about Microservice Architectures and Technologies like Docker, Kubernetes, RabbitMQ and Asynchronous Programming. So I developed simple Microservice via .Net Core 6.
+I was curious about Microservice Architectures and Technologies like **Docker, Kubernetes, RabbitMQ and Asynchronous Programming**. So I developed simple **Microservice via .NET Core 6**.
 
 ## Philosophy
 
@@ -1040,4 +1040,4 @@ Please use the Github issues.
 
 - In the Future, i am planning to use **Kubernetes** and **CI/CD DevOps** tools like **Jenkins** or **Gitlab**.
 - I want to use different branches for **test and production** environments.
-- Also i am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some HDD space on virtual machine.
+- Also i am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some **HDD space on virtual machine.**
