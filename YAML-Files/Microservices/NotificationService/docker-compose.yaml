@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  webservice:
+  notificationservice:
     image: cenkcamkiran/gcloud-projects:notificationservice_v1.0
     #volumes:
       #- webservice:/example
