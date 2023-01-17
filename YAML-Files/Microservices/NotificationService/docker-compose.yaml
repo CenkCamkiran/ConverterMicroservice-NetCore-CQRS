@@ -3,10 +3,8 @@ version: "3.9"
 services:
   notificationservice:
     image: cenkcamkiran/gcloud-projects:notificationservice_v1.0
-    #volumes:
-      #- webservice:/example
-    #networks:
-      #- microservices
+    networks:
+      default: null
     restart: on-failure
     container_name: notification_service
     environment:
@@ -22,9 +20,7 @@ services:
       SMTP_MAIL_FROM: ${SMTPMAILFROM}
       SMTP_MAIL_PASSWORD: ${SMTPMAILPASSWORD}
       SMTP_MAIL_USERNAME: ${SMTPMAILUSERNAME}
-      
-#volumes:
-  #webservice-volume:
-  
-#networks:
-  #microservices:
+
+networks:
+  default:
+    name: kong_default

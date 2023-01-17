@@ -1,14 +1,12 @@
 version: "3.9"
 
 services:
-  loggingservice:
-    image: cenkcamkiran/gcloud-projects:loggingservice_v1.0
-    #volumes:
-      #- webservice:/example
-    #networks:
-      #- microservices
+  loggerservice:
+    image: cenkcamkiran/gcloud-projects:loggerservice_v1.0
+    networks:
+      default: null
     restart: on-failure
-    container_name: logging_service
+    container_name: logger_service
     environment:
       RABBITMQ_HOST: ${RABBITMQHOST}
       RABBITMQ_PORT: ${RABBITMQPORT}
@@ -18,8 +16,7 @@ services:
       ELK_USERNAME: ${ELKUSERNAME}
       ELK_PASSWORD: ${ELKPASSWORD}
       ELK_DEFAULT_INDEX: webservice_requestresponse_logs
-#volumes:
-  #webservice-volume:
-  
-#networks:
-  #microservices:
+
+networks:
+  default:
+    name: kong_default

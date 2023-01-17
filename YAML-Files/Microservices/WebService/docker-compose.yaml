@@ -32,8 +32,7 @@ services:
       - "4080"
     networks:
       default: null
-      
+
 networks:
   default:
     name: kong_default
-
