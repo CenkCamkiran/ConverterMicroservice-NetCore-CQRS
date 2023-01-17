@@ -1028,5 +1028,4 @@ Please use the Github issues.
 - In the Future, i am planning to use Kubernetes and CI/CD Devops tools like Jenkins or Gitlab.
 - I want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
-- I am gonna fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
-- Tech amblems will be added into arch picture
+- I am gonna fix ELK docker-compose.yaml files in readme (Ports section and also network section to use same network with Minio, RabbitMQ)
