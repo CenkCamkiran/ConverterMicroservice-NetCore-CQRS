@@ -18,17 +18,17 @@ I was curious about Microservice Architectures and Technologies like Docker, Kub
 
 Main goal was develop MP4 to MP3 converter with Asynchronous way.
 
-- I used Kong API Gateway. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed .Net Core 6 but this is minor precaution)
+- I used **Kong API Gateway**. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed **.NET Core 6** but this is minor precaution)
 
-- File uploading to webservice and converting process is resource consuming and response from webservice might be resolve as 'Timeout', you actually waited the response maybe a long time and you faced 'Timeout exception', this is bad and the person that use the webservice might be very angry about that. I find out that the solution is using queue well RabbitMQ. Actually you don't wait response, only send the request and do other work via asynchronous way. Eventually you will get desired result sound and safe. Timeout exception never gonna be problem. Sometimes maybe RabbitMQ Container gonna crash but this is not huge, you should use durable queues and persistent messages and this is important, you MUST use volumes on containers or you will lose everyting! With that way you will never lose requests and messages, the user eventually get the desired result late or early.
+- File uploading to WebService and converting process is resource consuming and response from WebService might be resolve as **'Timeout'**, you actually waited the response maybe a long time and you faced **'Timeout exception'**, this is bad and the person that use the WebService might be very angry about that. I find out that the solution is using queue well **RabbitMQ**. Actually you don't wait response, only send the request and do other work via **asynchronous way**. Eventually you will get desired result sound and safe. **Timeout** **exception** never gonna be problem. Sometimes maybe **RabbitMQ Container** gonna crash but this is not huge, you should use **durable queues and persistent messages** and this is important, **you MUST use volumes on containers or you will lose everyting!** With that way you will never lose requests and messages, the user eventually get the desired result late or early.
 
-- I used Minio S3 Object Storage to store MP4 and MP3 files. Object Storages like Amazon S3 is very popular. They are cheap and fast. At first i decided to use SQL or MongoDB to store files but i thought this is very bad idea.
+- I used **Minio S3 Object Storage** to store **MP4 and MP3 files**. Object Storages like **Amazon S3** is very popular. They are cheap and fast. At first i decided to use **SQL** or **MongoDB** to store files but i thought this is very bad idea.
 
-- I used ElasticSearch for logging purposes. Because ElasticSearch is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on Kibana. This is cool!
+- I used **ElasticSearch** for logging purposes. Because **ElasticSearch** is very fast and popular for logging. It stores JSON files and uses indexes and you can get desired results with document scoring mechanism, you can create dashboards on **Kibana**. This is cool!
 
-- I used .Net Core 6. Because I wanted to learn something from .Net Technologies.
+- I used **.NET Core 6**. Because I wanted to learn something from **.NET Technologies**.
   
-- I used same network configuration on all containers (Kong, RabbitMQ, Minio, WebService and others). Because containers can communicate each other via same using same network.
+- I used same network configuration on all containers **(Kong, RabbitMQ, Minio, WebService and others)**. Because containers can communicate each other via same using same network.
 
 ## Contents
 
@@ -88,7 +88,7 @@ Docker Engine and Docker Compose must be installed. Check out on Docker's offica
 ### ElasticSearch Installation
 
 I followed instructions on this github repo: <https://github.com/deviantony/docker-elk> . Check readme, instructions are clear and simple.
-Note: I used Elastic, Logstash and Kibana version **8.5.1** at the time of i wrote this readme
+Note: I used **Elastic, Logstash and Kibana version 8.5.1** at the time of i wrote this readme
 
 #### Creation of Index on ElasticSearch-Kibana
 
@@ -546,11 +546,11 @@ networks:
 
 ```
 
-2. Create exchange called **'converter_exchange.direct'**. Type must be direct. After that, create queue called **'converter'** with properties of **"x-message-ttl: 43200000"** and **"durable: true"**. Bind queue to **'converter_exchange.direct'** exchange.
+2. Create exchange called **'converter_exchange.direct'**. Type must be **direct**. After that, create queue called **'converter'** with properties of **"x-message-ttl: 43200000"** and **"durable: true"**. Bind queue to **'converter_exchange.direct' exchange**.
 
-3. Create exchange called **'log_exchange.direct'**. Type must be direct. After that, create queue called **'errorlogs'** with property of **"durable: true"** and create queue **'otherlogs'** with property of **"durable: true"**. Bind queue to **'log_exchange.direct'** exchange.
+3. Create exchange called **'log_exchange.direct'**. Type must be **direct**. After that, create queue called **'errorlogs'** with property of **"durable: true"** and create queue **'otherlogs'** with property of **"durable: true"**. Bind queue to **'log_exchange.direct' exchange**.
 
-4. Create exchange called **'notification_exchange.direct'**. Type must be direct. After that, create queue called **'notification'** with properties of **"x-message-ttl: 3600000"** and **"durable: true"**. Bind queue to **'notification_exchange.direct'** exchange.
+4. Create exchange called **'notification_exchange.direct'**. Type must be **direct**. After that, create queue called **'notification'** with properties of **"x-message-ttl: 3600000"** and **"durable: true"**. Bind queue to **'notification_exchange.direct' exchange**.
 
 ### Kong API Gateway Installation
 
@@ -641,7 +641,7 @@ Also there is example of route definition of service. You can define whatever yo
 
 ##### Kong API Snapshot
 
-The Snapshot file is in "YAML Files/Kong/Snapshot" folder. File format is JSON and you can import it in your Kong instance using Konga Admin Dashboard.
+The Snapshot file is in **"YAML Files/Kong/Snapshot"** folder. File format is JSON and you can import it in your **Kong** instance using **Konga Admin Dashboard**.
 
 ### Install project with Docker Container
 
@@ -667,46 +667,46 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 
 ### Converter Microservice
 
-- Uses RabbitMQ for Asynchronous Communication.
+- Uses **RabbitMQ** for **Asynchronous Communication**.
 - Gets messages that contains email and file guid data from queue.
-- Fetches MP4 file's stream data from Minio Object storage via File Guid data that exists in queue message.
-- Converts MP4 file's stream data to MP3 stream data via FFMpeg library (Basically converts MP4 file to MP3 file).
-- New Guid is generated and MP3 stream data is saved as MP3 file in Minio Object Storage.
-- Email and New File Guid is sent to queue as message with TTL. (I used 43200000 milliseconds = 12 hours as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
+- Fetches **MP4** file's stream data from **Minio Object Storage** via File Guid data that exists in queue message.
+- Converts **MP4** file's stream data to **MP3** stream data via **FFMpeg Library** (Basically converts **MP4** file to **MP3** file).
+- New Guid is generated and **MP3** stream data is saved as **MP3** file in **Minio Object Storage**.
+- Email and New File Guid is sent to queue as message with **TTL**. (I used 43200000 milliseconds = 12 hours as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
 - Complete convert process until new message arrives to queue.
-- Also error logs are sent to queue called errorlogs and info logs are sent to queue called otherlogs. They are ready to consumed by Logger Microservice.
-- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
+- Also error logs are sent to queue called **'errorlogs**' and info logs are sent to queue called **'otherlogs'**. They are ready to consumed by **Logger Microservice**.
+- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Logger Microservice
 
-- Uses RabbitMQ for Asynchronous Communication.
-- Uses ElasticSearch for saving logs into indexes.
-- Fetches message from two different queues. They called 'errorlogs' and 'otherlogs' queues.
-- Saves logs into two different indexes in ElasticSearch. Errorlogs are saved into index that called 'loggerservice_errorlogs'. Infologs (Otherlogs) are saved into index that called 'loggerservice_otherlogs'.
+- Uses **RabbitMQ** for **Asynchronous Communication**.
+- Uses **ElasticSearch** for saving logs into indexes.
+- Fetches message from two different queues. They called **'errorlogs'** and **'otherlogs'** queues.
+- Saves logs into two different indexes in **ElasticSearch**. **Errorlogs** are saved into index that called **'loggerservice_errorlogs'**. **Infologs** (Otherlogs) are saved into index that called **'loggerservice_otherlogs'**.
 - It is bassically logger.
-- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Web Service
 
-- It is web service that you can upload MP4 file (Max size of file is around 30MB is limited, this is handled by Environment Variable as well).
-- It has only two controller (route). Health Controller is checking the health of API and its tools like ELK, RabbitMQ. Converter Controller is the main thing of the project, you can upload MP4 file for convert process.
-- It is REST API.
-- It uses RabbitMQ for queue the message that contains of email and Guid of uploaded MP4 file with TTL (I used 3600000 milliseconds = 1 hour as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
-- It uses Minio Object Storage to store MP4 files.
-- It uses ElasticSearch to log errors and infos.
-- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
+- It is web service that you can upload **MP4** file (Max size of file is around **30MB** is limited, this is handled by **Environment Variable** as well).
+- It has only two controller (route). **Health Controller** is checking the health of API and its tools like ELK, RabbitMQ. **Converter Controller** is the main thing of the project, you can upload **MP4** file for convert process.
+- It is **REST API**.
+- It uses **RabbitMQ** for queue the message that contains of email and Guid of uploaded **MP4** file with **TTL** (I used 3600000 milliseconds = 1 hour as TTL). The reason is i wanted to limit the requests and don't occupy too much the services.
+- It uses **Minio Object Storage** to store **MP4** files.
+- It uses **ElasticSearch** to log errors and infos.
+- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ### Notification Microservice
 
-- It uses RabbitMQ to fetch message that contains email address and MP3 File Guid from queue. Guid is generated in Converter Microservice.
-- It uses Minio Object Storage to fetch MP3 files via Guid.
-- It uses Environment Variables. You can pass any RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses Google Gmail to send MP3 file in the attachment as email to user. This configuration is based on Environment Variables as well. You can pass working SMTP Host, Username, Password and Port to project via using Environment Variables.
-- Error logs are sent to queue called errorlogs and info logs are sent to queue called otherlogs. They are ready to consumed by Logger Microservice.
-- It uses Log4Net File Logging due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **RabbitMQ** to fetch message that contains email address and **MP3** File Guid from queue. Guid is generated in **Converter Microservice**.
+- It uses **Minio Object Storage** to fetch **MP3** files via Guid.
+- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
+- It uses **Google Gmail** to send **MP3** file in the attachment as email to user. This configuration is based on **Environment Variables** as well. You can pass working **SMTP Host, Username, Password and Port to project via using Environment Variables**.
+- Error logs are sent to queue called **'errorlogs'** and info logs are sent to queue called **'otherlogs'**. They are ready to consumed by **Logger Microservice**.
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, i thought this is good idea to implement file logging. Logs never gonna be missed).
 
 ## Structure
 
@@ -1020,13 +1020,13 @@ root:.
 
 ## Installation
 
-At the root of project, there is a folder called 'YAML Files'. Each folder name represents technologies that i used in this project. In that folders, there are docker-compose files corresponds to each related folder. Use them to install on Docker Compose Linux.
+At the root of project, there is a folder called **'YAML-Files'**. Each folder name represents technologies that i used in this project. In that folders, there are docker-compose files corresponds to each related folder. Use them to install on **Docker Compose**.
 
-To install the Microservices, go to Microservices folder and each Microservice are represented as folder name. Inside of that folders there is docker-compose file. Use them via creating .env file in your workspace or what ever you want!
+To install the Microservices, go to **Microservices folder** and each Microservice are represented as folder name. Inside of that folders there is **docker-compose** file. Use them via creating **.env** file in your workspace or whatever you want!
 
 ## Contributing
 
-I am open every advice for my project. I am planning to improve myself on .NET Core 6, Microservices and Container Technologies. So don't hesitate comment on my project., every idea is plus for me.
+I am open every advice for my project. I am planning to improve myself on **.NET Core 6, Microservices and Container Technologies**. So don't hesitate comment on my project., every idea is plus for me.
 
 ## Helper Documents
 
