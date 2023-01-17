@@ -40,14 +40,14 @@ services:
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8003, ${KONG_ADMINHOST}:8445 ssl
+      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8001, ${KONG_ADMINHOST}:8444 ssl
     restart: on-failure
     expose:
-      - "8003"
-      - "8445"
+      - 8001
+      - 8444
     ports:
-      - 8002:8002
-      - 8444:8444
+      - 8000:8000
+      - 8443:8443
     links:
       - kong-database:kong-database
     depends_on:

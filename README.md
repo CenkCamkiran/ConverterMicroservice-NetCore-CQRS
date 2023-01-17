@@ -44,7 +44,8 @@ Main goal was develop Mp4 to MP3 converter with Asynchronous way.
     - [Minio Installation](#minio-installation)
     - [RabbitMQ Installation](#rabbitmq-installation)
     - [Kong API Gateway Installation](#kong-api-gateway-installation)
-      - [Kong API Gateway Routes Configuration](#kong-api-gateway-routes-configuration)
+      - [Kong API Gateway Definitions](#kong-api-gateway-definitions)
+        - [Kong API Snapshot](#kong-api-snapshot)
     - [Install project with Docker Container](#install-project-with-docker-container)
   - [Overall Architecture](#overall-architecture)
   - [Business Logic](#business-logic)
@@ -557,10 +558,9 @@ I followed instructions on this github repo: <https://github.com/Kuari/kong-kong
 For example, i used below docker-compose file.
 
 ```bash
-version: '3'
+version: "3"
 
 services:
-
   kong-database:
     image: postgres:9.6
     container_name: kong-database
@@ -600,13 +600,14 @@ services:
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
       - KONG_ADMIN_ERROR_LOG=/dev/stderr
-      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8003, ${KONG_ADMINHOST}:8445 ssl
+      - KONG_ADMIN_LISTEN=${KONG_ADMINHOST}:8001, ${KONG_ADMINHOST}:8444 ssl
     restart: on-failure
     expose:
-      - "8003"
-      - "8445"
-      - "8002"
-      - "8444"
+      - 8001
+      - 8444
+    ports:
+      - 8000:8000
+      - 8443:8443
     links:
       - kong-database:kong-database
     depends_on:
@@ -627,13 +628,23 @@ volumes:
 
 ```
 
-#### Kong API Gateway Routes Configuration
+#### Kong API Gateway Definitions
+
+There is some examples of service definitions in folder called **"\YAML-Files\Kong\Service-Route Definitions"**.
+
+You should define exactly as i do in pictures.
+
+<img src="./YAML-Files/Kong/Service-Route Definitions/ConverterServiceDefinition.png" >
+
+Also there is example of route definition of service. You can define whatever you want. Just define route and bind to service.
+
+##### Kong API Snapshot
 
 The Snapshot file is in "YAML Files/Kong/Snapshot" folder. File format is JSON and you can import it in your Kong instance using Konga Admin Dashboard.
 
 ### Install project with Docker Container
 
-Just use the DOckerfile to build image. After that use **"docker run"** command to run microservices.
+Just use the Dockerfile to build image. After that use **"docker run"** command to run microservices.
 
 ## Overall Architecture
 
@@ -1018,5 +1029,5 @@ Please use the Github issues.
 - I want to use different branches for test and production environments.
 - Also i am planning to use S3 objects as TTL (Time to live). It will be more efficient way to save some HDD space on virtual machine.
 - I am gonna fix RabbitMQ, Minio, ELK docker-compose.yaml files in readme (Ports section, use expose to use network property)
-- Kong pics will be added into readme
 - Tech amblems will be added into arch picture
+- Fix Kong docker-compose.yaml file.
