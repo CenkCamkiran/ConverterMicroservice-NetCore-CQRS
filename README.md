@@ -1026,7 +1026,7 @@ To install the Microservices, go to **Microservices folder** and each Microservi
 
 ## Contributing
 
-I am open every advice for my project. I am planning to improve myself on **.NET Core 6, Microservices and Container Technologies**. So don't hesitate comment on my project., every idea is plus for me.
+I am open every advice for my project. I am planning to improve myself on **.NET Core 6, Microservices and Container Technologies**. So don't hesitate comment on my project. Every idea is plus for me.
 
 ## Helper Documents
 
