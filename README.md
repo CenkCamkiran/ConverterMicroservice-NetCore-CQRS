@@ -16,7 +16,7 @@ I was curious about Microservice Architectures and Technologies like **Docker, K
 
 ## Philosophy
 
-Main goal was develop MP4 to MP3 converter with Asynchronous way.
+Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
 
 - I used **Kong API Gateway**. Because uploading a file to server might be dangerous. Some person can upload virus or trojan to server and person can access everything on server via virus file, this is gonna be devastation. So i did a precaution. (I made some precautions (like file extension checking, file size checking) on WebService that i developed **.NET Core 6** but this is minor precaution)
 
