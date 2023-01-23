@@ -1,6 +1,6 @@
-﻿using Models;
+﻿using ConverterMicroservice.Models;
 
-namespace Configuration
+namespace ConverterMicroservice.Configuration
 {
     public class EnvVariablesHandler
     {

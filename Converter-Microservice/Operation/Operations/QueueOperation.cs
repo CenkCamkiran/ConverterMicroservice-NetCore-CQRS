@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
-using Operation.Interfaces;
+﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
+using ConverterMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace ConverterMicroservice.OperationLayer.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {

@@ -14,9 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
-    <ProjectReference Include="..\Operation\Operation.csproj" />
+    <ProjectReference Include="..\DataAccess\ConverterMicroservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Models\ConverterMicroservice.Models.csproj" />
+    <ProjectReference Include="..\Operation\ConverterMicroservice.OperationLayer.csproj" />
   </ItemGroup>
 
 </Project>

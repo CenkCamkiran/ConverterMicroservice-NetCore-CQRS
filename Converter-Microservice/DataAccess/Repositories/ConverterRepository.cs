@@ -1,9 +1,8 @@
-﻿using DataAccess.Interfaces;
-using Models;
+﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
 using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
-namespace DataAccess.Repository
+namespace ConverterMicroservice.DataAccessLayer.Repositories
 {
     public class ConverterRepository : IConverterRepository
     {
@@ -22,7 +21,7 @@ namespace DataAccess.Repository
             _queueOtherRepository = queueOtherRepository;
         }
 
-        public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectDataModel objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
+        public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
         {
             QueueMessage? msg = null;
 

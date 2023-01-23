@@ -1,10 +1,9 @@
-﻿using DataAccess.Interfaces;
+﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
 using Minio;
 using Minio.DataModel;
-using Models;
 using Newtonsoft.Json;
 
-namespace DataAccess.Repository
+namespace ConverterMicroservice.DataAccessLayer.Repositories
 {
     public class ObjectStorageRepository : IObjectStorageRepository
     {
@@ -104,9 +103,9 @@ namespace DataAccess.Repository
             }
         }
 
-        public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
+        public async Task<ObjectData> GetFileAsync(string bucketName, string objectName)
         {
-            ObjectDataModel? objDataModel = null;
+            ObjectData? objDataModel = null;
             ServerSideEncryption? sse = null;
 
             try
@@ -129,7 +128,7 @@ namespace DataAccess.Repository
 
                 ObjectStat objStat = await _minioClient.Build().GetObjectAsync(args);
 
-                objDataModel = new ObjectDataModel()
+                objDataModel = new ObjectData()
                 {
                     Mp4FileFullPath = mp4FileFullPath,
                     ObjectStats = objStat

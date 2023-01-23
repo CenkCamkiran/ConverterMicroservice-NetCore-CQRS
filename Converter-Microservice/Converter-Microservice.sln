@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice", "Converter-Microservice\Converter-Microservice.csproj", "{3893251F-3DAE-4FCA-9A01-A8F2D0E4BCA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterMicroservice", "Converter-Microservice\ConverterMicroservice.csproj", "{3893251F-3DAE-4FCA-9A01-A8F2D0E4BCA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration", "Configuration\Configuration.csproj", "{93700FAC-5231-407B-94B5-9EC4F57E0670}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterMicroservice.Configuration", "Configuration\ConverterMicroservice.Configuration.csproj", "{93700FAC-5231-407B-94B5-9EC4F57E0670}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D73B0099-F014-4F24-B1FB-E8524ECEF72E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterMicroservice.DataAccessLayer", "DataAccess\ConverterMicroservice.DataAccessLayer.csproj", "{D73B0099-F014-4F24-B1FB-E8524ECEF72E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{6174B27F-0579-42B2-AB6F-6CE46DFF867F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterMicroservice.Models", "Models\ConverterMicroservice.Models.csproj", "{6174B27F-0579-42B2-AB6F-6CE46DFF867F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Operation", "Operation\Operation.csproj", "{F8674BF4-C0A1-41D4-B7B9-0C128CEA0654}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConverterMicroservice.OperationLayer", "Operation\ConverterMicroservice.OperationLayer.csproj", "{F8674BF4-C0A1-41D4-B7B9-0C128CEA0654}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Interfaces
+﻿namespace ConverterMicroservice.DataAccessLayer.Interfaces
 {
     public interface ILog4NetRepository
     {

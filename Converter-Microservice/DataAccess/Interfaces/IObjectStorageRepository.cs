@@ -1,10 +1,8 @@
-﻿using Models;
-
-namespace DataAccess.Interfaces
+﻿namespace ConverterMicroservice.DataAccessLayer.Interfaces
 {
     public interface IObjectStorageRepository
     {
         Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType);
-        Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName);
+        Task<ObjectData> GetFileAsync(string bucketName, string objectName);
     }
 }

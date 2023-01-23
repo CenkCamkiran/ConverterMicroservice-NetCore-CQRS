@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace ConverterMicroservice.Models
 {
     public class LoggerLog
     {

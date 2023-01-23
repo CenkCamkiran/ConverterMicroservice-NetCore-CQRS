@@ -1,9 +1,7 @@
-﻿using Models;
-
-namespace DataAccess.Interfaces
+﻿namespace ConverterMicroservice.DataAccessLayer.Interfaces
 {
     public interface IConverterRepository
     {
-        Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectDataModel objDataModel, QueueMessage message);
+        Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message);
     }
 }

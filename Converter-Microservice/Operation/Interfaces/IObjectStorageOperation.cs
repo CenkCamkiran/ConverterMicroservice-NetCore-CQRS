@@ -1,10 +1,10 @@
-﻿using Models;
+﻿using ConverterMicroservice.Models;
 
-namespace Operation.Interfaces
+namespace ConverterMicroservice.OperationLayer.Interfaces
 {
     public interface IObjectStorageOperation
     {
         Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType);
-        Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName);
+        Task<ObjectData> GetFileAsync(string bucketName, string objectName);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Minio.DataModel;
 
-namespace Models
+namespace ConverterMicroservice.Models
 {
-    public class ObjectDataModel
+    public class ObjectData
     {
         public ObjectStat? ObjectStats { get; set; }
         public string Mp4FileFullPath { get; set; } = string.Empty;

@@ -23,12 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Configuration\ConverterMicroservice.Configuration.csproj" />
+    <ProjectReference Include="..\Models\ConverterMicroservice.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Repository\App.config">
+    <None Update="Repositories\App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

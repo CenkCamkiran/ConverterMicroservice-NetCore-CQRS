@@ -1,12 +1,11 @@
-﻿using DataAccess.Interfaces;
-using Models;
+﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using IConnection = RabbitMQ.Client.IConnection;
 
-namespace DataAccess.Repository
+namespace ConverterMicroservice.DataAccessLayer.Repositories
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
@@ -162,7 +161,7 @@ namespace DataAccess.Repository
             msgCount = e.Model.MessageCount("converter");
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
+            ObjectData objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
