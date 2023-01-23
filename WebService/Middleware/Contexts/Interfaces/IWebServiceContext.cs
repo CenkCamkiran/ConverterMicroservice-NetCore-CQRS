@@ -1,4 +1,4 @@
-﻿namespace Middleware.Contexts.Interfaces
+﻿namespace WebService.MiddlewareLayer.Contexts.Interfaces
 {
     public interface IWebServiceContext
     {

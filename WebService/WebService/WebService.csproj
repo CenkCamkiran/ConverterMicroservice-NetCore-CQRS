@@ -17,9 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\APILayer\APILayer.csproj" />
-    <ProjectReference Include="..\Helpers\Helpers.csproj" />
-    <ProjectReference Include="..\Middleware\Middleware.csproj" />
+    <ProjectReference Include="..\APILayer\WebService.APILayer.csproj" />
+    <ProjectReference Include="..\Configuration\WebService.Configuration.csproj" />
+    <ProjectReference Include="..\Helpers\WebService.Helpers.csproj" />
+    <ProjectReference Include="..\Middleware\WebService.MiddlewareLayer.csproj" />
   </ItemGroup>
 
 </Project>

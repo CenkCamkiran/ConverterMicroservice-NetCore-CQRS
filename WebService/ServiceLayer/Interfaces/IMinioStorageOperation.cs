@@ -1,6 +1,6 @@
-﻿namespace WebService.DataAccessLayer.Interfaces
+﻿namespace WebService.OperationLayer.Interfaces
 {
-    public interface IMinioStorageRepository
+    public interface IMinioStorageOperation
     {
         Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType);
     }

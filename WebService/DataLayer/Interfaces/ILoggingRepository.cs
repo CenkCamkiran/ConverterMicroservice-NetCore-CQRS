@@ -1,4 +1,4 @@
-﻿namespace DataLayer.Interfaces
+﻿namespace WebService.DataAccessLayer.Interfaces
 {
     public interface ILoggingRepository<TModel> where TModel : class
     {

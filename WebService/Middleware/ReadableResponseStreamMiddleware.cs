@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace Middleware
+namespace WebService.MiddlewareLayer
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class ReadableResponseStreamMiddleware

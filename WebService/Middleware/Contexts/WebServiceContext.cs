@@ -1,6 +1,6 @@
-﻿using Middleware.Contexts.Interfaces;
+﻿using WebService.MiddlewareLayer.Contexts.Interfaces;
 
-namespace Middleware.Contexts
+namespace WebService.MiddlewareLayer.Contexts
 {
     public class WebServiceContext : IWebServiceContext
     {

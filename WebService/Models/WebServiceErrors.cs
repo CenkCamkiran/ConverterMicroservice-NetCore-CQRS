@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace WebService.Models
 {
     public class WebServiceErrors
     {

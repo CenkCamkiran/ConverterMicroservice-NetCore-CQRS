@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Middleware.Contexts.Interfaces;
-using ServiceLayer.Interfaces;
 using System.Text.RegularExpressions;
+using WebService.MiddlewareLayer.Contexts.Interfaces;
+using WebService.OperationLayer.Interfaces;
 
-namespace Middleware
+namespace WebService.MiddlewareLayer
 {
     // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class LoggingMiddleware
@@ -16,7 +16,7 @@ namespace Middleware
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, ILoggingService loggingService, IWebServiceContext webServiceContext)
+        public async Task Invoke(HttpContext httpContext, ILoggingOperation loggingService, IWebServiceContext webServiceContext)
         {
             DateTime requestDate = webServiceContext.GetRequestDateContext();
             await _next(httpContext);

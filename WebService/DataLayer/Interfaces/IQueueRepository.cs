@@ -1,6 +1,6 @@
-﻿using Models;
+﻿using WebService.Models;
 
-namespace DataLayer.Interfaces
+namespace WebService.DataAccessLayer.Interfaces
 {
     public interface IQueueRepository
     {

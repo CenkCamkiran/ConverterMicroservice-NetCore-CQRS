@@ -1,6 +1,6 @@
 ﻿using System.Net.NetworkInformation;
 
-namespace Helpers.Interfaces
+namespace WebService.Helpers.Interfaces
 {
     public interface IPingHelper
     {
