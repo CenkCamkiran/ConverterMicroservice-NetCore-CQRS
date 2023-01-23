@@ -712,45 +712,40 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 
 ```bash
 root:.
-|   cenk.doc
+|   .gitignore
+|   ProjectArch.png
 |   README.md
-|   
+|               
 +---Converter-Microservice
 |   |   .dockerignore
 |   |   .gitignore
-|   |   Converter-Microservice.sln
-|   |   
+|   |   Converter-Microservice.sln 
+|   |                       
 |   +---Configuration
-|   |   |   Configuration.csproj
-|   |   |   EnvVariablesHandler.cs  
+|   |   |   ConverterMicroservice.Configuration.csproj
+|   |   |   EnvVariablesHandler.cs
 |   |                       
 |   +---Converter-Microservice
-|   |   |   Converter-Microservice.csproj
-|   |   |   Program.cs                            
-|   |   |                   
+|   |   |   ConverterMicroservice.csproj
+|   |   |   Dockerfile
+|   |   |   Program.cs
+|   |   |   
 |   |   \---Properties
 |   |           launchSettings.json
-|   |           
+|   |
 |   +---DataAccess
-|   |   |   DataAccess.csproj
-|   |   |   
-|   |   +---bin
-|   |   |   \---Debug
-|   |   |       \---net6.0
-|   |   |           |   
-|   |   |           \---Repository
-|   |   |                   App.config
+|   |   |   ConverterMicroservice.DataAccessLayer.csproj
 |   |   |                   
 |   |   +---Interfaces
 |   |   |       IConverterRepository.cs
 |   |   |       ILog4NetRepository.cs
 |   |   |       IObjectStorageRepository.cs
-|   |   |       IQueueRepository.cs     
+|   |   |       IQueueRepository.cs
 |   |   |                   
 |   |   +---Providers
 |   |   |       LazyResolutionMiddlewareExtensions.cs
 |   |   |       
-|   |   \---Repository
+|   |   \---Repositories
 |   |           App.config
 |   |           ConverterRepository.cs
 |   |           Log4NetRepository.cs
@@ -760,99 +755,91 @@ root:.
 |   +---Models
 |   |   |   ConsumerException.cs
 |   |   |   ConverterLog.cs
+|   |   |   ConverterMicroservice.Models.csproj
 |   |   |   ElkConfiguration.cs
 |   |   |   ErrorLog.cs
 |   |   |   LoggerLog.cs
 |   |   |   MinioConfiguration.cs
-|   |   |   Models.csproj
 |   |   |   NotificationLog.cs
-|   |   |   ObjectDataModel.cs
+|   |   |   ObjectData.cs
 |   |   |   ObjectStorageLog.cs
 |   |   |   OtherLog.cs
 |   |   |   QueueLog.cs
 |   |   |   QueueMessage.cs
 |   |   |   RabbitMqConfiguration.cs
-|   |   |   
-|   |   +---bin
-|   |   |   \---Debug
-|   |   |       \---net6.0
-|   |   |               Models.deps.json
-|   |   |               Models.dll
-|   |   |               Models.pdb
-|   |                  
 |   |                       
 |   \---Operation
-|       |   Operation.csproj
-|       |   
-|       +---bin
-|       |   \---Debug
-|       |       \---net6.0
-|       |           |   
-|       |           \---Repository
-|       |                   App.config
+|       |   ConverterMicroservice.OperationLayer.csproj
 |       |                   
 |       +---Interfaces
 |       |       IObjectStorageOperation.cs
-|       |       IQueueOperation.cs     
+|       |       IQueueOperation.cs
 |       |                   
 |       \---Operations
 |               ObjectStorageOperation.cs
 |               QueueOperation.cs
 |               
++---ELK Scripts
+|       Script.txt
+|       
 +---LoggerMicroservice
 |   |   .dockerignore
 |   |   .gitignore
 |   |   LoggerMicroservice.sln
 |   |   
 |   +---Configuration
-|   |       Configuration.csproj
-|   |       EnvVariablesHandler.cs
-|   |       
+|   |   |   EnvVariablesHandler.cs
+|   |   |   LoggerMicroservice.Configuration.csproj
+|   |   |   
 |   +---DataAccess
 |   |   |   App.config
-|   |   |   DataAccess.csproj
-|   |   |   
+|   |   |   LoggerMicroservice.DataAccessLayer.csproj
+|   |   |               
 |   |   +---Interfaces
 |   |   |       IILog4NetRepository.cs
 |   |   |       ILoggingRepository.cs
 |   |   |       IQueueRepository.cs
-|   |   |       
+|   |   |               
 |   |   +---Providers
 |   |   |       LazyResolutionMiddlewareExtensions.cs
 |   |   |       
-|   |   \---Repository
+|   |   \---Repositories
 |   |           Log4NetRepository.cs
 |   |           LoggingRepository.cs
 |   |           QueueRepository.cs
 |   |           
 |   +---LoggerMicroservice
+|   |   |   Dockerfile
 |   |   |   LoggerMicroservice.csproj
 |   |   |   Program.cs
-|   |   |   
+|   |   |                   
 |   |   \---Properties
 |   |           launchSettings.json
 |   |           
-|   +---Models
-|   |       ConsumerException.cs
-|   |       ConverterLog.cs
-|   |       ElkConfiguration.cs
-|   |       ErrorLog.cs
-|   |       LoggerLog.cs
-|   |       Models.csproj
-|   |       NotificationLog.cs
-|   |       ObjectStorageLog.cs
-|   |       OtherLog.cs
-|   |       QueueLog.cs
-|   |       QueueMessage.cs
-|   |       RabbitMqConfiguration.cs
+|   +---LoggerMicroservice.Configuration
+|   |       LoggerMicroservice.Configuration.csproj
 |   |       
+|   +---Models
+|   |   |   ConsumerException.cs
+|   |   |   ConverterLog.cs
+|   |   |   ElkConfiguration.cs
+|   |   |   ErrorLog.cs
+|   |   |   LoggerLog.cs
+|   |   |   LoggerMicroservice.Models.csproj
+|   |   |   NotificationLog.cs
+|   |   |   ObjectStorageLog.cs
+|   |   |   OtherLog.cs
+|   |   |   QueueLog.cs
+|   |   |   QueueMessage.cs
+|   |   |   RabbitMqConfiguration.cs
+|   |                   
 |   \---Operation
-|       |   Operation.csproj
-|       |   
+|       |   LoggerMicroservice.OperationLayer.csproj
+|       |     
 |       +---Interfaces
 |       |       ILoggingOperation.cs
 |       |       IQueueOperation.cs
-|       |       
+|       |                   
 |       \---Operations
 |               LoggingOperation.cs
 |               QueueOperation.cs
@@ -863,23 +850,23 @@ root:.
 |   |   Notification-Microservice.sln
 |   |   
 |   +---Configuration
-|   |       Configuration.csproj
-|   |       EnvVariablesHandler.cs
-|   |       
+|   |   |   EnvVariablesHandler.cs
+|   |   |   NotificationMicroservice.Configuration.csproj
+|   |                       
 |   +---DataAccess
-|   |   |   DataAccess.csproj
+|   |   |   NotificationMicroservice.DataAccessLayer.csproj
 |   |   |   
 |   |   +---Interfaces
 |   |   |       ILog4NetRepository.cs
 |   |   |       IMailSenderRepository.cs
 |   |   |       IObjectStorageRepository.cs
 |   |   |       IQueueRepository.cs
-|   |   |       
+|   |   |                   
 |   |   +---Providers
 |   |   |       LazyResolutionMiddlewareExtensions.cs
 |   |   |       QueueProviders.cs
 |   |   |       
-|   |   \---Repository
+|   |   \---Repositories
 |   |           App.config
 |   |           Log4NetRepository.cs
 |   |           MailSenderRepository.cs
@@ -887,135 +874,187 @@ root:.
 |   |           QueueRepository.cs
 |   |           
 |   +---Helpers
-|   |       Helper.csproj
-|   |       
+|   |   |   Helper.csproj
+|   |      
 |   +---Models
-|   |       ConsumerException.cs
-|   |       ConsumerExceptionModel.cs
-|   |       ConverterLog.cs
-|   |       ElkConfiguration.cs
-|   |       ErrorLog.cs
-|   |       LoggerLog.cs
-|   |       MinioConfiguration.cs
-|   |       Models.csproj
-|   |       NotificationLog.cs
-|   |       ObjectDataModel.cs
-|   |       ObjectStorageLog.cs
-|   |       OtherLog.cs
-|   |       QueueLog.cs
-|   |       QueueMessage.cs
-|   |       RabbitMqConfiguration.cs
-|   |       SmtpConfiguration.cs
-|   |       
+|   |   |   ConsumerException.cs
+|   |   |   ConverterLog.cs
+|   |   |   ElkConfiguration.cs
+|   |   |   ErrorLog.cs
+|   |   |   LoggerLog.cs
+|   |   |   MinioConfiguration.cs
+|   |   |   NotificationLog.cs
+|   |   |   NotificationMicroservice.Models.csproj
+|   |   |   ObjectData.cs
+|   |   |   ObjectStorageLog.cs
+|   |   |   OtherLog.cs
+|   |   |   QueueLog.cs
+|   |   |   QueueMessage.cs
+|   |   |   RabbitMqConfiguration.cs
+|   |   |   SmtpConfiguration.cs
+|   |                       
 |   +---Notification-Microservice
-|   |   |   Notification-Microservice.csproj
+|   |   |   Dockerfile
+|   |   |   NotificationMicroservice.csproj
+|   |   |   NotificationMicroservice.csproj.user
 |   |   |   Program.cs
-|   |   |   
+|   |   |                   
 |   |   \---Properties
 |   |           launchSettings.json
 |   |           
 |   \---Operation
-|       |   Operation.csproj
-|       |   
+|       |   NotificationMicroservice.OperationLayer.csproj
+|       |               
 |       +---Interfaces
 |       |       IMailSenderOperation.cs
 |       |       IObjectStorageOperation.cs
 |       |       IQueueOperation.cs
-|       |       
+|       |                   
 |       \---Operations
 |               MailSenderOperation.cs
 |               ObjectStorageOperation.cs
 |               QueueOperation.cs
 |               
-\---WebService
-    |   .dockerignore
-    |   .gitignore
-    |   WebService.sln
-    |   
-    +---APILayer
-    |   |   APILayer.csproj
++---WebService
+|   |   .dockerignore
+|   |   .gitignore
+|   |   WebService.sln
+|   |   
+|   +---APILayer
+|   |   |   WebService.APILayer.csproj
+|   |   |               
+|   |   +---Controllers
+|   |   |   +---Converter
+|   |   |   |       ConverterController.cs
+|   |   |   |       
+|   |   |   \---Health
+|   |   |           HealthController.cs
+|   |                       
+|   +---Configuration
+|   |   |   EnvVariablesHandler.cs
+|   |   |   WebService.Configuration.csproj
+|   |                       
+|   +---DataLayer
+|   |   |   App.config
+|   |   |   WebService.DataAccessLayer.csproj
+|   |   |               
+|   |   +---Interfaces
+|   |   |       ILog4NetRepository.cs
+|   |   |       ILoggingRepository.cs
+|   |   |       ILogOtherRepository.cs
+|   |   |       IMinioStorageRepository.cs
+|   |   |       IQueueRepository.cs
+|   |   |                   
+|   |   \---Repositories
+|   |           Log4NetRepository.cs
+|   |           LoggingRepository.cs
+|   |           LogOtherRepository.cs
+|   |           MinioStorageRepository.cs
+|   |           QueueRepository.cs
+|   |           
+|   +---Helpers
+|   |   |   WebService.Helpers.csproj
+|   |   |               
+|   |   +---Helpers
+|   |   |       EmailFormatHelper.cs
+|   |   |       PingHelper.cs
+|   |   |       
+|   |   +---Interfaces
+|   |   |       IPingHelper.cs
+|   |                       
+|   +---Middleware
+|   |   |   ErrorHandlerMiddleware.cs
+|   |   |   LoggingMiddleware.cs
+|   |   |   ReadableResponseStreamMiddleware.cs
+|   |   |   RequestValidationMiddleware.cs
+|   |   |   WebService.MiddlewareLayer.csproj
+|   |   |               
+|   |   +---Contexts
+|   |   |   |   WebServiceContext.cs
+|   |   |   |   
+|   |   |   \---Interfaces
+|   |   |           IWebServiceContext.cs
+|   |                       
+|   +---Models
+|   |   |   ElkConfiguration.cs
+|   |   |   ExceptionLog.cs
+|   |   |   HealthResponse.cs
+|   |   |   MinioConfiguration.cs
+|   |   |   ObjectStorageLog.cs
+|   |   |   QueueLog.cs
+|   |   |   QueueMessage.cs
+|   |   |   RabbitMqConfiguration.cs
+|   |   |   RequestResponseLog.cs
+|   |   |   UploadMp4Response.cs
+|   |   |   WebService.Models.csproj
+|   |   |   WebServiceErrors.cs
+|   |   |   WebServiceException.cs 
+|   |                       
+|   +---ServiceLayer
+|   |   |   WebService.OperationLayer.csproj
+|   |   |               
+|   |   +---Interfaces
+|   |   |       IHealthOperation.cs
+|   |   |       ILoggingOperation.cs
+|   |   |       IMinioStorageOperation.cs
+|   |   |       IQueueOperation.cs
+|   |   |                   
+|   |   \---Operations
+|   |           HealthOperation.cs
+|   |           LoggingOperation.cs
+|   |           MinioStorageOperation.cs
+|   |           QueueOperation.cs
+|   |           
+|   \---WebService
+|       |   appsettings.Development.json
+|       |   appsettings.json
+|       |   Dockerfile
+|       |   Dockerfile.original
+|       |   Program.cs
+|       |   WebService.csproj
+|       |                   
+|       \---Properties
+|               launchSettings.json
+|               
+\---YAML-Files
+    +---Kong
+    |   |   .env.txt
+    |   |   docker-compose.yaml
     |   |   
-    |   +---Converters
-    |   |       ConverterController.cs
+    |   +---Service-Route Definitions
+    |   |       ConverterServiceDefinition.png
+    |   |       ExampleRouteDefinition.png
+    |   |       HealthServiceDefinition.png
     |   |       
-    |   +---Health
-    |   |       HealthController.cs
-    |          
-    +---DataLayer
-    |   |   App.config
-    |   |   DataLayer.csproj 
-    |   +---DataAccess
-    |   |       Log4NetRepository.cs
-    |   |       LoggingRepository.cs
-    |   |       LogOtherRepository.cs
-    |   |       MinioStorageRepository.cs
-    |   |       QueueRepository.cs
-    |   |       
-    |   +---Interfaces
-    |   |       ILog4NetRepository.cs
-    |   |       ILoggingRepository.cs
-    |   |       ILogOtherRepository.cs
-    |   |       IMinioStorageRepository.cs
-    |   |       IQueueRepository.cs
-    |          
-    +---Helpers
-    |   |   EmailFormatHelper.cs
-    |   |   Helpers.csproj
-    |   |   PingHelper.cs
-    |   |   WebServiceException.cs  
-    |   +---Interfaces
-    |   |       IPingHelper.cs
-    |          
-    +---Middleware
-    |   |   ErrorHandlerMiddleware.cs
-    |   |   LoggingMiddleware.cs
-    |   |   Middleware.csproj
-    |   |   ReadableResponseStreamMiddleware.cs
-    |   |   RequestValidationMiddleware.cs
-    |      
-    |   +---Contexts
-    |   |   |   WebServiceContext.cs
-    |   |   |   
-    |   |   \---Interfaces
-    |   |           IWebServiceContext.cs  
-    |     
-    +---Models
-    |   |   ExceptionLogModel.cs
-    |   |   HealthResponse.cs
-    |   |   Models.csproj
-    |   |   ObjectStorageLog.cs
-    |   |   QueueLog.cs
-    |   |   QueueMessage.cs
-    |   |   RequestResponseLogModel.cs
-    |   |   UploadMp4Response.cs
-    |   |   WebServiceErrors.cs
-    |
-    +---ServiceLayer
-    |   |   ServiceLayer.csproj
-    |   |   
-    |   +---Interfaces
-    |   |       IHealthService.cs
-    |   |       ILoggingService.cs
-    |   |       IMinioStorageService.cs
-    |   |       IQueueService.cs
-    |   |       
-    |   \---Services
-    |           HealthService.cs
-    |           LoggingService.cs
-    |           MinioStorageService.cs
-    |           QueueService.cs
+    |   \---Snapshot
+    |           Snapshot.json
     |           
-    \---WebService
-        |   appsettings.Development.json
-        |   appsettings.json
-        |   Dockerfile
-        |   Program.cs
-        |   WebService.csproj
-        |
-        +---obj
-        |
-        \---Properties
-                launchSettings.json
+    +---Microservices
+    |   +---ConverterService
+    |   |       .env.txt
+    |   |       docker-compose.yaml
+    |   |       
+    |   +---LoggerService
+    |   |       .env.txt
+    |   |       docker-compose.yaml
+    |   |       
+    |   +---NotificationService
+    |   |       .env.txt
+    |   |       docker-compose.yaml
+    |   |       
+    |   \---WebService
+    |           .env.txt
+    |           docker-compose.yaml
+    |           
+    +---Minio
+    |       .env.txt
+    |       docker-compose.yaml
+    |       
+    \---RabbitMQ
+            .env.txt
+            docker-compose.yaml
+            
+
 ```
 
 ## Installation
@@ -1038,6 +1077,7 @@ Please use the Github issues.
 
 ## RoadMap
 
+- In the future, i am definitely going to update Structure Section in README.md
 - In the Future, i am planning to use **Kubernetes** and **CI/CD DevOps** tools like **Jenkins** or **Gitlab**.
 - I want to use different branches for **test and production** environments.
 - Also i am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some **HDD space on virtual machine.**
