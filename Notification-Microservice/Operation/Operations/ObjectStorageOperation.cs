@@ -1,8 +1,8 @@
-﻿using DataAccess.Interfaces;
-using Models;
-using Operation.Interfaces;
+﻿using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.Models;
+using NotificationMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace NotificationMicroservice.OperationLayer.Operations
 {
     public class ObjectStorageOperation : IObjectStorageOperation
     {
@@ -13,7 +13,7 @@ namespace Operation.Operations
             _objectStorageRepository = objectStorageRepository;
         }
 
-        public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
+        public async Task<ObjectData> GetFileAsync(string bucketName, string objectName)
         {
             return await _objectStorageRepository.GetFileAsync(bucketName, objectName);
 

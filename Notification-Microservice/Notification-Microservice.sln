@@ -3,17 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice", "Notification-Microservice\Notification-Microservice.csproj", "{CFABB6C2-A560-46D9-B806-024758C8ADDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice", "Notification-Microservice\NotificationMicroservice.csproj", "{CFABB6C2-A560-46D9-B806-024758C8ADDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configuration", "Configuration\Configuration.csproj", "{0236B468-2087-435A-B801-35C36061C2DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.Configuration", "Configuration\NotificationMicroservice.Configuration.csproj", "{0236B468-2087-435A-B801-35C36061C2DB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{42147F5D-EE50-479E-A5A0-32C5C97062E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.Models", "Models\NotificationMicroservice.Models.csproj", "{42147F5D-EE50-479E-A5A0-32C5C97062E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{D1C8AE0B-0389-45B7-9640-DED990204CC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.DataAccessLayer", "DataAccess\NotificationMicroservice.DataAccessLayer.csproj", "{D1C8AE0B-0389-45B7-9640-DED990204CC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operation", "Operation\Operation.csproj", "{DF59739C-6139-478C-AA41-6D60AB52F074}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helpers\Helper.csproj", "{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.OperationLayer", "Operation\NotificationMicroservice.OperationLayer.csproj", "{DF59739C-6139-478C-AA41-6D60AB52F074}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +39,6 @@ Global
 		{DF59739C-6139-478C-AA41-6D60AB52F074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF59739C-6139-478C-AA41-6D60AB52F074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF59739C-6139-478C-AA41-6D60AB52F074}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CCAD1E9D-CD2B-432A-9E18-4E0C08748140}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

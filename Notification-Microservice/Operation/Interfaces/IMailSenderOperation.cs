@@ -1,4 +1,4 @@
-﻿namespace Operation.Interfaces
+﻿namespace NotificationMicroservice.OperationLayer.Interfaces
 {
     public interface IMailSenderOperation
     {

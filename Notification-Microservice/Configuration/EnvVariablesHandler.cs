@@ -1,6 +1,6 @@
-﻿using Models;
+﻿using NotificationMicroservice.Models;
 
-namespace Configuration
+namespace NotificationMicroservice.Configuration
 {
     public class EnvVariablesHandler
     {

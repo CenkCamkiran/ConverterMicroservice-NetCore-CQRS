@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
-using Operation.Interfaces;
+﻿using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace NotificationMicroservice.OperationLayer.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {

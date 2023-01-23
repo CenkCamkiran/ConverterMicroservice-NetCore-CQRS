@@ -1,12 +1,11 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
-using Helper.Interfaces;
-using Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using NotificationMicroservice.Configuration;
+using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.Models;
 using System.Net;
 using System.Net.Mail;
 
-namespace Helper.Helpers
+namespace NotificationMicroservice.DataAccessLayer.Repositories
 {
     public class MailSenderRepository : IMailSenderRepository
     {
@@ -34,13 +33,13 @@ namespace Helper.Helpers
                 client.Port = Convert.ToInt32(smtpConfiguration.SmtpPort);
                 client.DeliveryMethod = SmtpDeliveryMethod.Network;
                 client.UseDefaultCredentials = false;
-                client.EnableSsl= true;    
+                client.EnableSsl = true;
                 client.Host = smtpConfiguration.SmtpHost;
                 client.Credentials = new NetworkCredential(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailPassword);
                 mail.IsBodyHtml = true;
                 mail.To.Add(email);
                 //mail.CC.Add(new MailAddress(""));
-                mail.From = (new MailAddress(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailUsername));
+                mail.From = new MailAddress(smtpConfiguration.SmtpMailFrom, smtpConfiguration.SmtpMailUsername);
                 mail.Subject = "About Your Converted File";
                 mail.Attachments.Add(new Attachment(attachmentFileStream, attachmentFile));
                 mail.Body = body;

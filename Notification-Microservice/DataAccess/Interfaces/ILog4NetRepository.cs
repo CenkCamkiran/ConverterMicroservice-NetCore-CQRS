@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Interfaces
+﻿namespace NotificationMicroservice.DataAccessLayer.Interfaces
 {
     public interface ILog4NetRepository
     {

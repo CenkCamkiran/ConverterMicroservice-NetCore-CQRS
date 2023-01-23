@@ -1,6 +1,6 @@
-﻿using Operation.Interfaces;
+﻿using NotificationMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace NotificationMicroservice.OperationLayer.Operations
 {
     public class MailSenderOperation : IMailSenderOperation
     {

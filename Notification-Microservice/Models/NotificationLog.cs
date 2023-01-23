@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace NotificationMicroservice.Models
 {
     public class NotificationLog
     {

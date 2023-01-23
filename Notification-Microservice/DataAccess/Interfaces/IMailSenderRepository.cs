@@ -1,4 +1,4 @@
-﻿namespace Helper.Interfaces
+﻿namespace NotificationMicroservice.DataAccessLayer.Interfaces
 {
     public interface IMailSenderRepository
     {

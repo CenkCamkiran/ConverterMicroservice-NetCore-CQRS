@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Providers
+﻿namespace NotificationMicroservice.DataAccessLayer.Providers
 {
     public class QueueProviders
     {
@@ -6,7 +6,7 @@
 
         public void SetServices(IServiceProvider serviceProvider)
         {
-            this.ServiceProvider = serviceProvider;
+            ServiceProvider = serviceProvider;
         }
 
         public static QueueProviders Current

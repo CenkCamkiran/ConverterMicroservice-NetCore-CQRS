@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\DataAccess\NotificationMicroservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Models\NotificationMicroservice.Models.csproj" />
   </ItemGroup>
 
 </Project>

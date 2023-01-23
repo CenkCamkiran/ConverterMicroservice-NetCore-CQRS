@@ -16,9 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\Configuration.csproj" />
-    <ProjectReference Include="..\Helpers\Helper.csproj" />
-    <ProjectReference Include="..\Models\Models.csproj" />
+    <ProjectReference Include="..\Configuration\NotificationMicroservice.Configuration.csproj" />
+    <ProjectReference Include="..\Models\NotificationMicroservice.Models.csproj" />
   </ItemGroup>
 
 </Project>

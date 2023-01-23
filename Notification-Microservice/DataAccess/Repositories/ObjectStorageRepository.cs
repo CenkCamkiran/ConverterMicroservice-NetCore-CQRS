@@ -1,11 +1,10 @@
-﻿using DataAccess.Interfaces;
-using Minio;
+﻿using Minio;
 using Minio.DataModel;
-using Models;
 using Newtonsoft.Json;
-using System.IO;
+using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.Models;
 
-namespace DataAccess.Repository
+namespace NotificationMicroservice.DataAccessLayer.Repositories
 {
     public class ObjectStorageRepository : IObjectStorageRepository
     {
@@ -106,9 +105,9 @@ namespace DataAccess.Repository
             }
         }
 
-        public async Task<ObjectDataModel> GetFileAsync(string bucketName, string objectName)
+        public async Task<ObjectData> GetFileAsync(string bucketName, string objectName)
         {
-            ObjectDataModel? objDataModel = null;
+            ObjectData? objDataModel = null;
             ServerSideEncryption? sse = null;
 
             try
@@ -131,7 +130,7 @@ namespace DataAccess.Repository
 
                 ObjectStat objStat = await _minioClient.Build().GetObjectAsync(args);
 
-                objDataModel = new ObjectDataModel()
+                objDataModel = new ObjectData()
                 {
                     Mp3FileFullPath = filePath,
                     ObjectStats = objStat

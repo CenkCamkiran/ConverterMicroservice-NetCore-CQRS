@@ -1,16 +1,12 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
-using DataAccess.Providers;
-using DataAccess.Repository;
-using Elasticsearch.Net;
-using Helper.Helpers;
-using Helper.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using Models;
-using Nest;
-using Operation.Interfaces;
-using Operation.Operations;
+using NotificationMicroservice.Configuration;
+using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.DataAccessLayer.Providers;
+using NotificationMicroservice.DataAccessLayer.Repositories;
+using NotificationMicroservice.Models;
+using NotificationMicroservice.OperationLayer.Interfaces;
+using NotificationMicroservice.OperationLayer.Operations;
 using RabbitMQ.Client;
 using IConnection = RabbitMQ.Client.IConnection;
 

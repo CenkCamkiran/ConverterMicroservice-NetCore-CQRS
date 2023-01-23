@@ -1,4 +1,4 @@
-﻿namespace Operation.Interfaces
+﻿namespace NotificationMicroservice.OperationLayer.Interfaces
 {
     public interface IQueueOperation<TMessage> where TMessage : class
     {

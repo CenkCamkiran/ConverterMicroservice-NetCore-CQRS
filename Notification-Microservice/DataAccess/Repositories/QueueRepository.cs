@@ -1,13 +1,12 @@
-﻿using DataAccess.Interfaces;
-using Helper.Interfaces;
-using Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using NotificationMicroservice.DataAccessLayer.Interfaces;
+using NotificationMicroservice.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using IConnection = RabbitMQ.Client.IConnection;
 
-namespace DataAccess.Repository
+namespace NotificationMicroservice.DataAccessLayer.Repositories
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
@@ -31,7 +30,7 @@ namespace DataAccess.Repository
             _objectStorageRepository = objectStorageRepository;
         }
 
-        public void ConsumeQueue(string queue, long messageTtl = 0  )
+        public void ConsumeQueue(string queue, long messageTtl = 0)
         {
             try
             {
@@ -161,7 +160,7 @@ namespace DataAccess.Repository
 
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectDataModel objModel = await _objectStorageRepository.GetFileAsync("audios", queueMsg.fileGuid);
+            ObjectData objModel = await _objectStorageRepository.GetFileAsync("audios", queueMsg.fileGuid);
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
