@@ -1,4 +1,5 @@
-﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
+﻿using ConverterMicroservice.Configuration;
+using ConverterMicroservice.DataAccessLayer.Interfaces;
 using ConverterMicroservice.DataAccessLayer.Providers;
 using ConverterMicroservice.DataAccessLayer.Repositories;
 using ConverterMicroservice.Models;
