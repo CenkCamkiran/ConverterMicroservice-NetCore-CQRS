@@ -710,7 +710,7 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 
 ## Structure
 
-````bash
+```bash
 root:.
 |   cenk.doc
 |   README.md
@@ -1016,7 +1016,7 @@ root:.
         |
         \---Properties
                 launchSettings.json
-````
+```
 
 ## Installation
 
