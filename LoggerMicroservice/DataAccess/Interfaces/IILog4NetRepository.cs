@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataAccess.Interfaces
+namespace LoggerMicroservice.DataAccessLayer.Interfaces
 {
     public interface ILog4NetRepository
     {

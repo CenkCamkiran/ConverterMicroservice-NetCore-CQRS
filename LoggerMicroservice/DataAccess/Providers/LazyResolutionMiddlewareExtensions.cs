@@ -2,7 +2,7 @@
 using System;
 
 
-namespace DataAccess.Providers
+namespace LoggerMicroservice.DataAccessLayer.Providers
 {
     //https://thomaslevesque.com/2020/03/18/lazily-resolving-services-to-fix-circular-dependencies-in-net-core/
     public static class LazyResolutionMiddlewareExtensions

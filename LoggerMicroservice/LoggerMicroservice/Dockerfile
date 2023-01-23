@@ -6,10 +6,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["LoggerMicroservice/LoggerMicroservice.csproj", "LoggerMicroservice/"]
-COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
-COPY ["Configuration/Configuration.csproj", "Configuration/"]
-COPY ["Models/Models.csproj", "Models/"]
-COPY ["Operation/Operation.csproj", "Operation/"]
+COPY ["DataAccess/LoggerMicroservice.DataAccessLayer.csproj", "DataAccess/"]
+COPY ["Configuration/LoggerMicroservice.Configuration.csproj", "Configuration/"]
+COPY ["Models/LoggerMicroservice.Models.csproj", "Models/"]
+COPY ["Operation/LoggerMicroservice.OperationLayer.csproj", "Operation/"]
 RUN dotnet restore "LoggerMicroservice/LoggerMicroservice.csproj"
 COPY . .
 WORKDIR "/src/LoggerMicroservice"

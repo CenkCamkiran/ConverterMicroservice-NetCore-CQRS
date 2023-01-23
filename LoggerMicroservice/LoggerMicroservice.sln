@@ -5,13 +5,13 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerMicroservice", "LoggerMicroservice\LoggerMicroservice.csproj", "{D2A82498-DE4C-4857-B701-B7D34F94FFD6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{7B274126-94E4-407D-84C9-B1F471701592}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerMicroservice.DataAccessLayer", "DataAccess\LoggerMicroservice.DataAccessLayer.csproj", "{7B274126-94E4-407D-84C9-B1F471701592}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{6E5EA608-04A1-4FB6-B944-1BC175E15D67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerMicroservice.Models", "Models\LoggerMicroservice.Models.csproj", "{6E5EA608-04A1-4FB6-B944-1BC175E15D67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Configuration", "Configuration\Configuration.csproj", "{868B72F1-0522-48B3-A939-B53DC7025650}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerMicroservice.Configuration", "Configuration\LoggerMicroservice.Configuration.csproj", "{868B72F1-0522-48B3-A939-B53DC7025650}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Operation", "Operation\Operation.csproj", "{1F768F64-7B73-4758-B937-5DC76762EBBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LoggerMicroservice.OperationLayer", "Operation\LoggerMicroservice.OperationLayer.csproj", "{1F768F64-7B73-4758-B937-5DC76762EBBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

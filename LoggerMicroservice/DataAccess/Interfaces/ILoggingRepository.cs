@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace DataAccess.Interfaces
+namespace LoggerMicroservice.DataAccessLayer.Interfaces
 {
     public interface ILoggingRepository<TModel> where TModel : class
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Models
+namespace LoggerMicroservice.Models
 {
     public class ConverterLog
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Models
+namespace LoggerMicroservice.Models
 {
     public class QueueLog
     {
@@ -8,7 +8,7 @@ namespace Models
         public string QueueName { get; set; } = string.Empty;
         public string ExchangeName { get; set; } = string.Empty;
         public string RoutingKey { get; set; } = string.Empty;
-        public string? Message { get; set; } = null;
+        public string Message { get; set; } = null;
         public DateTime Date { get; set; }
         public string ExceptionMessage { get; set; } = string.Empty;
     }

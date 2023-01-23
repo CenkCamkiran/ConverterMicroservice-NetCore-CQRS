@@ -1,4 +1,4 @@
-﻿namespace DataAccess.Interfaces
+﻿namespace LoggerMicroservice.DataAccessLayer.Interfaces
 {
     public interface IQueueRepository<TMessage> where TMessage : class
     {

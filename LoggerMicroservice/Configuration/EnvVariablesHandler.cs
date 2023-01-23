@@ -1,17 +1,17 @@
-﻿using Models;
+﻿using LoggerMicroservice.Models;
 using System;
 
-namespace Configuration
+namespace LoggerMicroservice.Configuration
 {
     public class EnvVariablesHandler
     {
 
         public ElkConfiguration GetElkEnvVariables()
         {
-            string? elkHost = Environment.GetEnvironmentVariable("ELK_HOST");
-            string? elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX");
-            string? elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
-            string? elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
+            string elkHost = Environment.GetEnvironmentVariable("ELK_HOST");
+            string elkDefaultIndex = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX");
+            string elkUsername = Environment.GetEnvironmentVariable("ELK_USERNAME");
+            string elkPassword = Environment.GetEnvironmentVariable("ELK_PASSWORD");
 
             ElkConfiguration elkConfiguration = new ElkConfiguration()
             {
@@ -26,10 +26,10 @@ namespace Configuration
 
         public RabbitMqConfiguration GetRabbitEnvVariables()
         {
-            string? rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
-            string? rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
-            string? rabbitmqUsername = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
-            string? rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
+            string rabbitmqHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
+            string rabbitmqPort = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
+            string rabbitmqUsername = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
+            string rabbitmqPassword = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
             RabbitMqConfiguration rabbitMqConfiguration = new RabbitMqConfiguration()
             {

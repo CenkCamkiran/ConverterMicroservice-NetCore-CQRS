@@ -1,4 +1,4 @@
-﻿namespace Operation.Interfaces
+﻿namespace LoggerMicroservice.OperationLayer.Interfaces
 {
     public interface ILoggingOperation<TModel> where TModel : class
     {

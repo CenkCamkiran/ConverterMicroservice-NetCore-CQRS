@@ -1,10 +1,10 @@
-﻿using DataAccess.Interfaces;
-using Models;
+﻿using LoggerMicroservice.DataAccessLayer.Interfaces;
+using LoggerMicroservice.Models;
 using Nest;
 using System;
 using System.Threading.Tasks;
 
-namespace DataAccess.Repository
+namespace LoggerMicroservice.DataAccessLayer.Repositories
 {
     public class LoggingRepository<TModel> : ILoggingRepository<TModel> where TModel : class
     {

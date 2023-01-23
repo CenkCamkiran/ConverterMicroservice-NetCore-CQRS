@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace LoggerMicroservice.Models
 {
     public class ElkConfiguration
     {

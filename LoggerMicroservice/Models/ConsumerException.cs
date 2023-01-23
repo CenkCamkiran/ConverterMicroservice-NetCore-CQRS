@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Models
+namespace LoggerMicroservice.Models
 {
     public class ConsumerException : Exception
     {
@@ -8,7 +8,7 @@ namespace Models
         {
         }
 
-        public ConsumerException(string? message) : base(message)
+        public ConsumerException(string message) : base(message)
         {
         }
     }

@@ -1,5 +1,5 @@
-﻿using DataAccess.Interfaces;
-using Models;
+﻿using LoggerMicroservice.DataAccessLayer.Interfaces;
+using LoggerMicroservice.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,7 +7,7 @@ using System;
 using System.Text;
 using System.Threading;
 
-namespace DataAccess.Repository
+namespace LoggerMicroservice.DataAccessLayer.Repositories
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {

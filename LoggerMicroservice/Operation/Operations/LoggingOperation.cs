@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
-using Operation.Interfaces;
+﻿using LoggerMicroservice.DataAccessLayer.Interfaces;
+using LoggerMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace LoggerMicroservice.OperationLayer.Operations
 {
     public class LoggingOperation<TModel> : ILoggingOperation<TModel> where TModel : class
     {

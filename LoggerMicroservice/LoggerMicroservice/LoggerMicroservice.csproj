@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
-    <ProjectReference Include="..\Operation\Operation.csproj" />
+    <ProjectReference Include="..\DataAccess\LoggerMicroservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Operation\LoggerMicroservice.OperationLayer.csproj" />
   </ItemGroup>
 
 </Project>

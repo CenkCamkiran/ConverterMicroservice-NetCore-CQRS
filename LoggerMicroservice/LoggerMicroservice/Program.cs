@@ -1,49 +1,48 @@
-﻿using Configuration;
-using DataAccess.Interfaces;
-using DataAccess.Providers;
-using DataAccess.Repository;
-using Elasticsearch.Net;
+﻿using Elasticsearch.Net;
+using LoggerMicroservice.Configuration;
+using LoggerMicroservice.DataAccessLayer.Interfaces;
+using LoggerMicroservice.DataAccessLayer.Providers;
+using LoggerMicroservice.DataAccessLayer.Repositories;
+using LoggerMicroservice.Models;
+using LoggerMicroservice.OperationLayer.Interfaces;
+using LoggerMicroservice.OperationLayer.Operations;
 using Microsoft.Extensions.DependencyInjection;
-using Models;
 using Nest;
-using Operation.Interfaces;
-using Operation.Operations;
 using RabbitMQ.Client;
-using System;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
+
 EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
+ElkConfiguration elkEnvVariables = envVariablesHandler.GetElkEnvVariables();
+RabbitMqConfiguration rabbitEnvVariables = envVariablesHandler.GetRabbitEnvVariables();
 
-ElkConfiguration elkConfiguration = envVariablesHandler.GetElkEnvVariables();
-Console.WriteLine($"ELK_HOST {elkConfiguration.ElkHost}");
-Console.WriteLine($"ELK_DEFAULT_INDEX {elkConfiguration.ElkDefaultIndex}");
-Console.WriteLine($"ELK_USERNAME {elkConfiguration.ElkUsername}");
-Console.WriteLine($"ELK_PASSWORD {elkConfiguration.ElkPassword}");
+Console.WriteLine($"RABBITMQ_HOST {rabbitEnvVariables.RabbitMqHost}");
+Console.WriteLine($"RABBITMQ_PORT {rabbitEnvVariables.RabbitMqPort}");
+Console.WriteLine($"RABBITMQ_USERNAME {rabbitEnvVariables.RabbitMqUsername}");
+Console.WriteLine($"RABBITMQ_PASSWORD {rabbitEnvVariables.RabbitMqPassword}");
 
-ConnectionSettings connection = new ConnectionSettings(new Uri(elkConfiguration.ElkHost)).
-DefaultIndex(elkConfiguration.ElkDefaultIndex).
+Console.WriteLine($"ELK_HOST {elkEnvVariables.ElkHost}");
+Console.WriteLine($"ELK_DEFAULT_INDEX {elkEnvVariables.ElkDefaultIndex}");
+Console.WriteLine($"ELK_USERNAME {elkEnvVariables.ElkUsername}");
+Console.WriteLine($"ELK_PASSWORD {elkEnvVariables.ElkPassword}");
+
+ConnectionSettings connection = new ConnectionSettings(new Uri(elkEnvVariables.ElkHost)).
+DefaultIndex(elkEnvVariables.ElkDefaultIndex).
 ServerCertificateValidationCallback(CertificateValidations.AllowAll).
 ThrowExceptions(true).
 PrettyJson().
 RequestTimeout(TimeSpan.FromSeconds(300)).
-BasicAuthentication(elkConfiguration.ElkUsername, elkConfiguration.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
+BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
 ElasticClient elasticClient = new ElasticClient(connection);
 serviceProvider.AddSingleton<IElasticClient>(elasticClient);
 
-
-RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
-Console.WriteLine($"RABBITMQ_HOST {rabbitMqConfiguration.RabbitMqHost}");
-Console.WriteLine($"RABBITMQ_PORT {rabbitMqConfiguration.RabbitMqPort}");
-Console.WriteLine($"RABBITMQ_USERNAME {rabbitMqConfiguration.RabbitMqUsername}");
-Console.WriteLine($"RABBITMQ_PASSWORD {rabbitMqConfiguration.RabbitMqPassword}");
-
 var connectionFactory = new ConnectionFactory
 {
-    HostName = rabbitMqConfiguration.RabbitMqHost,
-    Port = Convert.ToInt32(rabbitMqConfiguration.RabbitMqPort),
-    UserName = rabbitMqConfiguration.RabbitMqUsername,
-    Password = rabbitMqConfiguration.RabbitMqPassword
+    HostName = rabbitEnvVariables.RabbitMqHost,
+    Port = Convert.ToInt32(rabbitEnvVariables.RabbitMqPort),
+    UserName = rabbitEnvVariables.RabbitMqUsername,
+    Password = rabbitEnvVariables.RabbitMqPassword
 };
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);

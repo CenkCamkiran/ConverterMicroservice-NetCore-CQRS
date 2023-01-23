@@ -1,7 +1,7 @@
-﻿using DataAccess.Interfaces;
-using Operation.Interfaces;
+﻿using LoggerMicroservice.DataAccessLayer.Interfaces;
+using LoggerMicroservice.OperationLayer.Interfaces;
 
-namespace Operation.Operations
+namespace LoggerMicroservice.OperationLayer.Operations
 {
     public class QueueOperation<TMessage> : IQueueOperation<TMessage> where TMessage : class
     {
