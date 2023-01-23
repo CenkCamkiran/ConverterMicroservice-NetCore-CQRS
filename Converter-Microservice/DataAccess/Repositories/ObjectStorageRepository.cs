@@ -1,4 +1,5 @@
 ﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
+using ConverterMicroservice.Models;
 using Minio;
 using Minio.DataModel;
 using Newtonsoft.Json;

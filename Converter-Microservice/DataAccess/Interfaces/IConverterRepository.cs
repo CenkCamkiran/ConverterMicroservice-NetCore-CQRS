@@ -1,4 +1,6 @@
-﻿namespace ConverterMicroservice.DataAccessLayer.Interfaces
+﻿using ConverterMicroservice.Models;
+
+namespace ConverterMicroservice.DataAccessLayer.Interfaces
 {
     public interface IConverterRepository
     {

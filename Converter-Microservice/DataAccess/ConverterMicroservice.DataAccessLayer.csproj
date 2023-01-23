@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Configuration\ConverterMicroservice.Configuration.csproj" />
     <ProjectReference Include="..\Models\ConverterMicroservice.Models.csproj" />
   </ItemGroup>
 

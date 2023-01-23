@@ -1,4 +1,5 @@
 ﻿using ConverterMicroservice.DataAccessLayer.Interfaces;
+using ConverterMicroservice.Models;
 using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
