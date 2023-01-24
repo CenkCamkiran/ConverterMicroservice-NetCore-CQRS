@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Helpers\WebService.Helpers.csproj" />
-    <ProjectReference Include="..\Models\WebService.Models.csproj" />
+    <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />
   </ItemGroup>
 
 </Project>

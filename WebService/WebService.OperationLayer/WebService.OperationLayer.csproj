@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataLayer\WebService.DataAccessLayer.csproj" />
-    <ProjectReference Include="..\Helpers\WebService.Helpers.csproj" />
-    <ProjectReference Include="..\Models\WebService.Models.csproj" />
+    <ProjectReference Include="..\WebService.DataAccessLayer\WebService.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />
+    <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />
   </ItemGroup>
 
 </Project>
