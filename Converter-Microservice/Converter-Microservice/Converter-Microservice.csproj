@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Converter_Microservice</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Converter-Microservice.Configuration\Converter-Microservice.Configuration.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.DataAccessLayer\Converter-Microservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.Models\Converter-Microservice.Models.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.OperationLayer\Converter-Microservice.OperationLayer.csproj" />
+  </ItemGroup>
+
+</Project>

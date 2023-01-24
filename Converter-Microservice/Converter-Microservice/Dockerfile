@@ -7,20 +7,20 @@ RUN apt-get update && apt-get install ffmpeg -y
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Converter-Microservice/ConverterMicroservice.csproj", "Converter-Microservice/"]
-COPY ["Configuration/ConverterMicroservice.Configuration.csproj", "Configuration/"]
-COPY ["Models/ConverterMicroservice.Models.csproj", "Models/"]
-COPY ["DataAccess/ConverterMicroservice.DataAccessLayer.csproj", "DataAccess/"]
-COPY ["Operation/ConverterMicroservice.OperationLayer.csproj", "Operation/"]
-RUN dotnet restore "Converter-Microservice/ConverterMicroservice.csproj"
+COPY ["Converter-Microservice/Converter-Microservice.csproj", "Converter-Microservice/"]
+COPY ["Converter-Microservice.Configuration/Converter-Microservice.Configuration.csproj", "Converter-Microservice.Configuration/"]
+COPY ["Converter-Microservice.Models/Converter-Microservice.Models.csproj", "Converter-Microservice.Models/"]
+COPY ["Converter-Microservice.DataAccessLayer/Converter-Microservice.DataAccessLayer.csproj", "Converter-Microservice.DataAccessLayer/"]
+COPY ["Converter-Microservice.OperationLayer/Converter-Microservice.OperationLayer.csproj", "Converter-Microservice.OperationLayer/"]
+RUN dotnet restore "Converter-Microservice/Converter-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Converter-Microservice"
-RUN dotnet build "ConverterMicroservice.csproj" -c Release -o /app/build
+RUN dotnet build "Converter-Microservice.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ConverterMicroservice.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Converter-Microservice.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ConverterMicroservice.dll"]
+ENTRYPOINT ["dotnet", "Converter-Microservice.dll"]
