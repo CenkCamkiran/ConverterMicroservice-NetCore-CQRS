@@ -5,13 +5,13 @@ VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice", "Notification-Microservice\Notification-Microservice.csproj", "{CFABB6C2-A560-46D9-B806-024758C8ADDC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.Configuration", "Notification-Microservice.Configuration\NotificationMicroservice.Configuration.csproj", "{01FEFF38-162D-4E56-A054-C185D94FA28C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice.Configuration", "Notification-Microservice.Configuration\Notification-Microservice.Configuration.csproj", "{01FEFF38-162D-4E56-A054-C185D94FA28C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.DataAccessLayer", "Notification-Microservice.DataAccessLayer\NotificationMicroservice.DataAccessLayer.csproj", "{384624FF-C57B-4F67-B06D-2FDFC94E4A52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice.DataAccessLayer", "Notification-Microservice.DataAccessLayer\Notification-Microservice.DataAccessLayer.csproj", "{384624FF-C57B-4F67-B06D-2FDFC94E4A52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.Models", "Notification-Microservice.Models\NotificationMicroservice.Models.csproj", "{0395B2B5-1004-4F90-8FD6-3D1962033BA0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice.Models", "Notification-Microservice.Models\Notification-Microservice.Models.csproj", "{0395B2B5-1004-4F90-8FD6-3D1962033BA0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMicroservice.OperationLayer", "NotificationMicroservice.OperationLayer\NotificationMicroservice.OperationLayer.csproj", "{B5935896-F6E9-4F4F-9D20-ECE2B7490B44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification-Microservice.OperationLayer", "Notification-Microservice.OperationLayer\Notification-Microservice.OperationLayer.csproj", "{82EB4587-75DC-4218-8240-E8A77B9661A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{0395B2B5-1004-4F90-8FD6-3D1962033BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0395B2B5-1004-4F90-8FD6-3D1962033BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0395B2B5-1004-4F90-8FD6-3D1962033BA0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B5935896-F6E9-4F4F-9D20-ECE2B7490B44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B5935896-F6E9-4F4F-9D20-ECE2B7490B44}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B5935896-F6E9-4F4F-9D20-ECE2B7490B44}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B5935896-F6E9-4F4F-9D20-ECE2B7490B44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82EB4587-75DC-4218-8240-E8A77B9661A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82EB4587-75DC-4218-8240-E8A77B9661A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82EB4587-75DC-4218-8240-E8A77B9661A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82EB4587-75DC-4218-8240-E8A77B9661A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

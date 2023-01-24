@@ -1,10 +1,10 @@
-﻿using log4net;
+﻿using Interfaces;
+using log4net;
 using log4net.Config;
 using log4net.Repository;
-using NotificationMicroservice.DataAccessLayer.Interfaces;
 using System.Reflection;
 
-namespace NotificationMicroservice.DataAccessLayer.Repositories
+namespace Repositories
 {
 
     public class Log4NetRepository : ILog4NetRepository

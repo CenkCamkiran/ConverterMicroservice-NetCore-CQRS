@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.DataAccessLayer.Providers
+﻿namespace Providers
 {
     public class QueueProviders
     {

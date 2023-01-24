@@ -1,6 +1,6 @@
 ﻿using NotificationMicroservice.Models;
 
-namespace NotificationMicroservice.OperationLayer.Interfaces
+namespace Interfaces
 {
     public interface IObjectStorageOperation
     {

@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Interfaces;
+using Newtonsoft.Json;
 using NotificationMicroservice.Configuration;
-using NotificationMicroservice.DataAccessLayer.Interfaces;
 using NotificationMicroservice.Models;
 using System.Net;
 using System.Net.Mail;
 
-namespace NotificationMicroservice.DataAccessLayer.Repositories
+namespace Repositories
 {
     public class MailSenderRepository : IMailSenderRepository
     {

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Notification-Microservice.Models\NotificationMicroservice.Models.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Models\Notification-Microservice.Models.csproj" />
   </ItemGroup>
 
 </Project>

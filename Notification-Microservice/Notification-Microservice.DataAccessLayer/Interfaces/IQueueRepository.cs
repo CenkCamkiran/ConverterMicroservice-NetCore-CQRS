@@ -1,4 +1,4 @@
-﻿namespace NotificationMicroservice.DataAccessLayer.Interfaces
+﻿namespace Interfaces
 {
     public interface IQueueRepository<TMessage> where TMessage : class
     {

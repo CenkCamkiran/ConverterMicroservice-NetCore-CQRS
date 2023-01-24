@@ -1,8 +1,7 @@
-﻿using NotificationMicroservice.DataAccessLayer.Interfaces;
+﻿using Interfaces;
 using NotificationMicroservice.Models;
-using NotificationMicroservice.OperationLayer.Interfaces;
 
-namespace NotificationMicroservice.OperationLayer.Operations
+namespace Operations
 {
     public class ObjectStorageOperation : IObjectStorageOperation
     {

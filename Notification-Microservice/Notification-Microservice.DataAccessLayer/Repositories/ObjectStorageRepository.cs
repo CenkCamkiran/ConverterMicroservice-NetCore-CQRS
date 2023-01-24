@@ -1,10 +1,10 @@
-﻿using Minio;
+﻿using Interfaces;
+using Minio;
 using Minio.DataModel;
 using Newtonsoft.Json;
-using NotificationMicroservice.DataAccessLayer.Interfaces;
 using NotificationMicroservice.Models;
 
-namespace NotificationMicroservice.DataAccessLayer.Repositories
+namespace Repositories
 {
     public class ObjectStorageRepository : IObjectStorageRepository
     {

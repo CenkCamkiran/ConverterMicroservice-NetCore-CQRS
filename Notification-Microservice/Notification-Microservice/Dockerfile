@@ -6,10 +6,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Notification-Microservice/Notification-Microservice.csproj", "Notification-Microservice/"]
-COPY ["NotificationMicroservice.OperationLayer/NotificationMicroservice.OperationLayer.csproj", "NotificationMicroservice.OperationLayer/"]
-COPY ["Notification-Microservice.DataAccessLayer/NotificationMicroservice.DataAccessLayer.csproj", "Notification-Microservice.DataAccessLayer/"]
-COPY ["Notification-Microservice.Configuration/NotificationMicroservice.Configuration.csproj", "Notification-Microservice.Configuration/"]
-COPY ["Notification-Microservice.Models/NotificationMicroservice.Models.csproj", "Notification-Microservice.Models/"]
+COPY ["Notification-Microservice.Configuration/Notification-Microservice.Configuration.csproj", "Notification-Microservice.Configuration/"]
+COPY ["Notification-Microservice.Models/Notification-Microservice.Models.csproj", "Notification-Microservice.Models/"]
+COPY ["Notification-Microservice.OperationLayer/Notification-Microservice.OperationLayer.csproj", "Notification-Microservice.OperationLayer/"]
+COPY ["Notification-Microservice.DataAccessLayer/Notification-Microservice.DataAccessLayer.csproj", "Notification-Microservice.DataAccessLayer/"]
 RUN dotnet restore "Notification-Microservice/Notification-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Notification-Microservice"
