@@ -9,12 +9,13 @@ EXPOSE 4080
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["WebService/WebService.csproj", "WebService/"]
-COPY ["WebService.Configuration/WebService.Configuration.csproj", "WebService.Configuration/"]
-COPY ["WebService.Models/WebService.Models.csproj", "WebService.Models/"]
+COPY ["WebService.APILayer/WebService.APILayer.csproj", "WebService.APILayer/"]
 COPY ["WebService.DataAccessLayer/WebService.DataAccessLayer.csproj", "WebService.DataAccessLayer/"]
-COPY ["WebService.Helpers/WebService.Helpers.csproj", "WebService.Helpers/"]
-COPY ["WebService.MiddlewareLayer/WebService.MiddlewareLayer.csproj", "WebService.MiddlewareLayer/"]
+COPY ["WebService.Models/WebService.Models.csproj", "WebService.Models/"]
 COPY ["WebService.OperationLayer/WebService.OperationLayer.csproj", "WebService.OperationLayer/"]
+COPY ["WebService.Helpers/WebService.Helpers.csproj", "WebService.Helpers/"]
+COPY ["WebService.Configuration/WebService.Configuration.csproj", "WebService.Configuration/"]
+COPY ["WebService.MiddlewareLayer/WebService.MiddlewareLayer.csproj", "WebService.MiddlewareLayer/"]
 RUN dotnet restore "WebService/WebService.csproj"
 COPY . .
 WORKDIR "/src/WebService"
