@@ -5,20 +5,20 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["Notification-Microservice/NotificationMicroservice.csproj", "Notification-Microservice/"]
-COPY ["Configuration/NotificationMicroservice.Configuration.csproj", "Configuration/"]
-COPY ["Models/NotificationMicroservice.Models.csproj", "Models/"]
-COPY ["Operation/NotificationMicroservice.OperationLayer.csproj", "Operation/"]
-COPY ["DataAccess/NotificationMicroservice.DataAccessLayer.csproj", "DataAccess/"]
-RUN dotnet restore "Notification-Microservice/NotificationMicroservice.csproj"
+COPY ["Notification-Microservice/Notification-Microservice.csproj", "Notification-Microservice/"]
+COPY ["NotificationMicroservice.OperationLayer/NotificationMicroservice.OperationLayer.csproj", "NotificationMicroservice.OperationLayer/"]
+COPY ["Notification-Microservice.DataAccessLayer/NotificationMicroservice.DataAccessLayer.csproj", "Notification-Microservice.DataAccessLayer/"]
+COPY ["Notification-Microservice.Configuration/NotificationMicroservice.Configuration.csproj", "Notification-Microservice.Configuration/"]
+COPY ["Notification-Microservice.Models/NotificationMicroservice.Models.csproj", "Notification-Microservice.Models/"]
+RUN dotnet restore "Notification-Microservice/Notification-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Notification-Microservice"
-RUN dotnet build "NotificationMicroservice.csproj" -c Release -o /app/build
+RUN dotnet build "Notification-Microservice.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "NotificationMicroservice.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Notification-Microservice.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "NotificationMicroservice.dll"]
+ENTRYPOINT ["dotnet", "Notification-Microservice.dll"]
