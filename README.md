@@ -730,4 +730,4 @@ Please use the Github issues.
 - In the Future, i am planning to use **Kubernetes** and **CI/CD DevOps** tools like **Jenkins** or **Gitlab**.
 - I want to use different branches for **test and production** environments.
 - I am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some **HDD space on virtual machine.** (Maybe Amazon S3 Object Storage)
-- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns.
+- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. For Event Sourcing, I want to use EventStoreDB.
