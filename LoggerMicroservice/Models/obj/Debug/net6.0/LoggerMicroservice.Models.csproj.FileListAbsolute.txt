@@ -1,0 +1,12 @@
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\bin\Debug\net6.0\LoggerMicroservice.Models.deps.json
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\bin\Debug\net6.0\LoggerMicroservice.Models.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\bin\Debug\net6.0\LoggerMicroservice.Models.pdb
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.csproj.AssemblyReference.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.AssemblyInfoInputs.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.AssemblyInfo.cs
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.csproj.CoreCompileInputs.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\refint\LoggerMicroservice.Models.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\LoggerMicroservice.Models.pdb
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\Models\obj\Debug\net6.0\ref\LoggerMicroservice.Models.dll

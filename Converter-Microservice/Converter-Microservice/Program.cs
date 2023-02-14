@@ -1,13 +1,12 @@
 ﻿using ConverterMicroservice.Configuration;
-using ConverterMicroservice.DataAccessLayer.Interfaces;
-using ConverterMicroservice.DataAccessLayer.Providers;
-using ConverterMicroservice.DataAccessLayer.Repositories;
 using ConverterMicroservice.Models;
-using ConverterMicroservice.OperationLayer.Interfaces;
-using ConverterMicroservice.OperationLayer.Operations;
+using Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using Operations;
+using Providers;
 using RabbitMQ.Client;
+using Repositories;
 
 var serviceProvider = new ServiceCollection();
 

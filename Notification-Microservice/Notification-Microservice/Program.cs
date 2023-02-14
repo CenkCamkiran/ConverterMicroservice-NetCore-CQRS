@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using NotificationMicroservice.Configuration;
-using NotificationMicroservice.DataAccessLayer.Interfaces;
-using NotificationMicroservice.DataAccessLayer.Providers;
-using NotificationMicroservice.DataAccessLayer.Repositories;
 using NotificationMicroservice.Models;
-using NotificationMicroservice.OperationLayer.Interfaces;
-using NotificationMicroservice.OperationLayer.Operations;
+using Operations;
+using Providers;
 using RabbitMQ.Client;
+using Repositories;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();

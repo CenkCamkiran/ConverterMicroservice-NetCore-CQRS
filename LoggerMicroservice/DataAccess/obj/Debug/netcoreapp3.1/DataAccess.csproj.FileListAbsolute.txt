@@ -1,0 +1,16 @@
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.dll.config
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.deps.json
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\DataAccess.pdb
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\Configuration.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\Models.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\Configuration.pdb
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\bin\Debug\netcoreapp3.1\Models.pdb
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.AssemblyReference.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfoInputs.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.AssemblyInfo.cs
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CoreCompileInputs.cache
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.csproj.CopyComplete
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.dll
+C:\Users\camki\Desktop\Kişisel\Google Cloud\Projects\Converter-K8S-App\LoggerMicroservice\DataAccess\obj\Debug\netcoreapp3.1\DataAccess.pdb

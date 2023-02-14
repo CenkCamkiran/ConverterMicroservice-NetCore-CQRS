@@ -17,10 +17,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\APILayer\WebService.APILayer.csproj" />
-    <ProjectReference Include="..\Configuration\WebService.Configuration.csproj" />
-    <ProjectReference Include="..\Helpers\WebService.Helpers.csproj" />
-    <ProjectReference Include="..\Middleware\WebService.MiddlewareLayer.csproj" />
+    <ProjectReference Include="..\WebService.APILayer\WebService.APILayer.csproj" />
+    <ProjectReference Include="..\WebService.Configuration\WebService.Configuration.csproj" />
+    <ProjectReference Include="..\WebService.DataAccessLayer\WebService.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />
+    <ProjectReference Include="..\WebService.MiddlewareLayer\WebService.MiddlewareLayer.csproj" />
+    <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />
+    <ProjectReference Include="..\WebService.OperationLayer\WebService.OperationLayer.csproj" />
   </ItemGroup>
 
 </Project>

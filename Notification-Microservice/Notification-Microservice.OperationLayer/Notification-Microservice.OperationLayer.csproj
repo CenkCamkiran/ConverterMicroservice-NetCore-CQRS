@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Notification-Microservice.DataAccessLayer\Notification-Microservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Models\Notification-Microservice.Models.csproj" />
+  </ItemGroup>
+
+</Project>
