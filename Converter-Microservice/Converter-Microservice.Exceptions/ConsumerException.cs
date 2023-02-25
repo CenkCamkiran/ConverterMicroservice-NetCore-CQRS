@@ -1,4 +1,4 @@
-﻿namespace ConverterMicroservice.Models
+﻿namespace Converter_Microservice.Exceptions
 {
     public class ConsumerException : Exception
     {

@@ -10,14 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Converter-Microservice.Configuration\Converter-Microservice.Configuration.csproj" />
-    <ProjectReference Include="..\Converter-Microservice.DataAccessLayer\Converter-Microservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.Handlers\Converter-Microservice.Handlers.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Models\Converter-Microservice.Models.csproj" />
-    <ProjectReference Include="..\Converter-Microservice.OperationLayer\Converter-Microservice.OperationLayer.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.Queries\Converter-Microservice.Queries.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.Repositories\Converter-Microservice.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

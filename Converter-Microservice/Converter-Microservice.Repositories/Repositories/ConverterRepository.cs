@@ -1,9 +1,9 @@
-﻿using ConverterMicroservice.Models;
-using Interfaces;
+﻿using Converter_Microservice.Repositories.Interfaces;
+using ConverterMicroservice.Models;
 using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
-namespace Repositories
+namespace Converter_Microservice.Repositories.Repositories
 {
     public class ConverterRepository : IConverterRepository
     {

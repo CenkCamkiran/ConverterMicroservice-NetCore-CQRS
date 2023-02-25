@@ -1,19 +1,19 @@
-﻿using ConverterMicroservice.Models;
-using Interfaces;
+﻿using Converter_Microservice.Repositories.Interfaces;
+using ConverterMicroservice.Models;
 using Minio;
 using Minio.DataModel;
 using Newtonsoft.Json;
 
-namespace Repositories
+namespace Converter_Microservice.Repositories.Repositories
 {
-    public class ObjectStorageRepository : IObjectStorageRepository
+    public class ObjectRepository : IObjectRepository
     {
         private readonly IMinioClient _minioClient;
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
         private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
 
-        public ObjectStorageRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
+        public ObjectRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
         {
             _minioClient = minioClient;
             _log4NetRepository = log4NetRepository;
@@ -21,7 +21,7 @@ namespace Repositories
             _queueOtherRepository = queueOtherRepository;
         }
 
-        public async Task StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
+        public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
             ServerSideEncryption? sse = null;
             stream.Position = 0;
@@ -80,6 +80,8 @@ namespace Repositories
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
 
+                return await Task.FromResult(true);
+
             }
             catch (Exception exception)
             {
@@ -101,6 +103,8 @@ namespace Repositories
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
+
+                throw;
             }
         }
 

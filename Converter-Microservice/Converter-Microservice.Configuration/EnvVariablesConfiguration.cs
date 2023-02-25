@@ -1,8 +1,8 @@
 ﻿using ConverterMicroservice.Models;
 
-namespace ConverterMicroservice.Configuration
+namespace WebService.ProjectConfigurations
 {
-    public class EnvVariablesHandler
+    public class EnvVariablesConfiguration
     {
 
         public MinioConfiguration GetMinioEnvVariables()
