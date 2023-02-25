@@ -727,14 +727,7 @@ Please use the Github issues.
 
 ## RoadMap
 
-<<<<<<< HEAD
-- In the future, I am definitely going to update Structure Section in README.md
-- In the Future, I am planning to use **Kubernetes** and **CI/CD DevOps** tools like **Jenkins** or **Gitlab**.
-- I want to use different branches for **test and production** environments.
-- Also I am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some **HDD space on virtual machine.**
-=======
-- In the Future, i am planning to use **Kubernetes** and **CI/CD DevOps** tools like **Jenkins** or **Gitlab**.
-- I want to use different branches for **test and production** environments.
-- I am planning to use **S3 objects as TTL (Time to live)**. It will be more efficient way to save some **HDD space on virtual machine.** (Maybe Amazon S3 Object Storage)
 - I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. For Event Sourcing, I want to use EventStoreDB.
->>>>>>> 8eea075c1e9a4a3eba2a57e4f82e9dd5d1fb9d02
+- Fix errors
+- Update README
+- Test project
