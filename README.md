@@ -733,3 +733,5 @@ Please use the Github issues.
 - Fix errors
 - Update README (especially add api endpoint docs in readme)
 - Test project
+- Explain some details about CQRS (maybe add new section on README?)
+- Connect Kong API Gateway to Keycloak?
