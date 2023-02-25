@@ -664,6 +664,8 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 
 ## Business Logic
 
+I used CQRS Design Pattern on this project.
+
 ### Converter Microservice
 
 - Uses **RabbitMQ** for **Asynchronous Communication**.
@@ -729,5 +731,5 @@ Please use the Github issues.
 
 - I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. For Event Sourcing, I want to use EventStoreDB.
 - Fix errors
-- Update README
+- Update README (especially add api endpoint docs in readme)
 - Test project
