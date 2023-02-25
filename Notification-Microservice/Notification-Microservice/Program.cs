@@ -1,17 +1,17 @@
-﻿using Interfaces;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
-using NotificationMicroservice.Configuration;
+using Notification_Microservice.ProjectConfigurations;
+using Notification_Microservice.Repositories.Interfaces;
+using Notification_Microservice.Repositories.Repositories;
 using NotificationMicroservice.Models;
-using Operations;
-using Providers;
 using RabbitMQ.Client;
-using Repositories;
+using System.Reflection;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
 
-EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
+EnvVariablesConfiguration envVariablesHandler = new EnvVariablesConfiguration();
 
 MinioConfiguration minioConfiguration = envVariablesHandler.GetMinioEnvVariables();
 Console.WriteLine($"MINIO_HOST {minioConfiguration.MinioHost}");
@@ -40,29 +40,33 @@ var connectionFactory = new ConnectionFactory
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
 
-//Operations
-serviceProvider.AddScoped<IObjectStorageOperation, ObjectStorageOperation>();
-serviceProvider.AddScoped<IMailSenderOperation, MailSenderOperation>();
-serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
-
 //Helpers
 serviceProvider.AddScoped<IMailSenderRepository, MailSenderRepository>();
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
-serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
+serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
+
+Assembly.GetAssembly(typeof(ConverterHandler));
+Assembly.GetAssembly(typeof(ObjectCommandHandler));
+Assembly.GetAssembly(typeof(ObjectQueryHandler));
+Assembly.GetAssembly(typeof(QueueCommandHandler<>));
+Assembly.GetAssembly(typeof(QueueQueryHandler<>));
+Assembly.GetAssembly(typeof(LogHandler));
+
+var Handlers = AppDomain.CurrentDomain.Load("Notification-Microservice.Handlers");
+var Queries = AppDomain.CurrentDomain.Load("Notification-Microservice.Queries");
+var Commands = AppDomain.CurrentDomain.Load("Notification-Microservice.Commands");
+
+serviceProvider.AddMediatR(Handlers);
+serviceProvider.AddMediatR(Queries);
+serviceProvider.AddMediatR(Commands);
 
 serviceProvider.AddLazyResolution();
 
 var builder = serviceProvider.BuildServiceProvider();
 
-Console.WriteLine("Program Started!");
+var _mediator = builder.GetService<IMediator>();
 
-var _queueOperation = builder.GetService<IQueueOperation<QueueMessage>>();
-
-_queueOperation.ConsumeQueue("notification", 3600000);
-
-//var _queueOperation = builder.GetService<IQueueOperation<object>>();
-//var _objectStorageOperation = builder.GetService<IObjectStorageOperation>();
-//_queueOperation.ConsumeQueue("converter");
+_mediator.Send(new QueueQuery("notification", 3600000)).GetAwaiter();

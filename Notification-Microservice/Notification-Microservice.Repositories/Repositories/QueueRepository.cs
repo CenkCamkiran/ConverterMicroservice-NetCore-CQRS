@@ -1,12 +1,11 @@
-﻿using Interfaces;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Notification_Microservice.Repositories.Interfaces;
 using NotificationMicroservice.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using IConnection = RabbitMQ.Client.IConnection;
 
-namespace Repositories
+namespace Notification_Microservice.Repositories.Repositories
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {

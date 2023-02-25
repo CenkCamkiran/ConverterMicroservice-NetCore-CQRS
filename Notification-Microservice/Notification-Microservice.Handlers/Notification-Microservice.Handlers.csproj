@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Notification_Microservice.Handlers</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Notification-Microservice.Commands\Notification-Microservice.Commands.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Queries\Notification-Microservice.Queries.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Repositories\Notification-Microservice.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>

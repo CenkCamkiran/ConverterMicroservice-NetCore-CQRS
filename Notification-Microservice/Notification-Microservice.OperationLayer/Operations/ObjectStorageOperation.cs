@@ -5,9 +5,9 @@ namespace Operations
 {
     public class ObjectStorageOperation : IObjectStorageOperation
     {
-        private IObjectStorageRepository _objectStorageRepository;
+        private IObjectRepository _objectStorageRepository;
 
-        public ObjectStorageOperation(IObjectStorageRepository objectStorageRepository)
+        public ObjectStorageOperation(IObjectRepository objectStorageRepository)
         {
             _objectStorageRepository = objectStorageRepository;
         }
