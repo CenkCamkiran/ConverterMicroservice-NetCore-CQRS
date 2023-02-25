@@ -2,17 +2,16 @@ using Elasticsearch.Net;
 using Minio;
 using Nest;
 using RabbitMQ.Client;
-using WebService.Configuration;
-using WebService.DataAccessLayer.Interfaces;
-using WebService.DataAccessLayer.Repositories;
 using WebService.Helpers.Helpers;
 using WebService.Helpers.Interfaces;
-using WebService.MiddlewareLayer;
-using WebService.MiddlewareLayer.Contexts;
-using WebService.MiddlewareLayer.Contexts.Interfaces;
+using WebService.Middlewares.Contexts;
+using WebService.Middlewares.Contexts.Interfaces;
 using WebService.Models;
-using WebService.OperationLayer.Interfaces;
-using WebService.OperationLayer.Operations;
+using WebService.ProjectConfigurations;
+using WebService.Repositories.Interfaces;
+using WebService.Repositories.Repositories;
+using WebService.Middlewares;
+
 //using MongoDB.Driver;
 //using StackExchange.Redis;
 using IConnection = RabbitMQ.Client.IConnection;
@@ -21,10 +20,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
-ElkConfiguration elkEnvVariables = envVariablesHandler.GetElkEnvVariables();
-RabbitMqConfiguration rabbitEnvVariables = envVariablesHandler.GetRabbitEnvVariables();
-MinioConfiguration minioEnvVariables = envVariablesHandler.GetMinioEnvVariables();
+EnvVariablesConfiguration variablesConfiguration = new EnvVariablesConfiguration(); 
+ElkConfiguration elkEnvVariables = variablesConfiguration.GetElkEnvVariables();
+RabbitMqConfiguration rabbitEnvVariables = variablesConfiguration.GetRabbitEnvVariables();
+MinioConfiguration minioEnvVariables = variablesConfiguration.GetMinioEnvVariables();
 
 Console.WriteLine($"RABBITMQ_HOST {rabbitEnvVariables.RabbitMqHost}");
 Console.WriteLine($"RABBITMQ_PORT {rabbitEnvVariables.RabbitMqPort}");
@@ -41,17 +40,13 @@ Console.WriteLine($"ELK_USERNAME {elkEnvVariables.ElkUsername}");
 Console.WriteLine($"ELK_PASSWORD {elkEnvVariables.ElkPassword}");
 
 //Repository
-builder.Services.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
+builder.Services.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
 builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
-builder.Services.AddScoped<IMinioStorageRepository, MinioStorageRepository>();
+builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();
 builder.Services.AddScoped<ILogOtherRepository, LogOtherRepository>();
 
-//Service
-builder.Services.AddScoped<IQueueOperation, QueueOperation>();
-builder.Services.AddScoped<IMinioStorageOperation, MinioStorageOperation>();
-builder.Services.AddScoped<IHealthOperation, HealthOperation>();
-builder.Services.AddScoped<ILoggingOperation, LoggingOperation>();
+
 builder.Services.AddScoped<IPingHelper, PingHelper>();
 
 //Context

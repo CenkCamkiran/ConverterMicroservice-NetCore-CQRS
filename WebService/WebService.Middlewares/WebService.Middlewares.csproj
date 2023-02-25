@@ -7,22 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ErrorHelper\**" />
-    <Compile Remove="PingHelper\**" />
-    <EmbeddedResource Remove="ErrorHelper\**" />
-    <EmbeddedResource Remove="PingHelper\**" />
-    <None Remove="ErrorHelper\**" />
-    <None Remove="PingHelper\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebService.Commands\WebService.Commands.csproj" />
     <ProjectReference Include="..\WebService.Exceptions\WebService.Exceptions.csproj" />
+    <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />
     <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />
-    <ProjectReference Include="..\WebService.ProjectConfigurations\WebService.ProjectConfigurations.csproj" />
+    <ProjectReference Include="..\WebService.Repositories\WebService.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

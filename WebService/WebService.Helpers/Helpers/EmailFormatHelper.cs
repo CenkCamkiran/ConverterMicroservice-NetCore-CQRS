@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mail;
+using WebService.Exceptions;
 using WebService.Models;
 
 namespace WebService.Helpers.Helpers

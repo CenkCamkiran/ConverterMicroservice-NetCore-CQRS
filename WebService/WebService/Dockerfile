@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 #4080 HTTP - 4443 HTTPS
 
@@ -9,13 +9,15 @@ EXPOSE 4080
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["WebService/WebService.csproj", "WebService/"]
-COPY ["WebService.APILayer/WebService.APILayer.csproj", "WebService.APILayer/"]
-COPY ["WebService.DataAccessLayer/WebService.DataAccessLayer.csproj", "WebService.DataAccessLayer/"]
+COPY ["WebService.Controllers/WebService.Controllers.csproj", "WebService.Controllers/"]
+COPY ["WebService.Commands/WebService.Commands.csproj", "WebService.Commands/"]
 COPY ["WebService.Models/WebService.Models.csproj", "WebService.Models/"]
-COPY ["WebService.OperationLayer/WebService.OperationLayer.csproj", "WebService.OperationLayer/"]
+COPY ["WebService.Queries/WebService.Queries.csproj", "WebService.Queries/"]
+COPY ["WebService.Repositories/WebService.Repositories.csproj", "WebService.Repositories/"]
+COPY ["WebService.Exceptions/WebService.Exceptions.csproj", "WebService.Exceptions/"]
 COPY ["WebService.Helpers/WebService.Helpers.csproj", "WebService.Helpers/"]
-COPY ["WebService.Configuration/WebService.Configuration.csproj", "WebService.Configuration/"]
-COPY ["WebService.MiddlewareLayer/WebService.MiddlewareLayer.csproj", "WebService.MiddlewareLayer/"]
+COPY ["WebService.ProjectConfigurations/WebService.ProjectConfigurations.csproj", "WebService.ProjectConfigurations/"]
+COPY ["WebService.Middlewares/WebService.Middlewares.csproj", "WebService.Middlewares/"]
 RUN dotnet restore "WebService/WebService.csproj"
 COPY . .
 WORKDIR "/src/WebService"

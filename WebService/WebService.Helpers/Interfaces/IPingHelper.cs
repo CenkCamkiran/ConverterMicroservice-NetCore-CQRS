@@ -4,6 +4,6 @@ namespace WebService.Helpers.Interfaces
 {
     public interface IPingHelper
     {
-        PingReply PingVMHost();
+        Task<PingReply> PingVMHost();
     }
 }

@@ -1,24 +1,27 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System.Net.NetworkInformation;
+using WebService.Exceptions;
 using WebService.Helpers.Interfaces;
 using WebService.Models;
+using WebService.ProjectConfigurations;
 
 namespace WebService.Helpers.Helpers
 {
     public class PingHelper : IPingHelper
     {
-
-        public PingReply PingVMHost()
+        public async Task<PingReply> PingVMHost()
         {
-            Uri uri = new Uri(Environment.GetEnvironmentVariable("ELK_HOST"));
-
             try
             {
-                Ping ping = new Ping();
-                Task<PingReply> pingResult = ping.SendPingAsync(uri.Host, 60000);
+                EnvVariablesConfiguration envVariablesConfiguration = new EnvVariablesConfiguration();
+                var vmHost = envVariablesConfiguration.GetElkEnvVariables();
+                Uri uri = new Uri(vmHost.ElkHost);
 
-                return pingResult.Result;
+                Ping ping = new Ping();
+                var pingResult = await ping.SendPingAsync(uri.Host, 60000);
+
+                return pingResult;
             }
             catch (Exception exception)
             {

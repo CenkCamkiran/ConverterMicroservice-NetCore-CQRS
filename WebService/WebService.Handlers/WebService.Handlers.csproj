@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebService.Commands\WebService.Commands.csproj" />
+    <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />
+    <ProjectReference Include="..\WebService.Queries\WebService.Queries.csproj" />
+    <ProjectReference Include="..\WebService.Repositories\WebService.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
