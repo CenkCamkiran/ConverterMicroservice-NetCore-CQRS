@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Minio" Version="4.0.6" />
@@ -17,10 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Logger-Microservice.Configuration\Logger-Microservice.Configuration.csproj" />
-    <ProjectReference Include="..\Logger-Microservice.DataAccessLayer\Logger-Microservice.DataAccessLayer.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.Handlers\Logger-Microservice.Handlers.csproj" />
     <ProjectReference Include="..\Logger-Microservice.Models\Logger-Microservice.Models.csproj" />
-    <ProjectReference Include="..\Logger-Microservice.OperationLayer\Logger-Microservice.OperationLayer.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.ProjectConfigurations\Logger-Microservice.ProjectConfigurations.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.Repositories\Logger-Microservice.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

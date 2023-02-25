@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
 WORKDIR /app
@@ -6,10 +6,12 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Logger-Microservice/Logger-Microservice.csproj", "Logger-Microservice/"]
-COPY ["Logger-Microservice.Configuration/Logger-Microservice.Configuration.csproj", "Logger-Microservice.Configuration/"]
+COPY ["Logger-Microservice.Handlers/Logger-Microservice.Handlers.csproj", "Logger-Microservice.Handlers/"]
+COPY ["Logger-Microservice.Commands/Logger-Microservice.Commands.csproj", "Logger-Microservice.Commands/"]
+COPY ["Logger-Microservice.Queries/Logger-Microservice.Queries.csproj", "Logger-Microservice.Queries/"]
+COPY ["Logger-Microservice.Repositories/Logger-Microservice.Repositories.csproj", "Logger-Microservice.Repositories/"]
 COPY ["Logger-Microservice.Models/Logger-Microservice.Models.csproj", "Logger-Microservice.Models/"]
-COPY ["Logger-Microservice.DataAccessLayer/Logger-Microservice.DataAccessLayer.csproj", "Logger-Microservice.DataAccessLayer/"]
-COPY ["Logger-Microservice.OperationLayer/Logger-Microservice.OperationLayer.csproj", "Logger-Microservice.OperationLayer/"]
+COPY ["Logger-Microservice.ProjectConfigurations/Logger-Microservice.ProjectConfigurations.csproj", "Logger-Microservice.ProjectConfigurations/"]
 RUN dotnet restore "Logger-Microservice/Logger-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Logger-Microservice"

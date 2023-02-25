@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Logger_Microservice.Handlers</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Logger-Microservice.Commands\Logger-Microservice.Commands.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.Queries\Logger-Microservice.Queries.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.Repositories\Logger-Microservice.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>

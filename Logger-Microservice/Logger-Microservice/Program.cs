@@ -1,18 +1,23 @@
 ﻿using Elasticsearch.Net;
-using Interfaces;
-using LoggerMicroservice.Configuration;
+using Logger_Microservice.Commands.LogCommands;
+using Logger_Microservice.Commands.QueueCommands;
+using Logger_Microservice.Handlers.LogHandlers;
+using Logger_Microservice.Handlers.QueueHandlers;
+using Logger_Microservice.ProjectConfigurations;
+using Logger_Microservice.Queries.QueueQueries;
+using Logger_Microservice.Repositories.Interfaces;
+using Logger_Microservice.Repositories.Repositories;
 using LoggerMicroservice.Models;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
-using Operations;
-using Providers;
 using RabbitMQ.Client;
-using Repositories;
+using System.Reflection;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
 
-EnvVariablesHandler envVariablesHandler = new EnvVariablesHandler();
+EnvVariablesConfiguration envVariablesHandler = new EnvVariablesConfiguration();
 ElkConfiguration elkEnvVariables = envVariablesHandler.GetElkEnvVariables();
 RabbitMqConfiguration rabbitEnvVariables = envVariablesHandler.GetRabbitEnvVariables();
 
@@ -46,35 +51,42 @@ var connectionFactory = new ConnectionFactory
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
 
-//Operation
-serviceProvider.AddScoped(typeof(ILoggingOperation<>), typeof(LoggingOperation<>));
-serviceProvider.AddScoped(typeof(IQueueOperation<>), typeof(QueueOperation<>));
-
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
-serviceProvider.AddScoped(typeof(ILoggingRepository<>), typeof(LoggingRepository<>));
+serviceProvider.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
+
+Assembly.GetAssembly(typeof(LogHandler<>));
+Assembly.GetAssembly(typeof(QueueErrorQueryHandler<>));
+Assembly.GetAssembly(typeof(QueueCommandHandler<>));
+
+Assembly.GetAssembly(typeof(LogCommand<>));
+Assembly.GetAssembly(typeof(QueueCommand<>));
+
+var Handlers = AppDomain.CurrentDomain.Load("Logger-Microservice.Handlers");
+var Queries = AppDomain.CurrentDomain.Load("Logger-Microservice.Queries");
+var Commands = AppDomain.CurrentDomain.Load("Logger-Microservice.Commands");
+
+serviceProvider.AddMediatR(Handlers);
+serviceProvider.AddMediatR(Queries);
+serviceProvider.AddMediatR(Commands);
 
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
-Console.WriteLine("Program Started!");
+IMediator _mediator = builder.GetService<IMediator>();
 
-var _queueErrorLogsOperation = builder.GetService<IQueueOperation<ErrorLog>>();
-var _queueOtherLogsOperation = builder.GetService<IQueueOperation<OtherLog>>();
-var _loggingOtherLogsOperation = builder.GetService<ILoggingOperation<OtherLog>>();
-var _loggingErrorLogsOperation = builder.GetService<ILoggingOperation<ErrorLog>>();
 
 try
 {
     await Task.Run(() =>
     {
-        _queueErrorLogsOperation.ConsumeErrorLogsQueue("errorlogs");
+        _mediator.Send(new QueueQuery("errorlogs")).GetAwaiter();
     });
 
     await Task.Run(() =>
     {
-        _queueOtherLogsOperation.ConsumeOtherLogsQueue("otherlogs");
+        _mediator.Send(new QueueQuery("otherlogs")).GetAwaiter();
     });
 
 }
@@ -90,6 +102,6 @@ catch (Exception exception)
     {
         queueLog = queueLog
     };
-    _queueErrorLogsOperation.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+    _mediator.Send(new QueueCommand<ErrorLog>(errorLog, "errorlogs", "log_exchange.direct", "error_log")).GetAwaiter();
 
 }
