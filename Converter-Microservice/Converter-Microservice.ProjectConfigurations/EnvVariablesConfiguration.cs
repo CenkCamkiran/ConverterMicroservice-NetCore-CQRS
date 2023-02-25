@@ -1,6 +1,6 @@
 ﻿using ConverterMicroservice.Models;
 
-namespace WebService.ProjectConfigurations
+namespace Converter_Microservice.ProjectConfigurations
 {
     public class EnvVariablesConfiguration
     {

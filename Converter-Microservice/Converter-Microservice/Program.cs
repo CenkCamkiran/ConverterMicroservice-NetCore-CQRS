@@ -2,6 +2,7 @@
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
 using Converter_Microservice.Handlers.QueueHandlers;
+using Converter_Microservice.ProjectConfigurations;
 using Converter_Microservice.Queries.QueueQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using Converter_Microservice.Repositories.Repositories;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using RabbitMQ.Client;
 using System.Reflection;
-using WebService.ProjectConfigurations;
 
 var serviceProvider = new ServiceCollection();
 
