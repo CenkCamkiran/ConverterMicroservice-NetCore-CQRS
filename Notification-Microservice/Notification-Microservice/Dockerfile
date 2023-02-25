@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/runtime:6.0 AS base
 WORKDIR /app
@@ -6,10 +6,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Notification-Microservice/Notification-Microservice.csproj", "Notification-Microservice/"]
-COPY ["Notification-Microservice.Configuration/Notification-Microservice.Configuration.csproj", "Notification-Microservice.Configuration/"]
+COPY ["Notification-Microservice.ProjectConfigurations/Notification-Microservice.ProjectConfigurations.csproj", "Notification-Microservice.ProjectConfigurations/"]
 COPY ["Notification-Microservice.Models/Notification-Microservice.Models.csproj", "Notification-Microservice.Models/"]
-COPY ["Notification-Microservice.OperationLayer/Notification-Microservice.OperationLayer.csproj", "Notification-Microservice.OperationLayer/"]
-COPY ["Notification-Microservice.DataAccessLayer/Notification-Microservice.DataAccessLayer.csproj", "Notification-Microservice.DataAccessLayer/"]
+COPY ["Notification-Microservice.Queries/Notification-Microservice.Queries.csproj", "Notification-Microservice.Queries/"]
+COPY ["Notification-Microservice.Repositories/Notification-Microservice.Repositories.csproj", "Notification-Microservice.Repositories/"]
 RUN dotnet restore "Notification-Microservice/Notification-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Notification-Microservice"

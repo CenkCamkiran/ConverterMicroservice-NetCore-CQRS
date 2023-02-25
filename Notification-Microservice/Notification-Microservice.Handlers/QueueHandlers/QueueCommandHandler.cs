@@ -15,7 +15,7 @@ namespace Notification_Microservice.Handlers.QueueHandlers
 
         public Task Handle(QueueCommand<TMessage> request, CancellationToken cancellationToken)
         {
-            _queueRepository.QueueMessageDirect(request.Message, request.Queue, request.Exchange, request.RoutingKey, request.MessageTTL);
+            _queueRepository.QueueMessageDirect(request.Message, request.Queue, request.Exchange, request.RoutingKey);
             return Task.CompletedTask;
         }
     }
