@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebService.Controllers\WebService.Controllers.csproj" />
+    <ProjectReference Include="..\WebService.Handlers\WebService.Handlers.csproj" />
     <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />
     <ProjectReference Include="..\WebService.Middlewares\WebService.Middlewares.csproj" />
     <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />

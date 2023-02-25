@@ -15,6 +15,17 @@ using WebService.Middlewares;
 //using MongoDB.Driver;
 //using StackExchange.Redis;
 using IConnection = RabbitMQ.Client.IConnection;
+using Microsoft.Extensions.DependencyInjection;
+using WebService.Commands.LogCommands;
+using WebService.Commands.ObjectCommands;
+using WebService.Commands.QueueCommands;
+using System.Reflection;
+using WebService.Handlers.LogHandlers;
+using System.Runtime.Remoting;
+using WebService.Handlers.ObjectHandlers;
+using WebService.Handlers.HealthHandlers;
+using WebService.Handlers.QueueHandlers;
+using WebService.Queries.HealthQueries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +89,17 @@ MinioClient minioClient = new MinioClient()
                                     .WithCredentials(minioEnvVariables.MinioAccessKey, minioEnvVariables.MinioSecretKey)
                                     .WithSSL(false);
 builder.Services.AddSingleton<IMinioClient>(minioClient);
+
+Assembly.GetAssembly(typeof(LogCommand));
+Assembly.GetAssembly(typeof(ObjectCommand));
+Assembly.GetAssembly(typeof(QueueCommand));
+
+Assembly.GetAssembly(typeof(LogHandler));
+Assembly.GetAssembly(typeof(ObjectHandler));
+Assembly.GetAssembly(typeof(HealthHandler));
+Assembly.GetAssembly(typeof(QueueHandler));
+
+Assembly.GetAssembly(typeof(HealthQuery));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
