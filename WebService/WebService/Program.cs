@@ -111,8 +111,7 @@ builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
     //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Handlers);
     //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Queries);
     //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Commands);
-
-    new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
+    var cenk = new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
 });
 
 builder.Services.AddEndpointsApiExplorer();
