@@ -56,20 +56,22 @@ serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>))
 serviceProvider.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-Assembly.GetAssembly(typeof(LogHandler<>));
-Assembly.GetAssembly(typeof(QueueErrorQueryHandler<>));
-Assembly.GetAssembly(typeof(QueueCommandHandler<>));
-
-Assembly.GetAssembly(typeof(LogCommand<>));
-Assembly.GetAssembly(typeof(QueueCommand<>));
-
 var Handlers = AppDomain.CurrentDomain.Load("Logger-Microservice.Handlers");
 var Queries = AppDomain.CurrentDomain.Load("Logger-Microservice.Queries");
 var Commands = AppDomain.CurrentDomain.Load("Logger-Microservice.Commands");
 
-serviceProvider.AddMediatR(Handlers);
-serviceProvider.AddMediatR(Queries);
-serviceProvider.AddMediatR(Commands);
+serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
+{
+    configuration.RegisterServicesFromAssemblies(
+        typeof(LogCommand<>).Assembly,
+        typeof(QueueCommand<>).Assembly,
+        typeof(LogHandler<>).Assembly,
+        typeof(QueueErrorQueryHandler<>).Assembly,
+        typeof(QueueCommandHandler<>).Assembly,
+        typeof(QueueOtherQueryHandler<>).Assembly,
+        typeof(QueueQuery).Assembly
+        );
+});
 
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
