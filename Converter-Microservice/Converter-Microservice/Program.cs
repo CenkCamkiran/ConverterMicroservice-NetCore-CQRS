@@ -1,4 +1,5 @@
-﻿using Converter_Microservice.Handlers.ConverterHandlers;
+﻿using Converter_Microservice.Commands.QueueCommands;
+using Converter_Microservice.Handlers.ConverterHandlers;
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
 using Converter_Microservice.Handlers.QueueHandlers;
@@ -52,22 +53,21 @@ serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
-Assembly.GetAssembly(typeof(ConverterHandler));
-Assembly.GetAssembly(typeof(ObjectCommandHandler));
-Assembly.GetAssembly(typeof(ObjectQueryHandler));
-Assembly.GetAssembly(typeof(QueueCommandHandler<>));
-Assembly.GetAssembly(typeof(QueueQueryHandler<>));
-Assembly.GetAssembly(typeof(LogHandler));
-
 var Handlers = AppDomain.CurrentDomain.Load("Converter-Microservice.Handlers");
 var Queries = AppDomain.CurrentDomain.Load("Converter-Microservice.Queries");
 var Commands = AppDomain.CurrentDomain.Load("Converter-Microservice.Commands");
 
-serviceProvider.AddMediatR(Handlers);
-serviceProvider.AddMediatR(Queries);
-serviceProvider.AddMediatR(Commands);
-
-Assembly.GetAssembly(typeof(LogHandler));
+serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
+{
+    configuration.RegisterServicesFromAssemblies(
+        typeof(ConverterHandler).Assembly,
+        typeof(ObjectCommandHandler).Assembly,
+        typeof(ObjectQueryHandler).Assembly,
+        typeof(QueueCommandHandler<>).Assembly,
+        typeof(QueueQueryHandler<>).Assembly,
+        typeof(LogHandler).Assembly
+        );
+});
 
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
