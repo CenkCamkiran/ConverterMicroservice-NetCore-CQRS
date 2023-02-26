@@ -106,13 +106,8 @@ Assembly.GetAssembly(typeof(HealthQuery));
 //Assembly.GetExecutingAssembly()
 //AppDomain.CurrentDomain.GetAssemblies()
 
-builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
-{
-    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Handlers);
-    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Queries);
-    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Commands);
-    var cenk = new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
-});
+var configuration = new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
+builder.Services.AddMediatR(func);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -144,3 +139,8 @@ if (app.Environment.IsDevelopment())
 app.MapControllers();
 
 app.Run();
+
+void func(MediatRServiceConfiguration i)
+{
+
+}
