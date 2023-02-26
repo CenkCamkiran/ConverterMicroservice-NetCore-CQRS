@@ -1,12 +1,19 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using Notification_Microservice.Commands.ObjectCommands;
+using Notification_Microservice.Commands.QueueCommands;
+using Notification_Microservice.Handlers.ObjectHandlers;
+using Notification_Microservice.Handlers.QueueHandlers;
 using Notification_Microservice.ProjectConfigurations;
+using Notification_Microservice.Queries.ObjectQueries;
+using Notification_Microservice.Queries.QueueQueries;
 using Notification_Microservice.Repositories.Interfaces;
 using Notification_Microservice.Repositories.Repositories;
 using NotificationMicroservice.Models;
 using RabbitMQ.Client;
 using System.Reflection;
+using System.Runtime.Remoting;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
@@ -48,20 +55,19 @@ serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>))
 serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-Assembly.GetAssembly(typeof(ConverterHandler));
-Assembly.GetAssembly(typeof(ObjectCommandHandler));
-Assembly.GetAssembly(typeof(ObjectQueryHandler));
-Assembly.GetAssembly(typeof(QueueCommandHandler<>));
-Assembly.GetAssembly(typeof(QueueQueryHandler<>));
-Assembly.GetAssembly(typeof(LogHandler));
-
-var Handlers = AppDomain.CurrentDomain.Load("Notification-Microservice.Handlers");
-var Queries = AppDomain.CurrentDomain.Load("Notification-Microservice.Queries");
-var Commands = AppDomain.CurrentDomain.Load("Notification-Microservice.Commands");
-
-serviceProvider.AddMediatR(Handlers);
-serviceProvider.AddMediatR(Queries);
-serviceProvider.AddMediatR(Commands);
+serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
+{
+    configuration.RegisterServicesFromAssemblies(
+        typeof(ObjectCommand).Assembly,
+        typeof(QueueCommand<>).Assembly,
+        typeof(ObjectCommandHandler).Assembly,
+        typeof(ObjectQueryHandler).Assembly,
+        typeof(QueueCommandHandler<>).Assembly,
+        typeof(QueueQueryHandler<>).Assembly,
+        typeof(ObjectQuery).Assembly,
+        typeof(QueueQuery).Assembly
+        );
+});
 
 serviceProvider.AddLazyResolution();
 
