@@ -729,7 +729,8 @@ Please use the Github issues.
 
 ## RoadMap
 
-- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. For Event Sourcing, I want to use EventStoreDB.
+- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. 
+- For Event Sourcing, I want to use EventStoreDB.
 - Fix errors
 - Update README (especially add api endpoint docs in readme)
 - Test project
