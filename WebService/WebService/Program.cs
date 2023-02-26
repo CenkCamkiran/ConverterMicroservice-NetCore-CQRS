@@ -1,4 +1,5 @@
 using Elasticsearch.Net;
+using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Nest;
 using RabbitMQ.Client;
@@ -58,39 +59,38 @@ builder.Services.AddScoped<IPingHelper, PingHelper>();
 //Context
 builder.Services.AddScoped<IWebServiceContext, WebServiceContext>();
 
-ConnectionSettings? connection = new ConnectionSettings(new Uri(elkEnvVariables.ElkHost)).
-   DefaultIndex(elkEnvVariables.ElkDefaultIndex).
-   ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-   ThrowExceptions(true).
-   PrettyJson().
-   RequestTimeout(TimeSpan.FromSeconds(300)).
-   BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
+//ConnectionSettings? connection = new ConnectionSettings(new Uri(elkEnvVariables.ElkHost)).
+//   DefaultIndex(elkEnvVariables.ElkDefaultIndex).
+//   ServerCertificateValidationCallback(CertificateValidations.AllowAll).
+//   ThrowExceptions(true).
+//   PrettyJson().
+//   RequestTimeout(TimeSpan.FromSeconds(300)).
+//   BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
 
-ElasticClient? elasticClient = new ElasticClient(connection);
-builder.Services.AddSingleton<IElasticClient>(elasticClient);
+//ElasticClient? elasticClient = new ElasticClient(connection);
+//builder.Services.AddSingleton<IElasticClient>(elasticClient);
 
-var connectionFactory = new ConnectionFactory
-{
-    HostName = rabbitEnvVariables.RabbitMqHost,
-    Port = Convert.ToInt32(rabbitEnvVariables.RabbitMqPort),
-    UserName = rabbitEnvVariables.RabbitMqUsername,
-    Password = rabbitEnvVariables.RabbitMqPassword
-};
-var rabbitConnection = connectionFactory.CreateConnection();
-builder.Services.AddSingleton<IConnection>(rabbitConnection);
+//var connectionFactory = new ConnectionFactory
+//{
+//    HostName = rabbitEnvVariables.RabbitMqHost,
+//    Port = Convert.ToInt32(rabbitEnvVariables.RabbitMqPort),
+//    UserName = rabbitEnvVariables.RabbitMqUsername,
+//    Password = rabbitEnvVariables.RabbitMqPassword
+//};
+//var rabbitConnection = connectionFactory.CreateConnection();
+//builder.Services.AddSingleton<IConnection>(rabbitConnection);
 
-MinioClient minioClient = new MinioClient()
-                                    .WithEndpoint(minioEnvVariables.MinioHost)
-                                    .WithCredentials(minioEnvVariables.MinioAccessKey, minioEnvVariables.MinioSecretKey)
-                                    .WithSSL(false);
-builder.Services.AddSingleton<IMinioClient>(minioClient);
+//MinioClient minioClient = new MinioClient()
+//                                    .WithEndpoint(minioEnvVariables.MinioHost)
+//                                    .WithCredentials(minioEnvVariables.MinioAccessKey, minioEnvVariables.MinioSecretKey)
+//                                    .WithSSL(false);
+//builder.Services.AddSingleton<IMinioClient>(minioClient);
 
 var Handlers = AppDomain.CurrentDomain.Load("WebService.Handlers");
 var Queries = AppDomain.CurrentDomain.Load("WebService.Queries");
 var Commands = AppDomain.CurrentDomain.Load("WebService.Commands");
 
-var cenk = Assembly.GetAssembly(typeof(LogCommand));
-
+Assembly.GetAssembly(typeof(LogCommand));
 Assembly.GetAssembly(typeof(ObjectCommand));
 Assembly.GetAssembly(typeof(QueueCommand));
 
@@ -100,8 +100,20 @@ Assembly.GetAssembly(typeof(HealthHandler));
 Assembly.GetAssembly(typeof(QueueHandler));
 
 Assembly.GetAssembly(typeof(HealthQuery));
+//new MediatRServiceConfiguration().RegisterServicesFromAssembly()
+//builder.Services.AddMediatR(typeof(Program));
+//builder.Services.AddMediatR(typeof(GetAllCustomersQuery).Assembly);
+//Assembly.GetExecutingAssembly()
+//AppDomain.CurrentDomain.GetAssemblies()
 
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
+{
+    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Handlers);
+    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Queries);
+    //new MediatRServiceConfiguration().RegisterServicesFromAssembly(Commands);
+
+    new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
