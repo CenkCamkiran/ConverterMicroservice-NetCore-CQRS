@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Notification-Microservice.Commands\Notification-Microservice.Commands.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Handlers\Notification-Microservice.Handlers.csproj" />
     <ProjectReference Include="..\Notification-Microservice.ProjectConfigurations\Notification-Microservice.ProjectConfigurations.csproj" />
     <ProjectReference Include="..\Notification-Microservice.Queries\Notification-Microservice.Queries.csproj" />
     <ProjectReference Include="..\Notification-Microservice.Repositories\Notification-Microservice.Repositories.csproj" />
