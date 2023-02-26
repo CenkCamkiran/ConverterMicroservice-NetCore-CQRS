@@ -4,12 +4,12 @@ using MediatR;
 
 namespace Logger_Microservice.Handlers.QueueHandlers
 {
-    public class QueueQueryHandler<TMessage> : IRequestHandler<QueueQuery> where TMessage : class
+    public class QueueOtherQueryHandler<TMessage> : IRequestHandler<QueueQuery> where TMessage : class
     {
 
         private readonly IQueueRepository<TMessage> _queueRepository;
 
-        public QueueQueryHandler(IQueueRepository<TMessage> queueRepository)
+        public QueueOtherQueryHandler(IQueueRepository<TMessage> queueRepository)
         {
             _queueRepository = queueRepository;
         }
