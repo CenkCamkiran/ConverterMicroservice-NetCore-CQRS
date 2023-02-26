@@ -86,28 +86,22 @@ builder.Services.AddScoped<IWebServiceContext, WebServiceContext>();
 //                                    .WithSSL(false);
 //builder.Services.AddSingleton<IMinioClient>(minioClient);
 
-var Handlers = AppDomain.CurrentDomain.Load("WebService.Handlers");
-var Queries = AppDomain.CurrentDomain.Load("WebService.Queries");
-var Commands = AppDomain.CurrentDomain.Load("WebService.Commands");
+//Assembly.GetAssembly(typeof(LogCommand));
+//Assembly.GetAssembly(typeof(ObjectCommand));
+//Assembly.GetAssembly(typeof(QueueCommand));
+//Assembly.GetAssembly(typeof(LogHandler));
+//Assembly.GetAssembly(typeof(ObjectHandler));
+//Assembly.GetAssembly(typeof(HealthHandler));
+//Assembly.GetAssembly(typeof(QueueHandler));
+//Assembly.GetAssembly(typeof(HealthQuery));
 
-Assembly.GetAssembly(typeof(LogCommand));
-Assembly.GetAssembly(typeof(ObjectCommand));
-Assembly.GetAssembly(typeof(QueueCommand));
-
-Assembly.GetAssembly(typeof(LogHandler));
-Assembly.GetAssembly(typeof(ObjectHandler));
-Assembly.GetAssembly(typeof(HealthHandler));
-Assembly.GetAssembly(typeof(QueueHandler));
-
-Assembly.GetAssembly(typeof(HealthQuery));
 //new MediatRServiceConfiguration().RegisterServicesFromAssembly()
 //builder.Services.AddMediatR(typeof(Program));
 //builder.Services.AddMediatR(typeof(GetAllCustomersQuery).Assembly);
 //Assembly.GetExecutingAssembly()
 //AppDomain.CurrentDomain.GetAssemblies()
 
-var configuration = new MediatRServiceConfiguration().RegisterServicesFromAssemblies(Handlers, Queries, Commands);
-builder.Services.AddMediatR(func);
+builder.Services.AddMediatR(ConfigureMediator);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -140,7 +134,12 @@ app.MapControllers();
 
 app.Run();
 
-void func(MediatRServiceConfiguration i)
+void ConfigureMediator(MediatRServiceConfiguration configuration)
 {
+    var Handlers = AppDomain.CurrentDomain.Load("WebService.Handlers");
+    var Queries = AppDomain.CurrentDomain.Load("WebService.Queries");
+    var Commands = AppDomain.CurrentDomain.Load("WebService.Commands");
+
+    configuration.RegisterServicesFromAssemblies(Handlers, Queries, Commands);
 
 }
