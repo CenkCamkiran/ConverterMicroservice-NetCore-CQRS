@@ -75,7 +75,7 @@ var connectionFactory = new ConnectionFactory
     Password = rabbitEnvVariables.RabbitMqPassword
 };
 var rabbitConnection = connectionFactory.CreateConnection();
-builder.Services.AddSingleton<IConnection>(rabbitConnection);
+builder.Services.AddSingleton<RabbitMQ.Client.IConnection>(rabbitConnection);
 
 MinioClient minioClient = new MinioClient()
                                     .WithEndpoint(minioEnvVariables.MinioHost)
