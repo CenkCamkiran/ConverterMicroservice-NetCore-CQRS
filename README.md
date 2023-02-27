@@ -4,7 +4,7 @@
 
 </div> -->
 
-# Microservice Project with .NET Core 6
+# Microservice Project with .NET Core 6 using CQRS Design Pattern
 
 <!-- [![Elastic Stack version](https://img.shields.io/badge/Elastic%20Stack-8.3.2-00bfb3?style=flat&logo=elastic-stack)](https://www.elastic.co/blog/category/releases)
 [![Build Status](https://github.com/deviantony/docker-elk/workflows/CI/badge.svg?branch=main)](https://github.com/deviantony/docker-elk/actions?query=workflow%3ACI+branch%3Amain)
@@ -12,7 +12,7 @@
 
 ## Abstract
 
-I was curious about Microservice Architectures and Technologies like **Docker, Kubernetes, RabbitMQ and Asynchronous Programming**. So I developed simple **Microservice via .NET Core 6**.
+I was curious about Microservice Architectures and Technologies like **Docker, Kubernetes, RabbitMQ and Asynchronous Programming**. So I developed **Microservice via .NET Core 6** using CQRS Design Pattern.
 
 ## Philosophy
 
@@ -29,10 +29,12 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
 - I used **.NET Core 6**. Because I wanted to learn something from **.NET Technologies**.
   
 - I used same network configuration on all containers **(Kong, RabbitMQ, Minio, WebService and others)**. Because containers can communicate each other via same using same network.
+  
+- I used CQRS Design Pattern on WebService and other Microservices.
 
 ## Contents
 
-- [Microservice Project with .NET Core 6](#microservice-project-with-net-core-6)
+- [Microservice Project with .NET Core 6 using CQRS Design Pattern](#microservice-project-with-net-core-6-using-cqrs-design-pattern)
   - [Abstract](#abstract)
   - [Philosophy](#philosophy)
   - [Contents](#contents)
@@ -49,6 +51,9 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
     - [Install project with Docker Container](#install-project-with-docker-container)
   - [Crontab definition](#crontab-definition)
   - [Overall Architecture](#overall-architecture)
+  - [Controllers (API Endpoints)](#controllers-api-endpoints)
+    - [`GET` /api/v1/Health](#get-apiv1health)
+    - [`POST` /api/v1/main/Converter](#post-apiv1mainconverter)
   - [Business Logic](#business-logic)
     - [Converter Microservice](#converter-microservice)
     - [Logger Microservice](#logger-microservice)
@@ -662,9 +667,63 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 
 <img src="./ProjectArch.png" >
 
+## Controllers (API Endpoints)
+
+### `GET` /api/v1/Health
+
+**Parameters**
+
+|          Name | Required |  Type   | Description                                                                                                                                                           |
+| -------------:|:--------:|:-------:| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     n/a | n/a | n/a | <br/> n/a <br/><br/>                                                                     |
+
+**Response**
+
+```
+
+//The tools that is used by webservice and microservices is running (online)
+{
+    "HostStatus": "Host is working!"
+}
+
+//The tools that is used by webservice and microservices is not running or online
+{
+    "HostStatus": "Host is not working!"
+}
+
+```
+
+### `POST` /api/v1/main/Converter
+
+**Parameters**
+
+|          Name | Required |  Type   | Description                                                                                                                                                           |
+| -------------:|:--------:|:-------:| --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     `file` | required | Form Data  | <br/> MP4 file to upload to API <br/><br/>                                                                     |
+|     `email` | required | Form Data  | <br/> Email address to receive converted from MP4 file that sent to MP3 <br/><br/>                                                                     |
+
+**Response**
+
+```
+//File uploaded succesfully
+{
+    "ResponseCode": 200,
+    "Message": "File uploaded!"
+}
+
+//Error occurred while uploading the file
+{
+    "ResponseCode": 500,
+    "Message": "Some error text"
+}
+```
+
+<!-- > **Note** <br />
+> :exclamation: :exclamation: :exclamation:  :exclamation: :exclamation: :exclamation: <br /> -->
+
 ## Business Logic
 
-I used CQRS Design Pattern on this project.
+I used CQRS Design Pattern Web Service and other Microservices.
 
 ### Converter Microservice
 
@@ -729,7 +788,7 @@ Please use the Github issues.
 
 ## RoadMap
 
-- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns. 
+- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns.
 - For Event Sourcing, I want to use EventStoreDB.
 - Fix errors
 - Update README (especially add api endpoint docs in readme)
