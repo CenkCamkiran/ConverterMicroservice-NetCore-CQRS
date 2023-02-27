@@ -795,3 +795,4 @@ Please use the Github issues.
 - Test project
 - Explain some details about CQRS (maybe add new section on README?)
 - Connect Kong API Gateway to Keycloak?
+- Exchange and queue definitions from RabbitMQ will be developed on code side, not RabbitMQ UI.
