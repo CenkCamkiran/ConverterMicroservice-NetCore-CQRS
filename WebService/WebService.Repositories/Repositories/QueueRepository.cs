@@ -34,7 +34,7 @@ namespace WebService.Repositories.Repositories
                                      arguments: new Dictionary<string, object>()
                                      {
                                          {
-                                             "x-message-ttl", 43200000
+                                             "x-message-ttl", messageTtl
                                          }
                                      });
 
