@@ -30,7 +30,7 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
   
 - I used same network configuration on all containers **(Kong, RabbitMQ, Minio, WebService and others)**. Because containers can communicate each other via same using same network.
   
-- I used CQRS Design Pattern on WebService and other Microservices.
+- I used **CQRS Design Pattern** on Web Service and other Microservices.
 
 ## What is CQRS?
 
@@ -804,4 +804,4 @@ Please use the Github issues.
 - Explain some details about CQRS (maybe add new section on README?)
 - Connect Kong API Gateway to Keycloak?
 - WebService OK!
--
+- Test other microservices.
