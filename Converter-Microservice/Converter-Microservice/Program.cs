@@ -76,5 +76,5 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
-IMediator _mediator = builder.GetService<IMediator>();
+var _mediator = builder.GetService<IMediator>();
 _mediator.Send(new QueueQuery("converter", 43200000));
