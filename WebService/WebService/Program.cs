@@ -62,7 +62,7 @@ ConnectionSettings? connection = new ConnectionSettings(new Uri(elkEnvVariables.
    ThrowExceptions(true).
    PrettyJson().
    RequestTimeout(TimeSpan.FromSeconds(300)).
-   BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
+   BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword);
 
 ElasticClient? elasticClient = new ElasticClient(connection);
 builder.Services.AddSingleton<IElasticClient>(elasticClient);
@@ -122,7 +122,6 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v1/main"), 
     appBuilder.UseRequestValidationMiddleware();
 });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
