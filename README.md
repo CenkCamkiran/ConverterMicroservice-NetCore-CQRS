@@ -803,3 +803,5 @@ Please use the Github issues.
 
 - Explain some details about CQRS (maybe add new section on README?)
 - Connect Kong API Gateway to Keycloak?
+- WebService OK!
+-
