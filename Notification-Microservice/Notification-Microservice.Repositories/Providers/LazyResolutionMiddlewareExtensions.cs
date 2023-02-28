@@ -1,4 +1,6 @@
-﻿namespace Notification_Microservice.Repositories.Providers
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace Notification_Microservice.Repositories.Providers
 {
     //https://thomaslevesque.com/2020/03/18/lazily-resolving-services-to-fix-circular-dependencies-in-net-core/
     public static class LazyResolutionMiddlewareExtensions

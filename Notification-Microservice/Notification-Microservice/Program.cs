@@ -9,6 +9,7 @@ using Notification_Microservice.ProjectConfigurations;
 using Notification_Microservice.Queries.ObjectQueries;
 using Notification_Microservice.Queries.QueueQueries;
 using Notification_Microservice.Repositories.Interfaces;
+using Notification_Microservice.Repositories.Providers;
 using Notification_Microservice.Repositories.Repositories;
 using NotificationMicroservice.Models;
 using RabbitMQ.Client;
