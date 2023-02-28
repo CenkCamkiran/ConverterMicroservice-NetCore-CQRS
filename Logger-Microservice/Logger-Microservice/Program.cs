@@ -6,6 +6,7 @@ using Logger_Microservice.Handlers.QueueHandlers;
 using Logger_Microservice.ProjectConfigurations;
 using Logger_Microservice.Queries.QueueQueries;
 using Logger_Microservice.Repositories.Interfaces;
+using Logger_Microservice.Repositories.Providers;
 using Logger_Microservice.Repositories.Repositories;
 using LoggerMicroservice.Models;
 using MediatR;
