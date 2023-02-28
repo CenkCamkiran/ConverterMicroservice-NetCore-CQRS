@@ -1,5 +1,8 @@
-﻿using Converter_Microservice.Repositories.Interfaces;
+﻿using Converter_Microservice.Commands.QueueCommands;
+using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
+using MediatR;
+using Minio.DataModel;
 using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
@@ -12,14 +15,16 @@ namespace Converter_Microservice.Repositories.Repositories
         private readonly Lazy<IQueueRepository<QueueMessage>> _queueRepository;
         private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
         private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
+        private readonly IMediator _mediator;
 
-        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, Lazy<IQueueRepository<QueueMessage>> queueRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
+        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, Lazy<IQueueRepository<QueueMessage>> queueRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository, IMediator mediator)
         {
             _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _queueRepository = queueRepository;
             _queueErrorRepository = queueErrorRepository;
             _queueOtherRepository = queueOtherRepository;
+            _mediator = mediator;
         }
 
         public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
@@ -49,7 +54,8 @@ namespace Converter_Microservice.Repositories.Repositories
                             fileGuid = guid
                         };
 
-                        _queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000);
+                        await _mediator.Send(new QueueCommand<QueueMessage>(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000));
+                        //_queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000);
 
                     }
                 }

@@ -1,11 +1,15 @@
-﻿using Converter_Microservice.Commands.QueueCommands;
+﻿using Converter_Microservice.Commands.ConverterCommands;
+using Converter_Microservice.Commands.ObjectCommands;
+using Converter_Microservice.Commands.QueueCommands;
 using Converter_Microservice.Handlers.ConverterHandlers;
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
 using Converter_Microservice.Handlers.QueueHandlers;
 using Converter_Microservice.ProjectConfigurations;
+using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Queries.QueueQueries;
 using Converter_Microservice.Repositories.Interfaces;
+using Converter_Microservice.Repositories.Providers;
 using Converter_Microservice.Repositories.Repositories;
 using ConverterMicroservice.Models;
 using MediatR;
@@ -46,16 +50,11 @@ IConnection rabbitConnection = connectionFactory.CreateConnection();
 
 serviceProvider.AddSingleton(rabbitConnection);
 
-
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
 serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
-
-var Handlers = AppDomain.CurrentDomain.Load("Converter-Microservice.Handlers");
-var Queries = AppDomain.CurrentDomain.Load("Converter-Microservice.Queries");
-var Commands = AppDomain.CurrentDomain.Load("Converter-Microservice.Commands");
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 {
@@ -65,7 +64,12 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
         typeof(ObjectQueryHandler).Assembly,
         typeof(QueueCommandHandler<>).Assembly,
         typeof(QueueQueryHandler<>).Assembly,
-        typeof(LogHandler).Assembly
+        typeof(LogHandler).Assembly,
+        typeof(ObjectCommand).Assembly,
+        typeof(QueueCommand<>).Assembly,
+        typeof(ConverterCommand).Assembly,
+        typeof(ObjectQuery).Assembly,
+        typeof(QueueQuery).Assembly
         );
 });
 

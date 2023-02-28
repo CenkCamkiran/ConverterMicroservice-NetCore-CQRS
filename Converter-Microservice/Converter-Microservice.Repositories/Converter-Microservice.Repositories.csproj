@@ -9,12 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
     <PackageReference Include="Xabe.FFmpeg" Version="5.2.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Converter-Microservice.Commands\Converter-Microservice.Commands.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Exceptions\Converter-Microservice.Exceptions.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Models\Converter-Microservice.Models.csproj" />
   </ItemGroup>

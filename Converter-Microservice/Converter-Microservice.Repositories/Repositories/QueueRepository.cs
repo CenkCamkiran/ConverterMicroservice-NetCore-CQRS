@@ -9,7 +9,6 @@ namespace Converter_Microservice.Repositories.Repositories
 {
     public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
     {
-        private List<QueueMessage> messageList = new List<QueueMessage>();
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         private readonly IConnection _connection;
