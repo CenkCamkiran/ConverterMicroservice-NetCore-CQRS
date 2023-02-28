@@ -32,11 +32,16 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
   
 - I used CQRS Design Pattern on WebService and other Microservices.
 
+## What is CQRS?
+
+Check the link: <https://learn.microsoft.com/tr-tr/azure/architecture/patterns/cqrs>
+
 ## Contents
 
 - [Microservice Project with .NET Core 6 using CQRS Design Pattern](#microservice-project-with-net-core-6-using-cqrs-design-pattern)
   - [Abstract](#abstract)
   - [Philosophy](#philosophy)
+  - [What is CQRS?](#what-is-cqrs)
   - [Contents](#contents)
   - [Features](#features)
   - [Requirements](#requirements)
@@ -788,11 +793,5 @@ Please use the Github issues.
 
 ## RoadMap
 
-- I want to implement CQRS - Event Sourcing Software Design Patterns on this project. I am still learning how to implement these Design Patterns.
-- For Event Sourcing, I want to use EventStoreDB.
-- Fix errors
-- Update README (especially add api endpoint docs in readme)
-- Test project
 - Explain some details about CQRS (maybe add new section on README?)
 - Connect Kong API Gateway to Keycloak?
-- Exchange and queue definitions from RabbitMQ will be developed on code side, not RabbitMQ UI.
