@@ -4,3 +4,4 @@
 
 *.env
 /WebService/WebService/Properties/launchSettings.json
+/Converter-Microservice/Converter-Microservice/Properties/launchSettings.json
