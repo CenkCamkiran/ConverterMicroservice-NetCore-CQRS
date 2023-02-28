@@ -712,14 +712,22 @@ You can use below crontab definition in your Linux Environment. You can edit wha
 ```
 //File uploaded succesfully
 {
-    "ResponseCode": 200,
-    "Message": "File uploaded!"
+    "responseCode": 200,
+    "message": "File uploaded!",
+    "errorMessage": "",
+    "errorCode": 0
+}
+
+//File format error
+{
+    "ErrorMessage": "File format must be mp4!",
+    "ErrorCode": 400
 }
 
 //Error occurred while uploading the file
 {
-    "ResponseCode": 500,
-    "Message": "Some error text"
+    "ErrorMessage": "Some error text",
+    "ErrorCode": 500
 }
 ```
 
