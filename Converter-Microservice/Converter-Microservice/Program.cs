@@ -66,7 +66,9 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
         typeof(QueueQueryHandler<>).Assembly,
         typeof(LogHandler).Assembly,
         typeof(ObjectCommand).Assembly,
-        typeof(QueueCommand<>).Assembly,
+        typeof(QueueCommand<QueueMessage>).Assembly,
+        typeof(QueueCommand<OtherLog>).Assembly,
+        typeof(QueueCommand<ErrorLog>).Assembly,
         typeof(ConverterCommand).Assembly,
         typeof(ObjectQuery).Assembly,
         typeof(QueueQuery).Assembly
