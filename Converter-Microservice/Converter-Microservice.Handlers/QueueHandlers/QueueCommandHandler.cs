@@ -13,10 +13,10 @@ namespace Converter_Microservice.Handlers.QueueHandlers
             _queueRepository = queueRepository;
         }
 
-        public Task Handle(QueueCommand<TMessage> request, CancellationToken cancellationToken)
+        public async Task Handle(QueueCommand<TMessage> request, CancellationToken cancellationToken)
         {
             _queueRepository.QueueMessageDirect(request.Message, request.Queue, request.Exchange, request.RoutingKey, request.MessageTTL);
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

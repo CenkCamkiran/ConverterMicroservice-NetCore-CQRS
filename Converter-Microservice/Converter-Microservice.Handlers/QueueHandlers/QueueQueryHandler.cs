@@ -4,12 +4,11 @@ using MediatR;
 
 namespace Converter_Microservice.Handlers.QueueHandlers
 {
-    public class QueueQueryHandler<TMessage> : IRequestHandler<QueueQuery, bool> where TMessage : class
+    public class QueueQueryHandler : IRequestHandler<QueueQuery, bool>
     {
+        private readonly IQueueRepository<object> _queueRepository;
 
-        private readonly IQueueRepository<TMessage> _queueRepository;
-
-        public QueueQueryHandler(IQueueRepository<TMessage> queueRepository)
+        public QueueQueryHandler(IQueueRepository<object> queueRepository)
         {
             _queueRepository = queueRepository;
         }

@@ -54,7 +54,7 @@ namespace Converter_Microservice.Repositories.Repositories
                             fileGuid = guid
                         };
 
-                        await _mediator.Send(new QueueCommand<QueueMessage>(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000));
+                        await _mediator.Send(new QueueCommand<QueueMessage>(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000)); //Error Ocurred
                         //_queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000);
 
                     }
