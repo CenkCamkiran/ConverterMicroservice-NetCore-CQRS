@@ -749,7 +749,7 @@ I used CQRS Design Pattern Web Service and other Microservices.
 - Complete convert process until new message arrives to queue.
 - Also error logs are sent to queue called **'errorlogs**' and info logs are sent to queue called **'otherlogs'**. They are ready to consumed by **Logger Microservice**.
 - It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs. Connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed.
 
 ### Logger Microservice
 
@@ -759,7 +759,7 @@ I used CQRS Design Pattern Web Service and other Microservices.
 - Saves logs into two different indexes in **ElasticSearch**. **Errorlogs** are saved into index that called **'loggerservice_errorlogs'**. **Infologs** (Otherlogs) are saved into index that called **'loggerservice_otherlogs'**.
 - It is bassically logger.
 - It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs. Connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed.
 
 ### Web Service
 
@@ -769,8 +769,8 @@ I used CQRS Design Pattern Web Service and other Microservices.
 - It uses **RabbitMQ** for queue the message that contains of email and Guid of uploaded **MP4** file with **TTL** (I used 3600000 milliseconds = 1 hour as TTL). The reason is I wanted to limit the requests and don't occupy too much the services.
 - It uses **Minio Object Storage** to store **MP4** files.
 - It uses **ElasticSearch** to log errors and infos.
-- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
-- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development. It is Like Test environment and Production environment.
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs. Connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed.
 
 ### Notification Microservice
 
