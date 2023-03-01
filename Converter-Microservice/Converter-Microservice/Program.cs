@@ -77,4 +77,4 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 var _mediator = builder.GetService<IMediator>();
-_mediator.Send(new QueueQuery("converter", 43200000)).GetAwaiter();
+await _mediator.Send(new QueueQuery("converter", 43200000));

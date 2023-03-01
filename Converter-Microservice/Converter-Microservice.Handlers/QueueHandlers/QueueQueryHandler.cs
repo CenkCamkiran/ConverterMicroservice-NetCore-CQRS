@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Converter_Microservice.Handlers.QueueHandlers
 {
-    public class QueueQueryHandler<TMessage> : IRequestHandler<QueueQuery> where TMessage : class
+    public class QueueQueryHandler<TMessage> : IRequestHandler<QueueQuery, bool> where TMessage : class
     {
 
         private readonly IQueueRepository<TMessage> _queueRepository;
@@ -14,10 +14,10 @@ namespace Converter_Microservice.Handlers.QueueHandlers
             _queueRepository = queueRepository;
         }
 
-        public Task Handle(QueueQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(QueueQuery request, CancellationToken cancellationToken)
         {
             _queueRepository.ConsumeQueue(request.Queue, request.MessageTTL);
-            return Task.CompletedTask;
+            return await Task.FromResult(true);
         }
     }
 }
