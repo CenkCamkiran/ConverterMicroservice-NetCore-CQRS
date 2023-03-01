@@ -72,7 +72,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -83,7 +82,6 @@ namespace Converter_Microservice.Repositories.Repositories
         {
             try
             {
-
                 using (var channel = _connection.CreateModel())
                 {
                     var properties = channel.CreateBasicProperties();
@@ -143,7 +141,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);

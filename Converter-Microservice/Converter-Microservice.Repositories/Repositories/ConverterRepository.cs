@@ -75,7 +75,7 @@ namespace Converter_Microservice.Repositories.Repositories
                 {
                     converterLog = converterLog
                 };
-                _queueOtherRepository.Value.QueueMessageDirect(otherLog, "otherlogs", "log_exchange.direct", "other_log");
+                await _mediator.Send(new QueueCommand<OtherLog>(otherLog, "otherlogs", "log_exchange.direct", "other_log", 0));
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
@@ -94,7 +94,7 @@ namespace Converter_Microservice.Repositories.Repositories
                 {
                     converterLog = exceptionModel
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                await _mediator.Send(new QueueCommand<ErrorLog>(errorLog, "errorlogs", "log_exchange.direct", "error_log", 0));
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
