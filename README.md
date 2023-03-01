@@ -779,7 +779,7 @@ I used CQRS Design Pattern Web Service and other Microservices.
 - It uses **Environment Variables**. You can pass any **RabbitMQ, Minio or ELK host, username, password into web service as environment variables in code and Docker Compose file**. It is more dynamic for me because, host servers of Minio and other technologies can change during development (Like Test environment and Production environment).
 - It uses **Google Gmail** to send **MP3** file in the attachment as email to user. This configuration is based on **Environment Variables** as well. You can pass working **SMTP Host, Username, Password and Port to project via using Environment Variables**.
 - Error logs are sent to queue called **'errorlogs'** and info logs are sent to queue called **'otherlogs'**. They are ready to consumed by **Logger Microservice**.
-- It uses **Log4Net File Logging** due to missed ElasticSearch logs (connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed).
+- It uses **Log4Net File Logging** due to missed ElasticSearch logs. Connection errors may happen during the process, I thought this is good idea to implement file logging. Logs never gonna be missed.
 
 ## Installation
 
