@@ -4,16 +4,16 @@ using MediatR;
 
 namespace Converter_Microservice.Handlers.QueueHandlers
 {
-    public class QueueCommandHandler<TMessage> : IRequestHandler<QueueCommand<TMessage>> where TMessage : class
+    public class QueueCommandHandler : IRequestHandler<QueueCommand >    
     {
-        private readonly IQueueRepository<TMessage> _queueRepository;
+        private readonly IQueueRepository _queueRepository;
 
-        public QueueCommandHandler(IQueueRepository<TMessage> queueRepository)
+        public QueueCommandHandler(IQueueRepository queueRepository)
         {
             _queueRepository = queueRepository;
         }
 
-        public async Task Handle(QueueCommand<TMessage> request, CancellationToken cancellationToken)
+        public async Task Handle(QueueCommand request, CancellationToken cancellationToken)
         {
             _queueRepository.QueueMessageDirect(request.Message, request.Queue, request.Exchange, request.RoutingKey, request.MessageTTL);
             await Task.CompletedTask;

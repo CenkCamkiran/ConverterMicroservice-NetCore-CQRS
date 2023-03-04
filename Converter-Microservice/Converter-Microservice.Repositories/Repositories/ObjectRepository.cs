@@ -10,10 +10,10 @@ namespace Converter_Microservice.Repositories.Repositories
     {
         private readonly IMinioClient _minioClient;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
-        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
+        private readonly Lazy<IQueueRepository> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository> _queueOtherRepository;
 
-        public ObjectRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository)
+        public ObjectRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository)
         {
             _minioClient = minioClient;
             _log4NetRepository = log4NetRepository;

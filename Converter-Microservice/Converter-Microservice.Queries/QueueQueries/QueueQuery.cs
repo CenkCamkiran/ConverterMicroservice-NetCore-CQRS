@@ -2,7 +2,7 @@
 
 namespace Converter_Microservice.Queries.QueueQueries
 {
-    public class QueueQuery : IRequest<bool>
+    public class QueueQuery : IRequest
     {
         public string Queue { get; set; } = string.Empty;
         public long MessageTTL { get; set; }

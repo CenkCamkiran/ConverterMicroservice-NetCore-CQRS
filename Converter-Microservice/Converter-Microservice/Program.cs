@@ -51,7 +51,7 @@ IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
 
 //Repositories
-serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
+serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
 serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
@@ -62,13 +62,13 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
         typeof(ConverterHandler).Assembly,
         typeof(ObjectCommandHandler).Assembly,
         typeof(ObjectQueryHandler).Assembly,
-        typeof(QueueCommandHandler<>).Assembly,
+        typeof(QueueCommandHandler).Assembly,
         typeof(QueueQueryHandler).Assembly,
         typeof(LogHandler).Assembly,
         typeof(ObjectCommand).Assembly,
-        typeof(QueueCommand<QueueMessage>).Assembly,
-        typeof(QueueCommand<OtherLog>).Assembly,
-        typeof(QueueCommand<ErrorLog>).Assembly,
+        typeof(QueueCommand).Assembly,
+        typeof(QueueCommand).Assembly,
+        typeof(QueueCommand).Assembly,
         typeof(ConverterCommand).Assembly,
         typeof(ObjectQuery).Assembly,
         typeof(QueueQuery).Assembly

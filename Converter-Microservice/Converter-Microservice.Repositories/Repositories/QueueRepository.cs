@@ -1,4 +1,5 @@
-﻿using Converter_Microservice.Repositories.Interfaces;
+﻿using Converter_Microservice.Commands.QueueCommands;
+using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace Converter_Microservice.Repositories.Repositories
 {
-    public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
+    public class QueueRepository : IQueueRepository
     {
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
@@ -78,7 +79,7 @@ namespace Converter_Microservice.Repositories.Repositories
             }
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey, long messageTtl = 0)
+        public void QueueMessageDirect(object message, string queue, string exchange, string routingKey, long messageTtl = 0)
         {
             try
             {
