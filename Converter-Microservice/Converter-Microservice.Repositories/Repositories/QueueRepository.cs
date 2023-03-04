@@ -170,8 +170,8 @@ namespace Converter_Microservice.Repositories.Repositories
                 return;
             }
 
-            var converterResult = _mediator.Send(new ConverterCommand(objModel, queueMsg));
-            if (converterResult.Wait(60000))
+            var converterResult = await _mediator.Send(new ConverterCommand(objModel, queueMsg));
+            if (converterResult != null)
             {
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             }
