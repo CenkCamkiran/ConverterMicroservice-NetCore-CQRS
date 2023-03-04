@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Logger_Microservice.Repositories.Repositories
 {
@@ -223,7 +224,7 @@ namespace Logger_Microservice.Repositories.Repositories
             }
         }
 
-        public async void ErrorLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public void ErrorLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
@@ -233,8 +234,8 @@ namespace Logger_Microservice.Repositories.Repositories
             ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
 
             //var task = _loggingErrorLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
-            var taskResult = await _mediator.Send(new LogCommand(queueMsg, "loggerservice_errorlogs"));
-            if (taskResult)
+            var task = _mediator.Send(new LogCommand(queueMsg, "loggerservice_errorlogs"));
+            if (task.Result)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
@@ -264,7 +265,7 @@ namespace Logger_Microservice.Repositories.Repositories
             }
         }
 
-        public async void OtherLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public void OtherLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
@@ -274,8 +275,8 @@ namespace Logger_Microservice.Repositories.Repositories
             OtherLog queueMsg = JsonConvert.DeserializeObject<OtherLog>(message);
 
             //var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_otherlogs", queueMsg);
-            var taskResult = await _mediator.Send(new LogCommand(queueMsg, "loggerservice_otherlogs"));
-            if (taskResult)
+            var task = _mediator.Send(new LogCommand(queueMsg, "loggerservice_otherlogs"));
+            if (task.Result)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
