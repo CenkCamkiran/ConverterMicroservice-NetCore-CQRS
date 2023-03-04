@@ -4,7 +4,7 @@ using Notification_Microservice.Repositories.Interfaces;
 
 namespace Notification_Microservice.Handlers.ObjectHandlers
 {
-    public class ObjectCommandHandler : IRequestHandler<ObjectCommand, bool>
+    public class ObjectCommandHandler : IRequestHandler<ObjectCommand>
     {
         private readonly IObjectRepository _objectRepository;
 
@@ -13,9 +13,9 @@ namespace Notification_Microservice.Handlers.ObjectHandlers
             _objectRepository = objectRepository;
         }
 
-        public async Task<bool> Handle(ObjectCommand request, CancellationToken cancellationToken)
+        public async Task Handle(ObjectCommand request, CancellationToken cancellationToken)
         {
-            return await _objectRepository.StoreFileAsync(request.BucketName, request.ObjectName, request.Stream, request.ContentType);
+            await _objectRepository.StoreFileAsync(request.BucketName, request.ObjectName, request.Stream, request.ContentType);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace Notification_Microservice.Repositories.Interfaces
 {
-    public interface IQueueRepository<TMessage> where TMessage : class
+    public interface IQueueRepository
     {
         void ConsumeQueue(string queue, long messageTtl = 0);
-        void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey);
+        void QueueMessageDirect(object message, string queue, string exchange, string routingKey);
     }
 }

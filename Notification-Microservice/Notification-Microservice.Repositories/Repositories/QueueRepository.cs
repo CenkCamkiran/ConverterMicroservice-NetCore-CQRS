@@ -7,19 +7,19 @@ using System.Text;
 
 namespace Notification_Microservice.Repositories.Repositories
 {
-    public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
+    public class QueueRepository : IQueueRepository
     {
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
         uint msgCount = 0;
 
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
-        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
+        private readonly Lazy<IQueueRepository> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository> _queueOtherRepository;
         private readonly Lazy<IMailSenderRepository> _mailSenderHelper;
         private readonly IObjectRepository _objectStorageRepository;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository, Lazy<IMailSenderRepository> mailSenderHelper, IObjectRepository objectStorageRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<IMailSenderRepository> mailSenderHelper, IObjectRepository objectStorageRepository)
         {
             _connection = connection;
             _log4NetRepository = log4NetRepository;
@@ -84,7 +84,7 @@ namespace Notification_Microservice.Repositories.Repositories
             }
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        public void QueueMessageDirect(object message, string queue, string exchange, string routingKey)
         {
             try
             {

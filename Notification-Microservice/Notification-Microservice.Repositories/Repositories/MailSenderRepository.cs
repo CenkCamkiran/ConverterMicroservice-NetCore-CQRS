@@ -9,11 +9,11 @@ namespace Notification_Microservice.Repositories.Repositories
 {
     public class MailSenderRepository : IMailSenderRepository
     {
-        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository> _queueErrorRepository;
         private readonly Lazy<ILog4NetRepository> _log4NetRepository;
         private EnvVariablesConfiguration envVariablesHandler = new EnvVariablesConfiguration(); //Get Host, port, email smtp server 
 
-        public MailSenderRepository(Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<ILog4NetRepository> log4NetRepository)
+        public MailSenderRepository(Lazy<IQueueRepository> queueErrorRepository, Lazy<ILog4NetRepository> log4NetRepository)
         {
             _queueErrorRepository = queueErrorRepository;
             _log4NetRepository = log4NetRepository;

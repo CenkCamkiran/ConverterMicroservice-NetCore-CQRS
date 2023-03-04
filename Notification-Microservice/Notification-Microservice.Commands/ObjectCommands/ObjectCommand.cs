@@ -2,7 +2,7 @@
 
 namespace Notification_Microservice.Commands.ObjectCommands
 {
-    public class ObjectCommand : IRequest<bool>
+    public class ObjectCommand : IRequest
     {
         public string ObjectName { get; set; } = string.Empty;
         public string BucketName { get; set; } = string.Empty;

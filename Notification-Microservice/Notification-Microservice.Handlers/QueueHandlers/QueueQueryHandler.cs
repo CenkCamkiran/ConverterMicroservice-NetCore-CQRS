@@ -4,20 +4,20 @@ using Notification_Microservice.Repositories.Interfaces;
 
 namespace Notification_Microservice.Handlers.QueueHandlers
 {
-    public class QueueQueryHandler<TMessage> : IRequestHandler<QueueQuery> where TMessage : class
+    public class QueueQueryHandler : IRequestHandler<QueueQuery>
     {
 
-        private readonly IQueueRepository<TMessage> _queueRepository;
+        private readonly IQueueRepository _queueRepository;
 
-        public QueueQueryHandler(IQueueRepository<TMessage> queueRepository)
+        public QueueQueryHandler(IQueueRepository queueRepository)
         {
             _queueRepository = queueRepository;
         }
 
-        public Task Handle(QueueQuery request, CancellationToken cancellationToken)
+        public async Task Handle(QueueQuery request, CancellationToken cancellationToken)
         {
             _queueRepository.ConsumeQueue(request.Queue, request.MessageTTL);
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }
