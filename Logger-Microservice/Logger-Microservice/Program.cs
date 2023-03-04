@@ -53,8 +53,8 @@ IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
 
 //Repository
-serviceProvider.AddScoped(typeof(IQueueRepository<>), typeof(QueueRepository<>));
-serviceProvider.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
+serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
+serviceProvider.AddScoped(typeof(ILogRepository), typeof(LogRepository));
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
 var Handlers = AppDomain.CurrentDomain.Load("Logger-Microservice.Handlers");
@@ -64,13 +64,14 @@ var Commands = AppDomain.CurrentDomain.Load("Logger-Microservice.Commands");
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 {
     configuration.RegisterServicesFromAssemblies(
-        typeof(LogCommand<>).Assembly,
-        typeof(QueueCommand<>).Assembly,
-        typeof(LogHandler<>).Assembly,
-        typeof(QueueErrorQueryHandler<>).Assembly,
-        typeof(QueueCommandHandler<>).Assembly,
-        typeof(QueueOtherQueryHandler<>).Assembly,
-        typeof(QueueQuery).Assembly
+        typeof(LogCommand).Assembly,
+        typeof(QueueCommand).Assembly,
+        typeof(LogHandler).Assembly,
+        typeof(QueueErrorQueryHandler).Assembly,
+        typeof(QueueCommandHandler).Assembly,
+        typeof(QueueErrorQueryHandler).Assembly,
+        typeof(QueueErrorQuery).Assembly,
+        typeof(QueueOtherQuery).Assembly
         );
 });
 
@@ -79,17 +80,13 @@ var builder = serviceProvider.BuildServiceProvider();
 
 IMediator _mediator = builder.GetService<IMediator>();
 
-
 try
 {
-    await Task.Run(() =>
+    await Task.Run(async () =>
     {
-        _mediator.Send(new QueueQuery("errorlogs")).GetAwaiter();
-    });
+        await _mediator.Send(new QueueErrorQuery("errorlogs"));
 
-    await Task.Run(() =>
-    {
-        _mediator.Send(new QueueQuery("otherlogs")).GetAwaiter();
+        await _mediator.Send(new QueueOtherQuery("otherlogs"));
     });
 
 }
@@ -105,6 +102,6 @@ catch (Exception exception)
     {
         queueLog = queueLog
     };
-    _mediator.Send(new QueueCommand<ErrorLog>(errorLog, "errorlogs", "log_exchange.direct", "error_log")).GetAwaiter();
+    await _mediator.Send(new QueueCommand(errorLog, "errorlogs", "log_exchange.direct", "error_log"));
 
 }

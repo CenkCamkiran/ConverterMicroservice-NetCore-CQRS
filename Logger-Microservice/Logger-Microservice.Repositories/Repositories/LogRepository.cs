@@ -4,20 +4,20 @@ using Nest;
 
 namespace Logger_Microservice.Repositories.Repositories
 {
-    public class LogRepository<TModel> : ILogRepository<TModel> where TModel : class
+    public class LogRepository : ILogRepository
     {
         private readonly IElasticClient _elasticClient;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository> _queueErrorRepository;
 
-        public LogRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository)
+        public LogRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository)
         {
             _elasticClient = elasticClient;
             _log4NetRepository = log4NetRepository;
             _queueErrorRepository = queueErrorRepository;
         }
 
-        public async Task<bool> IndexDocAsync(string indexName, TModel model)
+        public async Task<bool> IndexDocAsync(string indexName, object model)
         {
             try
             {

@@ -1,5 +1,7 @@
-﻿using Logger_Microservice.Repositories.Interfaces;
+﻿using Logger_Microservice.Commands.LogCommands;
+using Logger_Microservice.Repositories.Interfaces;
 using LoggerMicroservice.Models;
+using MediatR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,19 +9,20 @@ using System.Text;
 
 namespace Logger_Microservice.Repositories.Repositories
 {
-    public class QueueRepository<TMessage> : IQueueRepository<TMessage> where TMessage : class
+    public class QueueRepository : IQueueRepository
     {
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
         uint msgCount = 0;
 
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
-        private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
-        private readonly Lazy<ILogRepository<ErrorLog>> _loggingErrorLogsRepository;
-        private readonly Lazy<ILogRepository<OtherLog>> _loggingOtherLogsRepository;
+        private readonly Lazy<IQueueRepository> _queueErrorRepository;
+        private readonly Lazy<IQueueRepository> _queueOtherRepository;
+        private readonly Lazy<ILogRepository> _loggingErrorLogsRepository;
+        private readonly Lazy<ILogRepository> _loggingOtherLogsRepository;
+        private readonly IMediator _mediator;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository<ErrorLog>> queueErrorRepository, Lazy<IQueueRepository<OtherLog>> queueOtherRepository, Lazy<ILogRepository<ErrorLog>> loggingErrorLogsRepository, Lazy<ILogRepository<OtherLog>> loggingOtherLogsRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<ILogRepository> loggingErrorLogsRepository, Lazy<ILogRepository> loggingOtherLogsRepository, IMediator mediator)
         {
             _connection = connection;
             _log4NetRepository = log4NetRepository;
@@ -27,9 +30,10 @@ namespace Logger_Microservice.Repositories.Repositories
             _queueOtherRepository = queueOtherRepository;
             _loggingErrorLogsRepository = loggingErrorLogsRepository;
             _loggingOtherLogsRepository = loggingOtherLogsRepository;
+            _mediator = mediator;
         }
 
-        public void ConsumeOtherLogsQueue(string queue)
+        public async void ConsumeOtherLogsQueue(string queue)
         {
             try
             {
@@ -80,14 +84,15 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
             }
         }
 
-        public void ConsumeErrorLogsQueue(string queue)
+        public async void ConsumeErrorLogsQueue(string queue)
         {
             try
             {
@@ -137,14 +142,15 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
             }
         }
 
-        public void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey)
+        public async void QueueMessageDirect(object message, string queue, string exchange, string routingKey)
         {
             try
             {
@@ -202,7 +208,8 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -210,7 +217,7 @@ namespace Logger_Microservice.Repositories.Repositories
             }
         }
 
-        public void ErrorLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public async void ErrorLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
@@ -219,8 +226,9 @@ namespace Logger_Microservice.Repositories.Repositories
 
             ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
 
-            var task = _loggingErrorLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
-            if (task.Result && task.Wait(60000))
+            //var task = _loggingErrorLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
+            var taskResult = await _mediator.Send(new LogCommand(queueMsg, "loggerservice_errorlogs"));
+            if (taskResult)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
@@ -250,7 +258,7 @@ namespace Logger_Microservice.Repositories.Repositories
             }
         }
 
-        public void OtherLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
+        public async void OtherLogsQueueReceivedEvent(object se, BasicDeliverEventArgs ea)
         {
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
@@ -259,8 +267,9 @@ namespace Logger_Microservice.Repositories.Repositories
 
             OtherLog queueMsg = JsonConvert.DeserializeObject<OtherLog>(message);
 
-            var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_otherlogs", queueMsg);
-            if (task.Result && task.Wait(60000))
+            //var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_otherlogs", queueMsg);
+            var taskResult = await _mediator.Send(new LogCommand(queueMsg, "loggerservice_otherlogs"));
+            if (taskResult)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);

@@ -2,11 +2,11 @@
 
 namespace Logger_Microservice.Queries.QueueQueries
 {
-    public class QueueQuery : IRequest
+    public class QueueOtherQuery : IRequest
     {
         public string Queue { get; set; } = string.Empty;
 
-        public QueueQuery(string queue)
+        public QueueOtherQuery(string queue)
         {
             Queue = queue;
         }

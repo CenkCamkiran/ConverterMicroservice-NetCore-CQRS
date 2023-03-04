@@ -4,21 +4,21 @@ using MediatR;
 
 namespace Logger_Microservice.Handlers.QueueHandlers
 {
-    public class QueueErrorQueryHandler<TMessage> : IRequestHandler<QueueQuery> where TMessage : class
+    public class QueueErrorQueryHandler : IRequestHandler<QueueErrorQuery>
     {
 
-        private readonly IQueueRepository<TMessage> _queueRepository;
+        private readonly IQueueRepository _queueRepository;
 
-        public QueueErrorQueryHandler(IQueueRepository<TMessage> queueRepository)
+        public QueueErrorQueryHandler(IQueueRepository queueRepository)
         {
             _queueRepository = queueRepository;
         }
 
-        public Task Handle(QueueQuery request, CancellationToken cancellationToken)
+        public async Task Handle(QueueErrorQuery request, CancellationToken cancellationToken)
         {
             _queueRepository.ConsumeErrorLogsQueue(request.Queue);
 
-            return Task.CompletedTask;
+            await Task.CompletedTask;
         }
     }
 }

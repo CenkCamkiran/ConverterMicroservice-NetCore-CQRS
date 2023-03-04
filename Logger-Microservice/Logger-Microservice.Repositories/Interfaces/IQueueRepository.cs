@@ -1,9 +1,9 @@
 ﻿namespace Logger_Microservice.Repositories.Interfaces
 {
-    public interface IQueueRepository<TMessage> where TMessage : class
+    public interface IQueueRepository
     {
         void ConsumeErrorLogsQueue(string queue);
         void ConsumeOtherLogsQueue(string queue);
-        void QueueMessageDirect(TMessage message, string queue, string exchange, string routingKey);
+        void QueueMessageDirect(object message, string queue, string exchange, string routingKey);
     }
 }

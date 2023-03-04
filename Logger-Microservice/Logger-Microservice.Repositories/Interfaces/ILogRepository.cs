@@ -1,7 +1,7 @@
 ﻿namespace Logger_Microservice.Repositories.Interfaces
 {
-    public interface ILogRepository<TModel> where TModel : class
+    public interface ILogRepository
     {
-        Task<bool> IndexDocAsync(string indexName, TModel model);
+        Task<bool> IndexDocAsync(string indexName, object model);
     }
 }

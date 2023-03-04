@@ -4,17 +4,17 @@ using MediatR;
 
 namespace Logger_Microservice.Handlers.LogHandlers
 {
-    public class LogHandler<TModel> : IRequestHandler<LogCommand<TModel>, bool> where TModel : class
+    public class LogHandler : IRequestHandler<LogCommand, bool>
     {
 
-        private readonly ILogRepository<TModel> _logRepository;
+        private readonly ILogRepository _logRepository;
 
-        public LogHandler(ILogRepository<TModel> logRepository)
+        public LogHandler(ILogRepository logRepository)
         {
             _logRepository = logRepository;
         }
 
-        public async Task<bool> Handle(LogCommand<TModel> request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(LogCommand request, CancellationToken cancellationToken)
         {
             return await _logRepository.IndexDocAsync(request.IndexName, request.Model);
         }
