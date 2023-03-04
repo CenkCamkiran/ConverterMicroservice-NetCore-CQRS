@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using MediatR;
+using Newtonsoft.Json;
+using Notification_Microservice.Queries.ObjectQueries;
 using Notification_Microservice.Repositories.Interfaces;
 using NotificationMicroservice.Models;
 using RabbitMQ.Client;
@@ -18,8 +20,9 @@ namespace Notification_Microservice.Repositories.Repositories
         private readonly Lazy<IQueueRepository> _queueOtherRepository;
         private readonly Lazy<IMailSenderRepository> _mailSenderHelper;
         private readonly IObjectRepository _objectStorageRepository;
+        private readonly IMediator _mediator;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<IMailSenderRepository> mailSenderHelper, IObjectRepository objectStorageRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<IMailSenderRepository> mailSenderHelper, IObjectRepository objectStorageRepository, IMediator mediator)
         {
             _connection = connection;
             _log4NetRepository = log4NetRepository;
@@ -27,6 +30,7 @@ namespace Notification_Microservice.Repositories.Repositories
             _queueOtherRepository = queueOtherRepository;
             _mailSenderHelper = mailSenderHelper;
             _objectStorageRepository = objectStorageRepository;
+            _mediator = mediator;
         }
 
         public void ConsumeQueue(string queue, long messageTtl = 0)
@@ -159,7 +163,7 @@ namespace Notification_Microservice.Repositories.Repositories
 
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _objectStorageRepository.GetFileAsync("audios", queueMsg.fileGuid);
+            ObjectData objModel = await _mediator.Send(new ObjectQuery("audios", queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);

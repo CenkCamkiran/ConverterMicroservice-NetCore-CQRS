@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
@@ -16,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Notification-Microservice.Models\Notification-Microservice.Models.csproj" />
     <ProjectReference Include="..\Notification-Microservice.ProjectConfigurations\Notification-Microservice.ProjectConfigurations.csproj" />
+    <ProjectReference Include="..\Notification-Microservice.Queries\Notification-Microservice.Queries.csproj" />
   </ItemGroup>
 
 </Project>
