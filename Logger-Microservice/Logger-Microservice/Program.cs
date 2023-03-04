@@ -80,13 +80,19 @@ var builder = serviceProvider.BuildServiceProvider();
 
 IMediator _mediator = builder.GetService<IMediator>();
 
+CancellationTokenSource cts = new CancellationTokenSource();
+CancellationToken ct = cts.Token;
+
 try
 {
     await Task.Run(async () =>
     {
-        await _mediator.Send(new QueueErrorQuery("errorlogs"));
+        await _mediator.Send(new QueueErrorQuery("errorlogs"), ct);
+    });
 
-        await _mediator.Send(new QueueOtherQuery("otherlogs"));
+    await Task.Run(async () =>
+    {
+        await _mediator.Send(new QueueOtherQuery("otherlogs"), ct);
     });
 
 }

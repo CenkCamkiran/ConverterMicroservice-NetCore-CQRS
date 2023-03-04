@@ -33,7 +33,7 @@ namespace Logger_Microservice.Repositories.Repositories
             _mediator = mediator;
         }
 
-        public async void ConsumeOtherLogsQueue(string queue)
+        public void ConsumeOtherLogsQueue(string queue)
         {
             try
             {
@@ -84,7 +84,10 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                Task.Run(async () =>
+                {
+                    await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                });
                 //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
@@ -92,7 +95,7 @@ namespace Logger_Microservice.Repositories.Repositories
             }
         }
 
-        public async void ConsumeErrorLogsQueue(string queue)
+        public void ConsumeErrorLogsQueue(string queue)
         {
             try
             {
@@ -142,7 +145,10 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                Task.Run(async () =>
+                {
+                    await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                });
                 //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
