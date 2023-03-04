@@ -1,6 +1,9 @@
-﻿using Converter_Microservice.Commands.QueueCommands;
+﻿using Converter_Microservice.Commands.ConverterCommands;
+using Converter_Microservice.Commands.QueueCommands;
+using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
+using MediatR;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -16,15 +19,17 @@ namespace Converter_Microservice.Repositories.Repositories
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
+        private readonly IMediator _mediator; 
 
         uint msgCount = 0;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, IConverterRepository converterRepository)
+        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator)
         {
             _connection = connection;
             _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _converterRepository = converterRepository;
+            _mediator = mediator;
         }
 
         public void ConsumeQueue(string queue, long messageTtl = 0)
@@ -158,15 +163,14 @@ namespace Converter_Microservice.Repositories.Repositories
             msgCount = e.Model.MessageCount("converter");
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _objectStorageRepository.GetFileAsync("videos", queueMsg.fileGuid);
+            ObjectData objModel = await _mediator.Send(new ObjectQuery("videos", queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
                 return;
             }
 
-            var converterResult = _converterRepository.ConvertMP4_to_MP3_Async(objModel, queueMsg);
-
+            var converterResult = _mediator.Send(new ConverterCommand(objModel, queueMsg));
             if (converterResult.Wait(60000))
             {
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
