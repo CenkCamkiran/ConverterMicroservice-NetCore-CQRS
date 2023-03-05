@@ -801,7 +801,5 @@ Please use the Github issues.
 
 ## RoadMap
 
-- Explain some details about CQRS (maybe add new section on README?)
 - Connect Kong API Gateway to Keycloak?
-- WebService OK!
-- Test other microservices.
+- Logger service has erros that is object disposed error. Other services are fine.
