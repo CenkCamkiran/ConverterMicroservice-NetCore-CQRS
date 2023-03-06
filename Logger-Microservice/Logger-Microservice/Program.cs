@@ -13,7 +13,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using RabbitMQ.Client;
-using System.Reflection;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
