@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   converterservice:
-    image: cenkcamkiran/gcloud-projects:converterservice_v1.0
+    image: cenkcamkiran/gcloud-projects:converterservice_v2.0
     networks:
       default: null
     restart: on-failure

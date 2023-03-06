@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   webservice:
-    image: cenkcamkiran/gcloud-projects:webservice_v1.0
+    image: cenkcamkiran/gcloud-projects:webservice_v2.0
     #networks:
     #- microservices
     restart: on-failure
