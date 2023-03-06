@@ -79,6 +79,7 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 IMediator _mediator = builder.GetService<IMediator>();
+ILog4NetRepository _log4NetRepository = builder.GetService<ILog4NetRepository>();
 
 CancellationTokenSource cts = new CancellationTokenSource();
 CancellationToken ct = cts.Token;
@@ -108,6 +109,8 @@ catch (Exception exception)
     {
         queueLog = queueLog
     };
+    await _log4NetRepository.Error(exception.Message.ToString());
+
     await _mediator.Send(new QueueCommand(errorLog, "errorlogs", "log_exchange.direct", "error_log"));
 
 }
