@@ -109,7 +109,7 @@ catch (Exception exception)
     {
         queueLog = queueLog
     };
-    await _log4NetRepository.Error(exception.Message.ToString());
+    _log4NetRepository.Error(exception.Message.ToString());
 
     await _mediator.Send(new QueueCommand(errorLog, "errorlogs", "log_exchange.direct", "error_log"));
 
