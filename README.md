@@ -801,5 +801,4 @@ Please use the Github issues.
 
 ## RoadMap
 
-- Connect Kong API Gateway to Keycloak?
-- Logger service has erros that is object disposed error. Other services are fine.
+- I want to connect Kong API Gateway to Keycloak in the future.
