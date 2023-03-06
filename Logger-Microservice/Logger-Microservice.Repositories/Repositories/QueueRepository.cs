@@ -12,7 +12,8 @@ namespace Logger_Microservice.Repositories.Repositories
 {
     public class QueueRepository : IQueueRepository
     {
-        private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
+        private ManualResetEventSlim errorLogsMsgsRecievedGate = new ManualResetEventSlim(false);
+        private ManualResetEventSlim otherLogsMsgsRecievedGate = new ManualResetEventSlim(false);
         uint msgCount = 0;
 
         private readonly IConnection _connection;
@@ -57,19 +58,19 @@ namespace Logger_Microservice.Repositories.Repositories
                                          autoAck: false,
                                          consumer: consumer);
 
-                    uint msgCount = channel.MessageCount(queue);
-                    if (msgCount == 0)
+                    if (channel.MessageCount(queue) == 0)
                     {
-                        msgsRecievedGate.Set();
+                        errorLogsMsgsRecievedGate.Set();
 
                         return;
                     }
 
                     // Wait here until all messages are retrieved
-                    msgsRecievedGate.Wait();
+                    errorLogsMsgsRecievedGate.Wait();
 
                     return;
                 }
+
             }
             catch (Exception exception)
             {
@@ -121,17 +122,17 @@ namespace Logger_Microservice.Repositories.Repositories
 
                     if (channel.MessageCount(queue) == 0)
                     {
-                        msgsRecievedGate.Set();
+                        otherLogsMsgsRecievedGate.Set();
 
                         return;
                     }
 
-                    //throw new Exception();
                     // Wait here until all messages are retrieved
-                    msgsRecievedGate.Wait();
+                    otherLogsMsgsRecievedGate.Wait();
 
                     return;
                 }
+
             }
             catch (Exception exception)
             {
@@ -259,7 +260,7 @@ namespace Logger_Microservice.Repositories.Repositories
 
             if (msgCount == 0)
             {
-                msgsRecievedGate.Set();
+                errorLogsMsgsRecievedGate.Set();
 
                 return;
             }
@@ -300,7 +301,7 @@ namespace Logger_Microservice.Repositories.Repositories
 
             if (msgCount == 0)
             {
-                msgsRecievedGate.Set();
+                otherLogsMsgsRecievedGate.Set();
 
                 return;
             }
