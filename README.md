@@ -68,7 +68,6 @@ Check the link: <https://learn.microsoft.com/tr-tr/azure/architecture/patterns/c
   - [Contributing](#contributing)
   - [Helper Documents](#helper-documents)
   - [Bug Reports \& Feature Requests](#bug-reports--feature-requests)
-  - [RoadMap](#roadmap)
 
 ## Features
 
@@ -798,8 +797,3 @@ ELK script and Docker Compose files added to project. Folder names are **'YAML F
 ## Bug Reports & Feature Requests
 
 Please use the Github issues.
-
-## RoadMap
-
-- I want to connect Kong API Gateway to Keycloak in the future.
-- Update Kong Docker compose files.
