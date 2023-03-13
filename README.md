@@ -86,7 +86,6 @@ Check the link: <https://learn.microsoft.com/tr-tr/azure/architecture/patterns/c
 
 > **Note** <br />
 > Currently I use **Docker version 20.10.21** and **Docker Compose version v2.6.0** <br />
-> Currently I use **Docker Compose version v2.12.2** <br />
 > Currently I use **Linux Ubuntu 18.06 LTS** machine on Google Cloud. <br />
 
 ### Docker installation
