@@ -12,9 +12,6 @@ namespace Converter_Microservice.Repositories.Repositories
     {
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectRepository _objectStorageRepository;
-        //private readonly Lazy<IQueueRepository<QueueMessage>> _queueRepository;
-        //private readonly Lazy<IQueueRepository<ErrorLog>> _queueErrorRepository;
-        //private readonly Lazy<IQueueRepository<OtherLog>> _queueOtherRepository;
         private readonly IMediator _mediator;
 
         public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, IMediator mediator)
@@ -51,8 +48,7 @@ namespace Converter_Microservice.Repositories.Repositories
                             fileGuid = guid
                         };
 
-                        await _mediator.Send(new QueueCommand(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000)); //Error Ocurred
-                        //_queueRepository.Value.QueueMessageDirect(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000);
+                        await _mediator.Send(new QueueCommand(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000));
 
                     }
                 }
