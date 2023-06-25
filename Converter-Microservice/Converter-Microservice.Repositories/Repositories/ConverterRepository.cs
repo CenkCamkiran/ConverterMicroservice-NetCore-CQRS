@@ -39,7 +39,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     using (MemoryStream ms = new MemoryStream())
                     {
                         await fs.CopyToAsync(ms);
-                        await _objectStorageRepository.StoreFileAsync(ProjectConstants.MinioAudiosBucket, guid, ms, "audio/mp3");
+                        await _objectStorageRepository.StoreFileAsync(ProjectConstants.MinioAudioBucket, guid, ms, "audio/mp3");
 
                         msg = new QueueMessage()
                         {

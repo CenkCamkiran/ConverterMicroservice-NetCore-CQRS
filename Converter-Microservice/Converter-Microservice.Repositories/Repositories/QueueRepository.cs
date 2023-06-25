@@ -136,7 +136,7 @@ namespace Converter_Microservice.Repositories.Repositories
             msgCount = e.Model.MessageCount(ProjectConstants.ConverterServiceQueueName);
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioVideosBucket, queueMsg.fileGuid));
+            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioVideoBucket, queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
