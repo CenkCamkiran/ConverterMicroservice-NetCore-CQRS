@@ -8,14 +8,26 @@
         public static string ElkPassword { get; set; } = Environment.GetEnvironmentVariable("ELK_PASSWORD");
         public static double ElkRequestTimeout { get; set; } = Convert.ToDouble(Environment.GetEnvironmentVariable("ELK_REQUEST_TIMEOUT"));
         public static bool ElkExceptions { get; set; } = true;
-        public static string ElkUserServiceIndexName { get; set; } = "user_service";
-        public static string ElkStorageServiceIndexName { get; set; } = "storage_service";
-        public static string ElkChatBrokerServiceIndexName { get; set; } = "broker_service";
-        public static int UserServiceNumberOfShards { get; set; } = 1;
-        public static int StorageServiceNumberOfShards { get; set; } = 1;
-        public static int ChatBrokerServiceNumberOfShards { get; set; } = 1;
-        public static int UserServiceNumberOfReplicas { get; set; } = 0;
-        public static int StorageServiceNumberOfReplicas { get; set; } = 0;
-        public static int ChatBrokerServiceNumberOfReplicas { get; set; } = 0;
+
+        public static string LoggerServiceErrorLogsIndex { get; set; } = "loggerservice_errorlogs";
+        public static string LoggerServiceOtherLogsIndex { get; set; } = "loggerservice_otherlogs";
+        public static string WebServiceObjectStorageLogs { get; set; } = "webservice_objstorage_logs";
+        public static string WebServiceRequestResponseLogs { get; set; } = "webservice_requestresponse_logs";
+        public static string WebServiceQueueLogs { get; set; } = "webservice_queue_logs";
+
+
+        public static int LoggerServiceErrorLogsNumberOfShards { get; set; } = 1;
+        public static int LoggerServiceOtherLogsNumberOfShards { get; set; } = 1;
+        public static int WebServiceObjectStorageNumberOfShards { get; set; } = 1;
+        public static int WebServiceRequestResponseNumberOfShards { get; set; } = 1;
+        public static int WebServiceQueueNumberOfShards { get; set; } = 1;
+
+        public static int LoggerServiceErrorLogsNumberOfReplicas { get; set; } = 0;
+        public static int LoggerServiceOtherLogsNumberOfReplicas { get; set; } = 0;
+        public static int WebServiceObjectStorageNumberOfReplicas { get; set; } = 0;
+        public static int WebServiceRequestResponseNumberOfReplicas { get; set; } = 0;
+        public static int WebServiceQueueNumberOfReplicas { get; set; } = 0;
+
+
     }
 }
