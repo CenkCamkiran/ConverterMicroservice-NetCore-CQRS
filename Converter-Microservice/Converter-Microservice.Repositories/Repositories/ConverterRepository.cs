@@ -11,13 +11,11 @@ namespace Converter_Microservice.Repositories.Repositories
 {
     public class ConverterRepository : IConverterRepository
     {
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IMediator _mediator;
 
-        public ConverterRepository(ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, IMediator mediator)
+        public ConverterRepository(IObjectRepository objectStorageRepository, IMediator mediator)
         {
-            _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _mediator = mediator;
         }
@@ -72,7 +70,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 await _mediator.Send(new QueueCommand(otherLog, ProjectConstants.OtherLogsServiceQueueName, ProjectConstants.OtherLogsServiceExchangeName, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.OtherLogsServiceExchangeTtl));
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-                _log4NetRepository.Info(logText);
 
                 return msg;
 
@@ -91,7 +88,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.ErrorLogsServiceExchangeTtl));
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
 
                 return msg;
             }

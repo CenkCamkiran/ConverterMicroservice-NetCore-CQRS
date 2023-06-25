@@ -13,10 +13,27 @@ using Converter_Microservice.Repositories.Providers;
 using Converter_Microservice.Repositories.Repositories;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Minio;
 using RabbitMQ.Client;
 
 var serviceProvider = new ServiceCollection();
+
+serviceProvider.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.SetMinimumLevel(LogLevel.Information);
+    logging.Configure(options =>
+    {
+        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId
+                                            | ActivityTrackingOptions.Baggage
+                                            | ActivityTrackingOptions.Tags;
+    });
+});
+
 
 MinioClient minioClient = new MinioClient()
                         .WithEndpoint(ProjectConstants.MinioHost)
@@ -39,7 +56,6 @@ serviceProvider.AddSingleton(rabbitConnection);
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
 serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
-serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>

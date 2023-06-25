@@ -17,17 +17,15 @@ namespace Converter_Microservice.Repositories.Repositories
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         private readonly IConnection _connection;
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
         private readonly IMediator _mediator;
 
         uint msgCount = 0;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator)
+        public QueueRepository(IConnection connection, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator)
         {
             _connection = connection;
-            _log4NetRepository = log4NetRepository;
             _objectStorageRepository = objectStorageRepository;
             _converterRepository = converterRepository;
             _mediator = mediator;
@@ -70,7 +68,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 };
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
             }
         }
 
@@ -107,7 +104,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 };
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -128,8 +124,6 @@ namespace Converter_Microservice.Repositories.Repositories
                 };
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
-
             }
         }
 
@@ -170,7 +164,6 @@ namespace Converter_Microservice.Repositories.Repositories
             };
 
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-            _log4NetRepository.Info(logText);
 
             if (msgCount == 0)
             {
