@@ -32,7 +32,7 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
   
 - I used **CQRS Design Pattern** on Web Service and other Microservices.
 
-- I used Initilization Service for building required elements such as create Bucket in Minio, create indexes in ELK and create queues-exchanges and binding them each other in RabbitMQ. It runs only once.
+- I used **Initilization Service** for building required elements such as **create Bucket in Minio**, **create indexes in ELK** and **create queues-exchanges and binding them each other in RabbitMQ**. It runs **only once.**
 
 ## What is CQRS?
 
