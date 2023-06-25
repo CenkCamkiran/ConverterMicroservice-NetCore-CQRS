@@ -4,7 +4,7 @@ namespace Logger_Microservice.Queries.QueueQueries
 {
     public class QueueErrorQuery : IRequest
     {
-        public string Queue { get; set; } = string.Empty;
+        public string Queue { get; set; }
 
         public QueueErrorQuery(string queue)
         {

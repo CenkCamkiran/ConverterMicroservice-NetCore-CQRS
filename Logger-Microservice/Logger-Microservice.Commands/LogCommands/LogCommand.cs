@@ -5,7 +5,7 @@ namespace Logger_Microservice.Commands.LogCommands
     public class LogCommand : IRequest<bool>
     {
         public object Model { get; set; }
-        public string IndexName { get; set; } = string.Empty;
+        public string IndexName { get; set; }
 
         public LogCommand(object model, string ındexName)
         {

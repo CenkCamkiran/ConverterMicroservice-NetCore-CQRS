@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Logger-Microservice.Commands\Logger-Microservice.Commands.csproj" />
+    <ProjectReference Include="..\Logger-Microservice.Common\Logger-Microservice.Common.csproj" />
     <ProjectReference Include="..\Logger-Microservice.Models\Logger-Microservice.Models.csproj" />
   </ItemGroup>
 

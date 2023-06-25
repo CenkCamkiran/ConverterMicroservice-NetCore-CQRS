@@ -1,6 +1,7 @@
 ﻿using Logger_Microservice.Repositories.Interfaces;
 using LoggerMicroservice.Models;
 using Nest;
+using WebService.Common.Constants;
 
 namespace Logger_Microservice.Repositories.Repositories
 {
@@ -21,8 +22,6 @@ namespace Logger_Microservice.Repositories.Repositories
         {
             try
             {
-                //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
-                //BulkResponse bulkDocuments = await _elasticClient.BulkAsync(elk => elk.Index(indexName).IndexMany(model));
                 IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
@@ -40,7 +39,7 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     loggerLog = error
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 _log4NetRepository.Error(exception.Message.ToString());
 

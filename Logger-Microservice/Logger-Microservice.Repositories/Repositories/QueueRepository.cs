@@ -1,4 +1,5 @@
-﻿using Logger_Microservice.Commands.LogCommands;
+﻿using Converter_Microservice.Common.Events;
+using Logger_Microservice.Commands.LogCommands;
 using Logger_Microservice.Repositories.Interfaces;
 using LoggerMicroservice.Models;
 using MediatR;
@@ -7,6 +8,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
 using System.Threading.Tasks;
+using WebService.Common.Constants;
 
 namespace Logger_Microservice.Repositories.Repositories
 {
@@ -18,20 +20,15 @@ namespace Logger_Microservice.Repositories.Repositories
 
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
-        private readonly Lazy<IQueueRepository> _queueErrorRepository;
-        private readonly Lazy<IQueueRepository> _queueOtherRepository;
-        private readonly Lazy<ILogRepository> _loggingErrorLogsRepository;
-        private readonly Lazy<ILogRepository> _loggingOtherLogsRepository;
         private readonly IMediator _mediator;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<ILogRepository> loggingErrorLogsRepository, Lazy<ILogRepository> loggingOtherLogsRepository, IMediator mediator)
+        public QueueRepository(ManualResetEventSlim errorLogsMsgsRecievedGate, ManualResetEventSlim otherLogsMsgsRecievedGate, uint msgCount, IConnection connection, ILog4NetRepository log4NetRepository, IMediator mediator)
         {
+            this.errorLogsMsgsRecievedGate = errorLogsMsgsRecievedGate;
+            this.otherLogsMsgsRecievedGate = otherLogsMsgsRecievedGate;
+            this.msgCount = msgCount;
             _connection = connection;
             _log4NetRepository = log4NetRepository;
-            _queueErrorRepository = queueErrorRepository;
-            _queueOtherRepository = queueOtherRepository;
-            _loggingErrorLogsRepository = loggingErrorLogsRepository;
-            _loggingOtherLogsRepository = loggingOtherLogsRepository;
             _mediator = mediator;
         }
 
@@ -39,15 +36,8 @@ namespace Logger_Microservice.Repositories.Repositories
         {
             try
             {
-
                 using (var channel = _connection.CreateModel())
                 {
-                    var queueResult = channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -76,7 +66,7 @@ namespace Logger_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicConsume",
+                    OperationType = LogEvents.BasicConsumeEvent,
                     Date = DateTime.Now,
                     Message = JsonConvert.SerializeObject(""),
                     QueueName = queue,
@@ -88,9 +78,8 @@ namespace Logger_Microservice.Repositories.Repositories
                 };
                 Task.Run(async () =>
                 {
-                    await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                    await _mediator.Send(new LogCommand(errorLog, ProjectConstants.LoggerServiceErrorLogsIndex));
                 });
-                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -104,12 +93,6 @@ namespace Logger_Microservice.Repositories.Repositories
 
                 using (var channel = _connection.CreateModel())
                 {
-                    var queueResult = channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -138,7 +121,7 @@ namespace Logger_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicConsume",
+                    OperationType = LogEvents.BasicConsumeEvent,
                     Date = DateTime.Now,
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
@@ -149,9 +132,8 @@ namespace Logger_Microservice.Repositories.Repositories
                 };
                 Task.Run(async () =>
                 {
-                    await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
+                    await _mediator.Send(new LogCommand(errorLog, ProjectConstants.LoggerServiceErrorLogsIndex));
                 });
-                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -168,12 +150,6 @@ namespace Logger_Microservice.Repositories.Repositories
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
 
-                    channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
                     string serializedObj = JsonConvert.SerializeObject(message);
                     var body = Encoding.UTF8.GetBytes(serializedObj);
 
@@ -185,7 +161,7 @@ namespace Logger_Microservice.Repositories.Repositories
 
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -205,7 +181,7 @@ namespace Logger_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     QueueName = queue,
@@ -216,8 +192,7 @@ namespace Logger_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                await _mediator.Send(new LogCommand(errorLog, "loggerservice_errorlogs"));
-                //_queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                await _mediator.Send(new LogCommand(errorLog, ProjectConstants.LoggerServiceErrorLogsIndex));
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -230,12 +205,11 @@ namespace Logger_Microservice.Repositories.Repositories
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            msgCount = e.Model.MessageCount("errorlogs");
+            msgCount = e.Model.MessageCount(ProjectConstants.ErrorLogsServiceQueueName);
 
             ErrorLog queueMsg = JsonConvert.DeserializeObject<ErrorLog>(message);
 
-            //var task = _loggingErrorLogsRepository.Value.IndexDocAsync("loggerservice_errorlogs", queueMsg);
-            var task = _mediator.Send(new LogCommand(queueMsg, "loggerservice_errorlogs"));
+            var task = _mediator.Send(new LogCommand(queueMsg, ProjectConstants.LoggerServiceErrorLogsIndex));
             if (task.Result)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
@@ -243,11 +217,11 @@ namespace Logger_Microservice.Repositories.Repositories
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = "BasicConsume",
+                OperationType = LogEvents.BasicConsumeEvent,
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "errorlogs",
+                QueueName = ProjectConstants.ErrorLogsServiceQueueName,
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()
@@ -271,12 +245,11 @@ namespace Logger_Microservice.Repositories.Repositories
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            msgCount = e.Model.MessageCount("otherlogs");
+            msgCount = e.Model.MessageCount(ProjectConstants.OtherLogsServiceQueueName);
 
             OtherLog queueMsg = JsonConvert.DeserializeObject<OtherLog>(message);
 
-            //var task = _loggingOtherLogsRepository.Value.IndexDocAsync("loggerservice_otherlogs", queueMsg);
-            var task = _mediator.Send(new LogCommand(queueMsg, "loggerservice_otherlogs"));
+            var task = _mediator.Send(new LogCommand(queueMsg, ProjectConstants.LoggerServiceOtherLogsIndex));
             if (task.Result)
                 e.Model.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
             else
@@ -284,11 +257,11 @@ namespace Logger_Microservice.Repositories.Repositories
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = "BasicConsume",
+                OperationType = LogEvents.BasicConsumeEvent,
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "otherlogs",
+                QueueName = ProjectConstants.OtherLogsServiceQueueName,
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()

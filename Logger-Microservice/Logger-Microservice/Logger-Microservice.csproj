@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Logger-Microservice.Common\Logger-Microservice.Common.csproj" />
     <ProjectReference Include="..\Logger-Microservice.Handlers\Logger-Microservice.Handlers.csproj" />
     <ProjectReference Include="..\Logger-Microservice.Models\Logger-Microservice.Models.csproj" />
-    <ProjectReference Include="..\Logger-Microservice.ProjectConfigurations\Logger-Microservice.ProjectConfigurations.csproj" />
     <ProjectReference Include="..\Logger-Microservice.Repositories\Logger-Microservice.Repositories.csproj" />
   </ItemGroup>
 

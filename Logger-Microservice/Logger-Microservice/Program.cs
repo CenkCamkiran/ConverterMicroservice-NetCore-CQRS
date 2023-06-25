@@ -1,9 +1,9 @@
-﻿using Elasticsearch.Net;
+﻿using Converter_Microservice.Common.Events;
+using Elasticsearch.Net;
 using Logger_Microservice.Commands.LogCommands;
 using Logger_Microservice.Commands.QueueCommands;
 using Logger_Microservice.Handlers.LogHandlers;
 using Logger_Microservice.Handlers.QueueHandlers;
-using Logger_Microservice.ProjectConfigurations;
 using Logger_Microservice.Queries.QueueQueries;
 using Logger_Microservice.Repositories.Interfaces;
 using Logger_Microservice.Repositories.Providers;
@@ -13,52 +13,41 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using RabbitMQ.Client;
+using WebService.Common.Constants;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
 
-EnvVariablesConfiguration envVariablesHandler = new EnvVariablesConfiguration();
-ElkConfiguration elkEnvVariables = envVariablesHandler.GetElkEnvVariables();
-RabbitMqConfiguration rabbitEnvVariables = envVariablesHandler.GetRabbitEnvVariables();
 
-Console.WriteLine($"RABBITMQ_HOST {rabbitEnvVariables.RabbitMqHost}");
-Console.WriteLine($"RABBITMQ_PORT {rabbitEnvVariables.RabbitMqPort}");
-Console.WriteLine($"RABBITMQ_USERNAME {rabbitEnvVariables.RabbitMqUsername}");
-Console.WriteLine($"RABBITMQ_PASSWORD {rabbitEnvVariables.RabbitMqPassword}");
-
-Console.WriteLine($"ELK_HOST {elkEnvVariables.ElkHost}");
-Console.WriteLine($"ELK_DEFAULT_INDEX {elkEnvVariables.ElkDefaultIndex}");
-Console.WriteLine($"ELK_USERNAME {elkEnvVariables.ElkUsername}");
-Console.WriteLine($"ELK_PASSWORD {elkEnvVariables.ElkPassword}");
-
-ConnectionSettings connection = new ConnectionSettings(new Uri(elkEnvVariables.ElkHost)).
-DefaultIndex(elkEnvVariables.ElkDefaultIndex).
+//ELK
+ConnectionSettings connection = new ConnectionSettings(new Uri(ProjectConstants.ElkHost)).
+DefaultIndex(ProjectConstants.ElkDefaultIndexName).
 ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-ThrowExceptions(true).
+ThrowExceptions(ProjectConstants.ElkExceptions).
 PrettyJson().
-RequestTimeout(TimeSpan.FromSeconds(300)).
-BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword); //.ApiKeyAuthentication("<id>", "<api key>"); 
+RequestTimeout(TimeSpan.FromSeconds(ProjectConstants.ElkRequestTimeout)).
+BasicAuthentication(ProjectConstants.ElkUsername, ProjectConstants.ElkPassword);
 ElasticClient elasticClient = new ElasticClient(connection);
 serviceProvider.AddSingleton<IElasticClient>(elasticClient);
 
+
+//RabbitMQ
 var connectionFactory = new ConnectionFactory
 {
-    HostName = rabbitEnvVariables.RabbitMqHost,
-    Port = Convert.ToInt32(rabbitEnvVariables.RabbitMqPort),
-    UserName = rabbitEnvVariables.RabbitMqUsername,
-    Password = rabbitEnvVariables.RabbitMqPassword
+    HostName = ProjectConstants.RabbitmqHost,
+    Port = Convert.ToInt32(ProjectConstants.RabbitmqPort),
+    UserName = ProjectConstants.RabbitmqUsername,
+    Password = ProjectConstants.RabbitmqPassword
 };
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 serviceProvider.AddSingleton(rabbitConnection);
+
 
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
 serviceProvider.AddScoped(typeof(ILogRepository), typeof(LogRepository));
 serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
-var Handlers = AppDomain.CurrentDomain.Load("Logger-Microservice.Handlers");
-var Queries = AppDomain.CurrentDomain.Load("Logger-Microservice.Queries");
-var Commands = AppDomain.CurrentDomain.Load("Logger-Microservice.Commands");
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 {
@@ -85,22 +74,17 @@ CancellationToken ct = cts.Token;
 
 try
 {
-    await Task.Run(async () =>
-    {
-        await _mediator.Send(new QueueErrorQuery("errorlogs"), ct);
-    });
+    var errorLogsTask = _mediator.Send(new QueueErrorQuery(ProjectConstants.ErrorLogsServiceQueueName), ct);
+    var otherLogsTask = _mediator.Send(new QueueOtherQuery(ProjectConstants.OtherLogsServiceQueueName), ct);
 
-    await Task.Run(async () =>
-    {
-        await _mediator.Send(new QueueOtherQuery("otherlogs"), ct);
-    });
+    await Task.WhenAll(errorLogsTask, otherLogsTask);
 
 }
 catch (Exception exception)
 {
     QueueLog queueLog = new QueueLog()
     {
-        OperationType = "Program.cs",
+        OperationType = LogEvents.ConsumeLogsEvent,
         Date = DateTime.Now,
         ExceptionMessage = exception.Message.ToString()
     };
@@ -110,6 +94,6 @@ catch (Exception exception)
     };
     _log4NetRepository.Error(exception.Message.ToString());
 
-    await _mediator.Send(new QueueCommand(errorLog, "errorlogs", "log_exchange.direct", "error_log"));
+    await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey));
 
 }
