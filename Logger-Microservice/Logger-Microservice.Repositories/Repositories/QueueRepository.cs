@@ -18,16 +18,14 @@ namespace Logger_Microservice.Repositories.Repositories
         uint msgCount = 0;
 
         private readonly IConnection _connection;
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly IMediator _mediator;
 
-        public QueueRepository(ManualResetEventSlim errorLogsMsgsRecievedGate, ManualResetEventSlim otherLogsMsgsRecievedGate, uint msgCount, IConnection connection, ILog4NetRepository log4NetRepository, IMediator mediator)
+        public QueueRepository(ManualResetEventSlim errorLogsMsgsRecievedGate, ManualResetEventSlim otherLogsMsgsRecievedGate, uint msgCount, IConnection connection, IMediator mediator)
         {
             this.errorLogsMsgsRecievedGate = errorLogsMsgsRecievedGate;
             this.otherLogsMsgsRecievedGate = otherLogsMsgsRecievedGate;
             this.msgCount = msgCount;
             _connection = connection;
-            _log4NetRepository = log4NetRepository;
             _mediator = mediator;
         }
 
@@ -81,7 +79,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 });
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
             }
         }
 
@@ -89,7 +86,6 @@ namespace Logger_Microservice.Repositories.Repositories
         {
             try
             {
-
                 using (var channel = _connection.CreateModel())
                 {
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
@@ -135,7 +131,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 });
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
             }
         }
 
@@ -173,7 +168,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 };
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -194,7 +188,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 await _mediator.Send(new LogCommand(errorLog, ProjectConstants.LoggerServiceErrorLogsIndex));
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
 
             }
         }
@@ -229,7 +222,6 @@ namespace Logger_Microservice.Repositories.Repositories
             };
 
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-            _log4NetRepository.Info(logText);
 
             if (msgCount == 0)
             {
@@ -269,7 +261,6 @@ namespace Logger_Microservice.Repositories.Repositories
             };
 
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-            _log4NetRepository.Info(logText);
 
             if (msgCount == 0)
             {

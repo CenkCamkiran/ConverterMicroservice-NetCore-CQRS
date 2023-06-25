@@ -8,13 +8,11 @@ namespace Logger_Microservice.Repositories.Repositories
     public class LogRepository : ILogRepository
     {
         private readonly IElasticClient _elasticClient;
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
 
-        public LogRepository(IElasticClient elasticClient, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository)
+        public LogRepository(IElasticClient elasticClient, Lazy<IQueueRepository> queueErrorRepository)
         {
             _elasticClient = elasticClient;
-            _log4NetRepository = log4NetRepository;
             _queueErrorRepository = queueErrorRepository;
         }
 
@@ -25,7 +23,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";
-                _log4NetRepository.Info(elkResponse);
 
                 return indexDocument.IsValid;
 
@@ -41,7 +38,6 @@ namespace Logger_Microservice.Repositories.Repositories
                 };
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
-                _log4NetRepository.Error(exception.Message.ToString());
 
                 return false;
             }

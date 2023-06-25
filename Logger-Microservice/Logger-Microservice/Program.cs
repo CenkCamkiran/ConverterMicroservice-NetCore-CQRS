@@ -12,11 +12,27 @@ using Logger_Microservice.Repositories.Repositories;
 using LoggerMicroservice.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nest;
 using RabbitMQ.Client;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
+
+serviceProvider.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+    logging.Configure(options =>
+    {
+        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId
+                                            | ActivityTrackingOptions.Baggage
+                                            | ActivityTrackingOptions.Tags;
+    });
+});
 
 
 //ELK
@@ -46,7 +62,6 @@ serviceProvider.AddSingleton(rabbitConnection);
 //Repository
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
 serviceProvider.AddScoped(typeof(ILogRepository), typeof(LogRepository));
-serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
@@ -67,7 +82,6 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 IMediator _mediator = builder.GetService<IMediator>();
-ILog4NetRepository _log4NetRepository = builder.GetService<ILog4NetRepository>();
 
 CancellationTokenSource cts = new CancellationTokenSource();
 CancellationToken ct = cts.Token;
@@ -92,8 +106,6 @@ catch (Exception exception)
     {
         queueLog = queueLog
     };
-    _log4NetRepository.Error(exception.Message.ToString());
-
     await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey));
 
 }
