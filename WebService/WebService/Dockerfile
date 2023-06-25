@@ -1,4 +1,4 @@
-#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 #4080 HTTP - 4443 HTTPS
 
@@ -9,6 +9,7 @@ EXPOSE 4080
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["WebService/WebService.csproj", "WebService/"]
+COPY ["WebService.Common/WebService.Common.csproj", "WebService.Common/"]
 COPY ["WebService.Controllers/WebService.Controllers.csproj", "WebService.Controllers/"]
 COPY ["WebService.Commands/WebService.Commands.csproj", "WebService.Commands/"]
 COPY ["WebService.Models/WebService.Models.csproj", "WebService.Models/"]
@@ -17,7 +18,6 @@ COPY ["WebService.Repositories/WebService.Repositories.csproj", "WebService.Repo
 COPY ["WebService.Exceptions/WebService.Exceptions.csproj", "WebService.Exceptions/"]
 COPY ["WebService.Handlers/WebService.Handlers.csproj", "WebService.Handlers/"]
 COPY ["WebService.Helpers/WebService.Helpers.csproj", "WebService.Helpers/"]
-COPY ["WebService.ProjectConfigurations/WebService.ProjectConfigurations.csproj", "WebService.ProjectConfigurations/"]
 COPY ["WebService.Middlewares/WebService.Middlewares.csproj", "WebService.Middlewares/"]
 RUN dotnet restore "WebService/WebService.csproj"
 COPY . .
