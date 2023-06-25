@@ -10,12 +10,10 @@ namespace Notification_Microservice.Repositories.Repositories
     public class MailSenderRepository : IMailSenderRepository
     {
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
-        private readonly Lazy<ILog4NetRepository> _log4NetRepository;
 
-        public MailSenderRepository(Lazy<IQueueRepository> queueErrorRepository, Lazy<ILog4NetRepository> log4NetRepository)
+        public MailSenderRepository(Lazy<IQueueRepository> queueErrorRepository)
         {
             _queueErrorRepository = queueErrorRepository;
-            _log4NetRepository = log4NetRepository;
         }
 
         public void SendMailToUser(string email, string attachmentFile, Stream attachmentFileStream)
@@ -57,7 +55,6 @@ namespace Notification_Microservice.Repositories.Repositories
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Value.Error(logText);
             }
 
         }

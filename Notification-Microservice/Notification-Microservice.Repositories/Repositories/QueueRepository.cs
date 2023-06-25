@@ -17,17 +17,15 @@ namespace Notification_Microservice.Repositories.Repositories
         uint msgCount = 0;
 
         private readonly IConnection _connection;
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
         private readonly Lazy<IMailSenderRepository> _mailSenderHelper;
         private readonly IMediator _mediator;
 
-        public QueueRepository(ManualResetEventSlim msgsRecievedGate, uint msgCount, IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IMailSenderRepository> mailSenderHelper, IMediator mediator)
+        public QueueRepository(ManualResetEventSlim msgsRecievedGate, uint msgCount, IConnection connection, Lazy<IQueueRepository> queueErrorRepository, Lazy<IMailSenderRepository> mailSenderHelper, IMediator mediator)
         {
             this.msgsRecievedGate = msgsRecievedGate;
             this.msgCount = msgCount;
             _connection = connection;
-            _log4NetRepository = log4NetRepository;
             _queueErrorRepository = queueErrorRepository;
             _mailSenderHelper = mailSenderHelper;
             _mediator = mediator;
@@ -72,7 +70,6 @@ namespace Notification_Microservice.Repositories.Repositories
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
             }
         }
 
@@ -110,7 +107,6 @@ namespace Notification_Microservice.Repositories.Repositories
                 };
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-                _log4NetRepository.Info(logText);
 
             }
             catch (Exception exception)
@@ -131,7 +127,6 @@ namespace Notification_Microservice.Repositories.Repositories
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-                _log4NetRepository.Error(logText);
 
             }
         }
@@ -176,7 +171,6 @@ namespace Notification_Microservice.Repositories.Repositories
             };
 
             string logText = $"{JsonConvert.SerializeObject(otherLog)}";
-            _log4NetRepository.Info(logText);
 
             if (msgCount == 0)
             {

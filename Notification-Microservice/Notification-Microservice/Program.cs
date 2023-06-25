@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Minio;
 using Notification_Microservice.Commands.ObjectCommands;
 using Notification_Microservice.Commands.QueueCommands;
@@ -15,6 +16,21 @@ using RabbitMQ.Client;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();
+
+serviceProvider.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.SetMinimumLevel(LogLevel.Information);
+    logging.Configure(options =>
+    {
+        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId
+                                            | ActivityTrackingOptions.Baggage
+                                            | ActivityTrackingOptions.Tags;
+    });
+});
 
 
 MinioClient minioClient = new MinioClient()
@@ -42,7 +58,6 @@ serviceProvider.AddScoped<IMailSenderRepository, MailSenderRepository>();
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
 serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
-serviceProvider.AddScoped<ILog4NetRepository, Log4NetRepository>();
 
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
