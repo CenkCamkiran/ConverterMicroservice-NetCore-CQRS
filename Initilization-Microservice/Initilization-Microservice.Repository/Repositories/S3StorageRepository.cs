@@ -1,15 +1,8 @@
-﻿using Initilization_Microservice.Common;
-using Initilization_Microservice.Common.Events;
+﻿using Initilization_Microservice.Common.Events;
 using Initilization_Microservice.Helpers;
 using Initilization_Microservice.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 using Minio;
-using Minio.DataModel;
-using Nest;
-using System.IO;
-using System.Net;
-using System.Net.Mime;
-using System.Security.AccessControl;
 
 namespace Initilization_Microservice.Repository.Repositories
 {

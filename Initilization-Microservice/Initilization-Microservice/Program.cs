@@ -80,7 +80,7 @@ var userServiceQueueConfiguration = queueService.ConfigureExchangeAndQueueAsync(
 var chatBrokerServiceQueueConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.ChatBrokerServiceExchangeName, ProjectConstants.ChatBrokerServiceExchange_Type, ProjectConstants.ChatBrokerServiceExchangeIsDurable, ProjectConstants.ChatBrokerServiceExchangeIsAutoDelete, ProjectConstants.ChatBrokerServiceQueueName, ProjectConstants.ChatBrokerServiceQueueIsDurable, ProjectConstants.ChatBrokerServiceQueueIsExclusive, ProjectConstants.ChatBrokerServiceQueueIsAutoDelete, null);
 
 
-var storageConfiguration = storageOperation.ConfigureS3Async(ProjectConstants.MinioBucketName); 
+var storageConfiguration = storageOperation.ConfigureS3Async(ProjectConstants.MinioBucketName);
 
 
 var userServiceElkConfiguration = elkOperation.ConfigureIndex(ProjectConstants.ElkUserServiceIndexName, ProjectConstants.UserServiceNumberOfShards, ProjectConstants.UserServiceNumberOfReplicas);
