@@ -140,7 +140,7 @@ namespace Notification_Microservice.Repositories.Repositories
 
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioAudiosBucket, queueMsg.fileGuid));
+            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioAudioBucket, queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);

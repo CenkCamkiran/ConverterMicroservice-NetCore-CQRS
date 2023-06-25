@@ -36,7 +36,7 @@ serviceProvider.AddLogging(logging =>
 MinioClient minioClient = new MinioClient()
                         .WithEndpoint(ProjectConstants.MinioHost)
                         .WithCredentials(ProjectConstants.MinioAccessKey, ProjectConstants.MinioSecretKey)
-                        .WithSSL(false);
+                        .WithSSL(ProjectConstants.MinioUseSsl);
 serviceProvider.AddSingleton<IMinioClient>(minioClient);
 
 
