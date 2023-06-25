@@ -25,8 +25,7 @@ namespace Notification_Microservice.Repositories.Repositories
 
         public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-
-            ServerSideEncryption? sse = null;
+            IServerSideEncryption? sse = null;
             stream.Position = 0;
 
             Dictionary<string, string> metadata = new Dictionary<string, string>()
@@ -46,12 +45,12 @@ namespace Notification_Microservice.Repositories.Repositories
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
                 var putObjectArgs = new PutObjectArgs()
@@ -62,7 +61,7 @@ namespace Notification_Microservice.Repositories.Repositories
                     .WithContentType(contentType)
                     .WithHeaders(metadata)
                     .WithServerSideEncryption(sse);
-                await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+                await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
@@ -113,18 +112,17 @@ namespace Notification_Microservice.Repositories.Repositories
         public async Task<ObjectData> GetFileAsync(string bucketName, string objectName)
         {
             ObjectData? objDataModel = null;
-            ServerSideEncryption? sse = null;
 
             try
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
                 string filePath = Path.Combine(Path.GetTempPath(), objectName + ".mp3"); //Get mp3 file from object storage
@@ -133,7 +131,7 @@ namespace Notification_Microservice.Repositories.Repositories
                                .WithObject(objectName)
                                .WithFile(filePath);
 
-                ObjectStat objStat = await _minioClient.Build().GetObjectAsync(args);
+                ObjectStat objStat = await _minioClient.GetObjectAsync(args);
 
                 objDataModel = new ObjectData()
                 {

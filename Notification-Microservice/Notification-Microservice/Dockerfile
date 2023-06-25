@@ -11,7 +11,7 @@ COPY ["Notification-Microservice.Handlers/Notification-Microservice.Handlers.csp
 COPY ["Notification-Microservice.Queries/Notification-Microservice.Queries.csproj", "Notification-Microservice.Queries/"]
 COPY ["Notification-Microservice.Models/Notification-Microservice.Models.csproj", "Notification-Microservice.Models/"]
 COPY ["Notification-Microservice.Repositories/Notification-Microservice.Repositories.csproj", "Notification-Microservice.Repositories/"]
-COPY ["Notification-Microservice.ProjectConfigurations/Notification-Microservice.ProjectConfigurations.csproj", "Notification-Microservice.ProjectConfigurations/"]
+COPY ["Notification-Microservice.Common/Notification-Microservice.Common.csproj", "Notification-Microservice.Common/"]
 RUN dotnet restore "Notification-Microservice/Notification-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Notification-Microservice"
