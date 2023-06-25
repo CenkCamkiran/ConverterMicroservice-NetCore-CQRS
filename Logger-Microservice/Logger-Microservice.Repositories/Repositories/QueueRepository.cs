@@ -1,5 +1,5 @@
-﻿using Converter_Microservice.Common.Events;
-using Logger_Microservice.Commands.LogCommands;
+﻿using Logger_Microservice.Commands.LogCommands;
+using Logger_Microservice.Common.Events;
 using Logger_Microservice.Repositories.Interfaces;
 using LoggerMicroservice.Models;
 using MediatR;
@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using System.Threading.Tasks;
 using WebService.Common.Constants;
 
 namespace Logger_Microservice.Repositories.Repositories

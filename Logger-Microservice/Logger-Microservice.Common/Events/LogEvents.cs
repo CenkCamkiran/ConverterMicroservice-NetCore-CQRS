@@ -1,4 +1,4 @@
-﻿namespace Converter_Microservice.Common.Events
+﻿namespace Logger_Microservice.Common.Events
 {
     public static class LogEvents
     {

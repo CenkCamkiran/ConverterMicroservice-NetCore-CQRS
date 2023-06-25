@@ -1,7 +1,7 @@
-﻿using Converter_Microservice.Common.Events;
-using Elasticsearch.Net;
+﻿using Elasticsearch.Net;
 using Logger_Microservice.Commands.LogCommands;
 using Logger_Microservice.Commands.QueueCommands;
+using Logger_Microservice.Common.Events;
 using Logger_Microservice.Handlers.LogHandlers;
 using Logger_Microservice.Handlers.QueueHandlers;
 using Logger_Microservice.Queries.QueueQueries;
