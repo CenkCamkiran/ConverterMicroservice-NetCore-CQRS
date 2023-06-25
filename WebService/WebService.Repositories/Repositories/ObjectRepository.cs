@@ -11,13 +11,11 @@ namespace WebService.Repositories.Repositories
     public class ObjectRepository : IObjectRepository
     {
         private readonly IMinioClient _minioClient;
-        private readonly ILog4NetRepository _log4NetRepository;
         private readonly ILogRepository<ObjectStorageLog> _loggingRepository;
 
-        public ObjectRepository(IMinioClient minioClient, ILog4NetRepository log4NetRepository, ILogRepository<ObjectStorageLog> loggingRepository)
+        public ObjectRepository(IMinioClient minioClient, ILogRepository<ObjectStorageLog> loggingRepository)
         {
             _minioClient = minioClient;
-            _log4NetRepository = log4NetRepository;
             _loggingRepository = loggingRepository;
         }
 
@@ -95,7 +93,6 @@ namespace WebService.Repositories.Repositories
             await _loggingRepository.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
 
             string logText = $"BucketName: {objectStorageLog.BucketName} - ObjectName: {objectStorageLog.ObjectName} - Content Type: {objectStorageLog.ContentType}";
-            _log4NetRepository.Info(logText);
         }
     }
 }

@@ -23,9 +23,24 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+builder.Services.AddLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole();
+    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Information);
+    logging.Configure(options =>
+    {
+        options.ActivityTrackingOptions = ActivityTrackingOptions.SpanId
+                                            | ActivityTrackingOptions.TraceId
+                                            | ActivityTrackingOptions.ParentId
+                                            | ActivityTrackingOptions.Baggage
+                                            | ActivityTrackingOptions.Tags;
+    });
+});
+
+
 //Repository
 builder.Services.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
-builder.Services.AddScoped<ILog4NetRepository, Log4NetRepository>();
 builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();
 builder.Services.AddScoped<ILogOtherRepository, LogOtherRepository>();
