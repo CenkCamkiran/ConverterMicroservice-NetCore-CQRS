@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Notification_Microservice.Common.Constants;
-using Notification_Microservice.ProjectConfigurations;
 using Notification_Microservice.Repositories.Interfaces;
 using NotificationMicroservice.Models;
 using System.Net;

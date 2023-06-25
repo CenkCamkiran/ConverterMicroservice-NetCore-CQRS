@@ -6,13 +6,11 @@ using Notification_Microservice.Commands.QueueCommands;
 using Notification_Microservice.Common.Constants;
 using Notification_Microservice.Handlers.ObjectHandlers;
 using Notification_Microservice.Handlers.QueueHandlers;
-using Notification_Microservice.ProjectConfigurations;
 using Notification_Microservice.Queries.ObjectQueries;
 using Notification_Microservice.Queries.QueueQueries;
 using Notification_Microservice.Repositories.Interfaces;
 using Notification_Microservice.Repositories.Providers;
 using Notification_Microservice.Repositories.Repositories;
-using NotificationMicroservice.Models;
 using RabbitMQ.Client;
 using IConnection = RabbitMQ.Client.IConnection;
 
