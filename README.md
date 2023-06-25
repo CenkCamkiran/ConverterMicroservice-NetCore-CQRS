@@ -32,6 +32,8 @@ Main goal is:  Develop MP4 to MP3 converter with Asynchronous way.
   
 - I used **CQRS Design Pattern** on Web Service and other Microservices.
 
+- I used Initilization Service for building required elements such as create Bucket in Minio, create indexes in ELK and create queues-exchanges and binding them each other in RabbitMQ. It runs only once.
+
 ## What is CQRS?
 
 Check the link: <https://learn.microsoft.com/tr-tr/azure/architecture/patterns/cqrs>
@@ -400,6 +402,8 @@ I used CQRS Design Pattern Web Service and other Microservices.
 At the root of project, there is a folder called **'YAML-Files'**. Each folder name represents technologies that I used in this project. In that folders, there are docker-compose files corresponds to each related folder. Use them to install on **Docker Compose**.
 
 To install the Microservices, go to **Microservices folder** and each Microservice are represented as folder name. Inside of that folders there is **docker-compose** file. Use them via creating **.env** file in your workspace or whatever you want!
+
+Install InitilizationService first and the others!
 
 ## Contributing
 
