@@ -7,7 +7,7 @@
         public string ExchangeName { get; set; } = string.Empty;
         public string RoutingKey { get; set; } = string.Empty;
         public string? Message { get; set; } = null;
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
         public string ExceptionMessage { get; set; } = string.Empty;
     }
 }

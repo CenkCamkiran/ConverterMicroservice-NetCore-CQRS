@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Newtonsoft.Json;
+using Notification_Microservice.Common.Constants;
+using Notification_Microservice.Common.Events;
 using Notification_Microservice.Queries.ObjectQueries;
 using Notification_Microservice.Repositories.Interfaces;
 using NotificationMicroservice.Models;
@@ -17,19 +19,17 @@ namespace Notification_Microservice.Repositories.Repositories
         private readonly IConnection _connection;
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
-        private readonly Lazy<IQueueRepository> _queueOtherRepository;
         private readonly Lazy<IMailSenderRepository> _mailSenderHelper;
-        private readonly IObjectRepository _objectStorageRepository;
         private readonly IMediator _mediator;
 
-        public QueueRepository(IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, Lazy<IMailSenderRepository> mailSenderHelper, IObjectRepository objectStorageRepository, IMediator mediator)
+        public QueueRepository(ManualResetEventSlim msgsRecievedGate, uint msgCount, IConnection connection, ILog4NetRepository log4NetRepository, Lazy<IQueueRepository> queueErrorRepository, Lazy<IMailSenderRepository> mailSenderHelper, IMediator mediator)
         {
+            this.msgsRecievedGate = msgsRecievedGate;
+            this.msgCount = msgCount;
             _connection = connection;
             _log4NetRepository = log4NetRepository;
             _queueErrorRepository = queueErrorRepository;
-            _queueOtherRepository = queueOtherRepository;
             _mailSenderHelper = mailSenderHelper;
-            _objectStorageRepository = objectStorageRepository;
             _mediator = mediator;
         }
 
@@ -40,17 +40,6 @@ namespace Notification_Microservice.Repositories.Repositories
 
                 using (var channel = _connection.CreateModel())
                 {
-                    var queueResult = channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
-                                         {
-                                             {
-                                                 "x-message-ttl", messageTtl
-                                             }
-                                         });
-
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
                     var consumer = new EventingBasicConsumer(channel);
@@ -61,7 +50,6 @@ namespace Notification_Microservice.Repositories.Repositories
                                          autoAck: false,
                                          consumer: consumer);
 
-                    //throw new Exception();
                     // Wait here until all messages are retrieved
                     msgsRecievedGate.Wait();
 
@@ -72,7 +60,7 @@ namespace Notification_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicConsume",
+                    OperationType = LogEvents.BasicConsumeEvent,
                     Date = DateTime.Now,
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
@@ -81,7 +69,7 @@ namespace Notification_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -98,12 +86,6 @@ namespace Notification_Microservice.Repositories.Repositories
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
 
-                    channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: null);
-
                     string serializedObj = JsonConvert.SerializeObject(message);
                     var body = Encoding.UTF8.GetBytes(serializedObj);
 
@@ -115,7 +97,7 @@ namespace Notification_Microservice.Repositories.Repositories
 
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -135,7 +117,7 @@ namespace Notification_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     QueueName = queue,
@@ -146,7 +128,7 @@ namespace Notification_Microservice.Repositories.Repositories
                 {
                     queueLog = queueLog
                 };
-                _queueErrorRepository.Value.QueueMessageDirect(errorLog, "errorlogs", "log_exchange.direct", "error_log");
+                _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey);
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);
@@ -159,11 +141,11 @@ namespace Notification_Microservice.Repositories.Repositories
             var e = (EventingBasicConsumer)se;
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            msgCount = e.Model.MessageCount("notification");
+            msgCount = e.Model.MessageCount(ProjectConstants.NotificationServiceQueueName);
 
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _mediator.Send(new ObjectQuery("audios", queueMsg.fileGuid));
+            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioAudiosBucket, queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
@@ -181,11 +163,11 @@ namespace Notification_Microservice.Repositories.Repositories
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = "BasicConsume",
+                OperationType = LogEvents.BasicConsumeEvent,
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "errorlogs",
+                QueueName = ProjectConstants.ErrorLogsServiceQueueName,
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()

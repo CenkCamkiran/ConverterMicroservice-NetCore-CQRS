@@ -5,8 +5,8 @@ namespace Notification_Microservice.Queries.ObjectQueries
 {
     public class ObjectQuery : IRequest<ObjectData>
     {
-        public string BucketName { get; set; } = string.Empty;
-        public string ObjectName { get; set; } = string.Empty;
+        public string BucketName { get; set; }
+        public string ObjectName { get; set; }
 
         public ObjectQuery(string bucketName, string objectName)
         {

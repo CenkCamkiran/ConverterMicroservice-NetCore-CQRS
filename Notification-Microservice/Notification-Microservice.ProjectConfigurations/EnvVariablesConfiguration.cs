@@ -1,6 +1,4 @@
-﻿using NotificationMicroservice.Models;
-
-namespace Notification_Microservice.ProjectConfigurations
+﻿namespace Notification_Microservice.ProjectConfigurations
 {
     public class EnvVariablesConfiguration
     {
