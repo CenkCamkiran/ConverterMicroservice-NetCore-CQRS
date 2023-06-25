@@ -9,8 +9,6 @@ namespace WebService.Common.Constants
         public static string RabbitmqUsername { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
         public static string RabbitmqPassword { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
-        public static int ExchangeTtl { get; set; } = 28800000;
-
         public static int ConverterExchangeTtl { get; set; } = 43200000;
         public static string ConverterServiceExchangeName { get; set; } = "converter_exchange.direct";
         public static string ConverterServiceQueueName { get; set; } = "converter";
