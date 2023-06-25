@@ -5,7 +5,7 @@ namespace WebService.Commands.LogCommands
 {
     public class LogCommand : IRequest<bool>
     {
-        public string IndexName { get; set; } = string.Empty;
+        public string IndexName { get; set; }
         public HttpRequest Request { get; set; }
         public HttpResponse Response { get; set; }
         public DateTime RequestDate { get; set; }
