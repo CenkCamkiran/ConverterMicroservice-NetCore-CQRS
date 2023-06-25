@@ -8,13 +8,13 @@ RUN apt-get update && apt-get install ffmpeg -y
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["Converter-Microservice/Converter-Microservice.csproj", "Converter-Microservice/"]
+COPY ["Converter-Microservice.Common/Converter-Microservice.Common.csproj", "Converter-Microservice.Common/"]
 COPY ["Converter-Microservice.Handlers/Converter-Microservice.Handlers.csproj", "Converter-Microservice.Handlers/"]
 COPY ["Converter-Microservice.Commands/Converter-Microservice.Commands.csproj", "Converter-Microservice.Commands/"]
 COPY ["Converter-Microservice.Models/Converter-Microservice.Models.csproj", "Converter-Microservice.Models/"]
 COPY ["Converter-Microservice.Queries/Converter-Microservice.Queries.csproj", "Converter-Microservice.Queries/"]
 COPY ["Converter-Microservice.Repositories/Converter-Microservice.Repositories.csproj", "Converter-Microservice.Repositories/"]
 COPY ["Converter-Microservice.Exceptions/Converter-Microservice.Exceptions.csproj", "Converter-Microservice.Exceptions/"]
-COPY ["Converter-Microservice.ProjectConfigurations/Converter-Microservice.ProjectConfigurations.csproj", "Converter-Microservice.ProjectConfigurations/"]
 RUN dotnet restore "Converter-Microservice/Converter-Microservice.csproj"
 COPY . .
 WORKDIR "/src/Converter-Microservice"
