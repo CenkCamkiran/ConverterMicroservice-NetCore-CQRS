@@ -23,7 +23,7 @@ namespace WebService.Repositories.Repositories
 
         public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
-            ServerSideEncryption? sse = null;
+            IServerSideEncryption? sse = null;
             stream.Position = 0;
 
             Dictionary<string, string> metadata = new Dictionary<string, string>()
@@ -46,12 +46,12 @@ namespace WebService.Repositories.Repositories
             {
                 var beArgs = new BucketExistsArgs()
                     .WithBucket(bucketName);
-                bool found = await _minioClient.Build().BucketExistsAsync(beArgs).ConfigureAwait(false);
+                bool found = await _minioClient.BucketExistsAsync(beArgs).ConfigureAwait(false);
                 if (!found)
                 {
                     var mbArgs = new MakeBucketArgs()
                         .WithBucket(bucketName);
-                    await _minioClient.Build().MakeBucketAsync(mbArgs).ConfigureAwait(false);
+                    await _minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
                 var putObjectArgs = new PutObjectArgs()
@@ -62,7 +62,7 @@ namespace WebService.Repositories.Repositories
                     .WithContentType("video/mp4")
                     .WithHeaders(metadata)
                     .WithServerSideEncryption(sse);
-                await _minioClient.Build().PutObjectAsync(putObjectArgs).ConfigureAwait(false);
+                await _minioClient.PutObjectAsync(putObjectArgs).ConfigureAwait(false);
                 //await _minioClient.Build().PutObjectAsync(bucketName, objectName, stream, stream.Length, contentType).ConfigureAwait(false);
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
