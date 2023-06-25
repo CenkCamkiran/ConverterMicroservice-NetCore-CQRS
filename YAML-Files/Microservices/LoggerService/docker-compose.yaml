@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   loggerservice:
-    image: cenkcamkiran/gcloud-projects:loggerservice_v2.0
+    image: cenkcamkiran/gcloud-projects:loggerservice_v3.0
     networks:
       default: null
     restart: on-failure

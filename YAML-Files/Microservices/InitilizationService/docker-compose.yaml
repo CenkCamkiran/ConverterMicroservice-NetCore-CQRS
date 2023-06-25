@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  converterservice:
-    image: cenkcamkiran/gcloud-projects:converterservice_v3.0
+  initilizationservice:
+    image: cenkcamkiran/gcloud-projects:initilizationservice_v3.0
     networks:
       default: null
     restart: on-failure
-    container_name: converter_service
+    container_name: initilization_service
     environment:
       RABBITMQ_HOST: ${RABBITMQHOST}
       RABBITMQ_PORT: ${RABBITMQPORT}
@@ -18,6 +18,9 @@ services:
       MINIO_USE_SSL: ${MINIO_USE_SSL}
       MINIO_AUDIO_BUCKET_NAME: ${MINIO_AUDIO_BUCKET_NAME}
       MINIO_VIDEO_BUCKET_NAME: ${MINIO_VIDEO_BUCKET_NAME}
+      ELK_HOST: ${ELKHOST}
+      ELK_USERNAME: ${ELKUSERNAME}
+      ELK_PASSWORD: ${ELKPASSWORD}
 
 networks:
   default:
