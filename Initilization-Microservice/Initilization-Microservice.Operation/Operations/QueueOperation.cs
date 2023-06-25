@@ -1,5 +1,4 @@
-﻿using Initilization_Microservice.Common;
-using Initilization_Microservice.Operation.Interfaces;
+﻿using Initilization_Microservice.Operation.Interfaces;
 using Initilization_Microservice.Repository.Interfaces;
 
 namespace Initilization_Microservice.Operation.Operations
