@@ -43,7 +43,7 @@ namespace WebService.Controllers.Converter
                 {
                     await stream.CopyToAsync(ms);
 
-                    await _mediator.Send(new ObjectCommand(ProjectConstants.MinioBucketName, guid, ms, file.ContentType));
+                    await _mediator.Send(new ObjectCommand(ProjectConstants.MinioVideoBucket, guid, ms, file.ContentType));
                 }
             }
             catch (Exception exception)

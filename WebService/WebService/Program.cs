@@ -75,7 +75,7 @@ builder.Services.AddSingleton<RabbitMQ.Client.IConnection>(rabbitConnection);
 MinioClient minioClient = new MinioClient()
                                     .WithEndpoint(ProjectConstants.MinioHost)
                                     .WithCredentials(ProjectConstants.MinioAccessKey, ProjectConstants.MinioSecretKey)
-                                    .WithSSL(false);
+                                    .WithSSL(ProjectConstants.MinioUseSsl);
 builder.Services.AddSingleton<IMinioClient>(minioClient);
 
 builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
