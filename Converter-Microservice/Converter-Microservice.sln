@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice", "C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Models", "Converter-Microservice.Models\Converter-Microservice.Models.csproj", "{A213CE20-5DA3-4B48-BB52-8AC856EB249F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Handlers", "Converter-Microservice.Handlers\Converter-Microservice.Handlers.csproj", "{431D6D56-8A7B-4834-B650-A289CEDEB81F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Handlers", "Converter-Microservice.Handlers\Converter-Microservice.Handlers.csproj", "{431D6D56-8A7B-4834-B650-A289CEDEB81F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Queries", "Converter-Microservice.Queries\Converter-Microservice.Queries.csproj", "{BA271689-ADE4-4B2B-81FF-FEFC785D8804}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Queries", "Converter-Microservice.Queries\Converter-Microservice.Queries.csproj", "{BA271689-ADE4-4B2B-81FF-FEFC785D8804}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Commands", "Converter-Microservice.Commands\Converter-Microservice.Commands.csproj", "{411EF423-2570-41A1-8D7A-3410425FF105}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Commands", "Converter-Microservice.Commands\Converter-Microservice.Commands.csproj", "{411EF423-2570-41A1-8D7A-3410425FF105}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Exceptions", "Converter-Microservice.Exceptions\Converter-Microservice.Exceptions.csproj", "{7C990C81-A8FB-40B0-BAA6-E31A6C255006}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Exceptions", "Converter-Microservice.Exceptions\Converter-Microservice.Exceptions.csproj", "{7C990C81-A8FB-40B0-BAA6-E31A6C255006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Repositories", "Converter-Microservice.Repositories\Converter-Microservice.Repositories.csproj", "{EEE0950B-20A9-449E-A343-5D83675C006B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Converter-Microservice.Repositories", "Converter-Microservice.Repositories\Converter-Microservice.Repositories.csproj", "{EEE0950B-20A9-449E-A343-5D83675C006B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.ProjectConfigurations", "Converter-Microservice.ProjectConfigurations\Converter-Microservice.ProjectConfigurations.csproj", "{ADF3E3F9-473B-41FA-8351-3B0C16549B86}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Converter-Microservice.Common", "Converter-Microservice.Common\Converter-Microservice.Common.csproj", "{FBC18C3A-5D4B-4271-8A46-BFB79D4AC9BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{EEE0950B-20A9-449E-A343-5D83675C006B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEE0950B-20A9-449E-A343-5D83675C006B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEE0950B-20A9-449E-A343-5D83675C006B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADF3E3F9-473B-41FA-8351-3B0C16549B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADF3E3F9-473B-41FA-8351-3B0C16549B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADF3E3F9-473B-41FA-8351-3B0C16549B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADF3E3F9-473B-41FA-8351-3B0C16549B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBC18C3A-5D4B-4271-8A46-BFB79D4AC9BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBC18C3A-5D4B-4271-8A46-BFB79D4AC9BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBC18C3A-5D4B-4271-8A46-BFB79D4AC9BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBC18C3A-5D4B-4271-8A46-BFB79D4AC9BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

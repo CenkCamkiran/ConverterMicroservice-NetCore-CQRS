@@ -1,9 +1,11 @@
-﻿using Converter_Microservice.Commands.QueueCommands;
+﻿using ChatAppStorageService.Common.Events;
+using Converter_Microservice.Commands.QueueCommands;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
 using MediatR;
 using Minio.DataModel;
 using Newtonsoft.Json;
+using WebService.Common.Constants;
 using Xabe.FFmpeg;
 
 namespace Converter_Microservice.Repositories.Repositories
@@ -21,7 +23,7 @@ namespace Converter_Microservice.Repositories.Repositories
             _mediator = mediator;
         }
 
-        public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message) //string ConvertFromFilePath, string ConvertToFilePath
+        public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message)
         {
             QueueMessage? msg = null;
 
@@ -40,7 +42,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     using (MemoryStream ms = new MemoryStream())
                     {
                         await fs.CopyToAsync(ms);
-                        await _objectStorageRepository.StoreFileAsync("audios", guid, ms, "audio/mp3");
+                        await _objectStorageRepository.StoreFileAsync(ProjectConstants.MinioAudiosBucket, guid, ms, "audio/mp3");
 
                         msg = new QueueMessage()
                         {
@@ -48,7 +50,7 @@ namespace Converter_Microservice.Repositories.Repositories
                             fileGuid = guid
                         };
 
-                        await _mediator.Send(new QueueCommand(msg, "notification", "notification_exchange.direct", "mp4_to_notif", 3600000));
+                        await _mediator.Send(new QueueCommand(msg, ProjectConstants.NotificationServiceQueueName, ProjectConstants.NotificationServiceExchangeName, ProjectConstants.NotificationServiceRoutingKey, ProjectConstants.NotificationServiceExchangeTtl));
 
                     }
                 }
@@ -61,14 +63,14 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 ConverterLog converterLog = new ConverterLog()
                 {
-                    Info = "Conversion finished!",
+                    Info = LogEvents.ConversionEvent,
                     Date = DateTime.Now
                 };
                 OtherLog otherLog = new OtherLog()
                 {
                     converterLog = converterLog
                 };
-                await _mediator.Send(new QueueCommand(otherLog, "otherlogs", "log_exchange.direct", "other_log", 0));
+                await _mediator.Send(new QueueCommand(otherLog, ProjectConstants.OtherLogsServiceQueueName, ProjectConstants.OtherLogsServiceExchangeName, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.OtherLogsServiceExchangeTtl));
 
                 string logText = $"{JsonConvert.SerializeObject(otherLog)}";
                 _log4NetRepository.Info(logText);
@@ -87,7 +89,7 @@ namespace Converter_Microservice.Repositories.Repositories
                 {
                     converterLog = exceptionModel
                 };
-                await _mediator.Send(new QueueCommand(errorLog, "errorlogs", "log_exchange.direct", "error_log", 0));
+                await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.ErrorLogsServiceExchangeTtl));
 
                 string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
                 _log4NetRepository.Error(logText);

@@ -1,4 +1,5 @@
-﻿using Converter_Microservice.Commands.ConverterCommands;
+﻿using ChatAppStorageService.Common.Events;
+using Converter_Microservice.Commands.ConverterCommands;
 using Converter_Microservice.Commands.QueueCommands;
 using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Repositories.Interfaces;
@@ -8,6 +9,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using WebService.Common.Constants;
 
 namespace Converter_Microservice.Repositories.Repositories
 {
@@ -36,19 +38,8 @@ namespace Converter_Microservice.Repositories.Repositories
         {
             try
             {
-
                 using (var channel = _connection.CreateModel())
                 {
-                    var queueResult = channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
-                                         {
-                                             {
-                                                 "x-message-ttl", messageTtl
-                                             }
-                                         });
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -69,7 +60,7 @@ namespace Converter_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicConsume",
+                    OperationType = LogEvents.BasicConsumeEvent,
                     Date = DateTime.Now,
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
@@ -93,17 +84,6 @@ namespace Converter_Microservice.Repositories.Repositories
                     var properties = channel.CreateBasicProperties();
                     properties.Persistent = true;
 
-                    channel.QueueDeclare(queue: queue,
-                                         durable: true,
-                                         exclusive: false,
-                                         autoDelete: false,
-                                         arguments: messageTtl == 0 ? null : new Dictionary<string, object>()
-                                         {
-                                             {
-                                                 "x-message-ttl", messageTtl
-                                             }
-                                         });
-
                     string serializedObj = JsonConvert.SerializeObject(message);
                     var body = Encoding.UTF8.GetBytes(serializedObj);
 
@@ -115,7 +95,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -135,7 +115,7 @@ namespace Converter_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = "BasicPublish",
+                    OperationType = LogEvents.BasicPublishEvent,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -160,10 +140,10 @@ namespace Converter_Microservice.Repositories.Repositories
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
 
-            msgCount = e.Model.MessageCount("converter");
+            msgCount = e.Model.MessageCount(ProjectConstants.ConverterServiceQueueName);
             QueueMessage queueMsg = JsonConvert.DeserializeObject<QueueMessage>(message);
 
-            ObjectData objModel = await _mediator.Send(new ObjectQuery("videos", queueMsg.fileGuid));
+            ObjectData objModel = await _mediator.Send(new ObjectQuery(ProjectConstants.MinioVideosBucket, queueMsg.fileGuid));
             if (objModel == null)
             {
                 e.Model.BasicNack(deliveryTag: ea.DeliveryTag, multiple: false, requeue: true);
@@ -178,11 +158,11 @@ namespace Converter_Microservice.Repositories.Repositories
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = "BasicConsume",
+                OperationType = LogEvents.BasicConsumeEvent,
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
-                QueueName = "converter",
+                QueueName = ProjectConstants.ConverterServiceQueueName,
                 RoutingKey = ea.RoutingKey
             };
             OtherLog otherLog = new OtherLog()

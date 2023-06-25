@@ -17,34 +17,23 @@ using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using RabbitMQ.Client;
 using System.Reflection;
+using WebService.Common.Constants;
 
 var serviceProvider = new ServiceCollection();
 
-EnvVariablesConfiguration envVariablesHandler = new EnvVariablesConfiguration();
-
-MinioConfiguration minioConfiguration = envVariablesHandler.GetMinioEnvVariables();
-Console.WriteLine($"MINIO_HOST {minioConfiguration.MinioHost}");
-Console.WriteLine($"MINIO_ACCESSKEY {minioConfiguration.MinioAccessKey}");
-Console.WriteLine($"MINIO_SECRETKEY {minioConfiguration.MinioSecretKey}");
-
 MinioClient minioClient = new MinioClient()
-                        .WithEndpoint(minioConfiguration.MinioHost)
-                        .WithCredentials(minioConfiguration.MinioAccessKey, minioConfiguration.MinioSecretKey)
+                        .WithEndpoint(ProjectConstants.MinioHost)
+                        .WithCredentials(ProjectConstants.MinioAccessKey, ProjectConstants.MinioSecretKey)
                         .WithSSL(false);
 serviceProvider.AddSingleton<IMinioClient>(minioClient);
 
-RabbitMqConfiguration rabbitMqConfiguration = envVariablesHandler.GetRabbitEnvVariables();
-Console.WriteLine($"RABBITMQ_HOST {rabbitMqConfiguration.RabbitMqHost}");
-Console.WriteLine($"RABBITMQ_PORT {rabbitMqConfiguration.RabbitMqPort}");
-Console.WriteLine($"RABBITMQ_USERNAME {rabbitMqConfiguration.RabbitMqUsername}");
-Console.WriteLine($"RABBITMQ_PASSWORD {rabbitMqConfiguration.RabbitMqPassword}");
 
 var connectionFactory = new ConnectionFactory
 {
-    HostName = rabbitMqConfiguration.RabbitMqHost,
-    Port = Convert.ToInt32(rabbitMqConfiguration.RabbitMqPort),
-    UserName = rabbitMqConfiguration.RabbitMqUsername,
-    Password = rabbitMqConfiguration.RabbitMqPassword
+    HostName = ProjectConstants.RabbitmqHost,
+    Port = Convert.ToInt32(ProjectConstants.RabbitmqPort),
+    UserName = ProjectConstants.RabbitmqUsername,
+    Password = ProjectConstants.RabbitmqPassword
 };
 IConnection rabbitConnection = connectionFactory.CreateConnection();
 
@@ -79,4 +68,4 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 var _mediator = builder.GetService<IMediator>();
-await _mediator.Send(new QueueQuery("converter", 43200000));
+await _mediator.Send(new QueueQuery(ProjectConstants.ConverterServiceQueueName, ProjectConstants.ConverterExchangeTtl));

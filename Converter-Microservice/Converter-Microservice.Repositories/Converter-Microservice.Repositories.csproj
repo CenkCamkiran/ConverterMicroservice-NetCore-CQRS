@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Converter-Microservice.Commands\Converter-Microservice.Commands.csproj" />
+    <ProjectReference Include="..\Converter-Microservice.Common\Converter-Microservice.Common.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Exceptions\Converter-Microservice.Exceptions.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Models\Converter-Microservice.Models.csproj" />
     <ProjectReference Include="..\Converter-Microservice.Queries\Converter-Microservice.Queries.csproj" />
