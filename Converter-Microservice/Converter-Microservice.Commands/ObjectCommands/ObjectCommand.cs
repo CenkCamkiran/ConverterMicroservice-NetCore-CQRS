@@ -4,7 +4,7 @@ namespace Converter_Microservice.Commands.ObjectCommands
 {
     public class ObjectCommand : IRequest<bool>
     {
-        public string ObjectName { get; set; } 
+        public string ObjectName { get; set; }
         public string BucketName { get; set; }
         public string ContentType { get; set; }
         public Stream Stream { get; set; }

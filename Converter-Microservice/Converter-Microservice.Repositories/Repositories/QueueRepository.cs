@@ -1,6 +1,5 @@
-﻿using ChatAppStorageService.Common.Events;
-using Converter_Microservice.Commands.ConverterCommands;
-using Converter_Microservice.Commands.QueueCommands;
+﻿using Converter_Microservice.Commands.ConverterCommands;
+using Converter_Microservice.Common.Events;
 using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
@@ -21,7 +20,7 @@ namespace Converter_Microservice.Repositories.Repositories
         private readonly ILog4NetRepository _log4NetRepository;
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
-        private readonly IMediator _mediator; 
+        private readonly IMediator _mediator;
 
         uint msgCount = 0;
 

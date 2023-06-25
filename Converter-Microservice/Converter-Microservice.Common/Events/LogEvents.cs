@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http;
-
-namespace ChatAppStorageService.Common.Events
+﻿namespace Converter_Microservice.Common.Events
 {
     public static class LogEvents
     {

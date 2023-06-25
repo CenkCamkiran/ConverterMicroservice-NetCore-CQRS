@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Converter_Microservice.Handlers.QueueHandlers
 {
-    public class QueueCommandHandler : IRequestHandler<QueueCommand >    
+    public class QueueCommandHandler : IRequestHandler<QueueCommand>
     {
         private readonly IQueueRepository _queueRepository;
 

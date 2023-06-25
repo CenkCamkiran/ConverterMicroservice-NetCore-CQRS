@@ -1,4 +1,4 @@
-﻿using ChatAppStorageService.Common.Events;
+﻿using Converter_Microservice.Common.Events;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
 using Minio;

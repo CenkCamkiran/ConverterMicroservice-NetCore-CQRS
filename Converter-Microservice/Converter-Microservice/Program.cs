@@ -5,18 +5,15 @@ using Converter_Microservice.Handlers.ConverterHandlers;
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
 using Converter_Microservice.Handlers.QueueHandlers;
-using Converter_Microservice.ProjectConfigurations;
 using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Queries.QueueQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using Converter_Microservice.Repositories.Providers;
 using Converter_Microservice.Repositories.Repositories;
-using ConverterMicroservice.Models;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using RabbitMQ.Client;
-using System.Reflection;
 using WebService.Common.Constants;
 
 var serviceProvider = new ServiceCollection();

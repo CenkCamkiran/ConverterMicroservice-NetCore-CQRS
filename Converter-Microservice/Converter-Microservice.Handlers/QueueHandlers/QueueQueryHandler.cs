@@ -1,5 +1,4 @@
-﻿using Converter_Microservice.Commands.QueueCommands;
-using Converter_Microservice.Queries.QueueQueries;
+﻿using Converter_Microservice.Queries.QueueQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using MediatR;
 
