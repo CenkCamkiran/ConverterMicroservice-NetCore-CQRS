@@ -11,8 +11,8 @@
     <PackageReference Include="log4net" Version="2.0.15" />
     <PackageReference Include="MediatR" Version="12.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
-    <PackageReference Include="Xabe.FFmpeg" Version="5.2.5" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+    <PackageReference Include="Xabe.FFmpeg" Version="5.2.6" />
   </ItemGroup>
 
   <ItemGroup>
