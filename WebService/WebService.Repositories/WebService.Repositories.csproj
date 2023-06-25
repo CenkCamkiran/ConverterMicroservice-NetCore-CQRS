@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebService.Common\WebService.Common.csproj" />
     <ProjectReference Include="..\WebService.Exceptions\WebService.Exceptions.csproj" />
     <ProjectReference Include="..\WebService.Models\WebService.Models.csproj" />
   </ItemGroup>

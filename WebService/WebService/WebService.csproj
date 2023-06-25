@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebService.Common\WebService.Common.csproj" />
     <ProjectReference Include="..\WebService.Controllers\WebService.Controllers.csproj" />
     <ProjectReference Include="..\WebService.Handlers\WebService.Handlers.csproj" />
     <ProjectReference Include="..\WebService.Helpers\WebService.Helpers.csproj" />

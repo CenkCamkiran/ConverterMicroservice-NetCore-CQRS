@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using System.Net.NetworkInformation;
+using WebService.Common.Constants;
 using WebService.Exceptions;
 using WebService.Helpers.Interfaces;
 using WebService.Models;
-using WebService.ProjectConfigurations;
 
 namespace WebService.Helpers.Helpers
 {
@@ -14,9 +14,7 @@ namespace WebService.Helpers.Helpers
         {
             try
             {
-                EnvVariablesConfiguration envVariablesConfiguration = new EnvVariablesConfiguration();
-                var vmHost = envVariablesConfiguration.GetElkEnvVariables();
-                Uri uri = new Uri(vmHost.ElkHost);
+                Uri uri = new Uri(ProjectConstants.ElkHost);
 
                 Ping ping = new Ping();
                 var pingResult = await ping.SendPingAsync(uri.Host, 60000);

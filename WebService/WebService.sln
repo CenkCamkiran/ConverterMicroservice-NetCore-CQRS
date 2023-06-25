@@ -9,21 +9,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Helpers", "WebSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Models", "WebService.Models\WebService.Models.csproj", "{2224A5B6-543E-41A1-BFFE-1CE860405A1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Commands", "WebService.Commands\WebService.Commands.csproj", "{1CB3BEFE-4B86-4D58-A848-606C44E7AEA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Commands", "WebService.Commands\WebService.Commands.csproj", "{1CB3BEFE-4B86-4D58-A848-606C44E7AEA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Queries", "WebService.Queries\WebService.Queries.csproj", "{28485FCF-B0DB-4A0E-974F-9E5AC7D49036}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Queries", "WebService.Queries\WebService.Queries.csproj", "{28485FCF-B0DB-4A0E-974F-9E5AC7D49036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Handlers", "WebService.Handlers\WebService.Handlers.csproj", "{40EE4A43-984F-46BB-B9F3-7175C83BE447}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Handlers", "WebService.Handlers\WebService.Handlers.csproj", "{40EE4A43-984F-46BB-B9F3-7175C83BE447}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Middlewares", "WebService.Middlewares\WebService.Middlewares.csproj", "{204170A2-151F-41CB-8FEF-851EEF887239}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Middlewares", "WebService.Middlewares\WebService.Middlewares.csproj", "{204170A2-151F-41CB-8FEF-851EEF887239}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Repositories", "WebService.Repositories\WebService.Repositories.csproj", "{940B7007-ADCA-49C1-A517-A53966139B0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Repositories", "WebService.Repositories\WebService.Repositories.csproj", "{940B7007-ADCA-49C1-A517-A53966139B0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.ProjectConfigurations", "WebService.ProjectConfigurations\WebService.ProjectConfigurations.csproj", "{2258D3E4-4402-4A11-B5DC-4A8A0B4F1882}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Controllers", "WebService.Controllers\WebService.Controllers.csproj", "{98570BB4-C358-4F36-91B5-BE4F38B90E8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Controllers", "WebService.Controllers\WebService.Controllers.csproj", "{98570BB4-C358-4F36-91B5-BE4F38B90E8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebService.Exceptions", "WebService.Exceptions\WebService.Exceptions.csproj", "{2A481B05-AE13-4EC5-8E5F-34906AF4BC92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Exceptions", "WebService.Exceptions\WebService.Exceptions.csproj", "{2A481B05-AE13-4EC5-8E5F-34906AF4BC92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebService.Common", "WebService.Common\WebService.Common.csproj", "{1743926E-C8ED-4F78-9899-F6E6E7137242}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +63,6 @@ Global
 		{940B7007-ADCA-49C1-A517-A53966139B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{940B7007-ADCA-49C1-A517-A53966139B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{940B7007-ADCA-49C1-A517-A53966139B0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2258D3E4-4402-4A11-B5DC-4A8A0B4F1882}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2258D3E4-4402-4A11-B5DC-4A8A0B4F1882}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2258D3E4-4402-4A11-B5DC-4A8A0B4F1882}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2258D3E4-4402-4A11-B5DC-4A8A0B4F1882}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98570BB4-C358-4F36-91B5-BE4F38B90E8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98570BB4-C358-4F36-91B5-BE4F38B90E8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98570BB4-C358-4F36-91B5-BE4F38B90E8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,6 +71,10 @@ Global
 		{2A481B05-AE13-4EC5-8E5F-34906AF4BC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A481B05-AE13-4EC5-8E5F-34906AF4BC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A481B05-AE13-4EC5-8E5F-34906AF4BC92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1743926E-C8ED-4F78-9899-F6E6E7137242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1743926E-C8ED-4F78-9899-F6E6E7137242}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1743926E-C8ED-4F78-9899-F6E6E7137242}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1743926E-C8ED-4F78-9899-F6E6E7137242}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

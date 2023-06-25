@@ -5,6 +5,7 @@ using RabbitMQ.Client;
 using WebService.Commands.LogCommands;
 using WebService.Commands.ObjectCommands;
 using WebService.Commands.QueueCommands;
+using WebService.Common.Constants;
 using WebService.Handlers.HealthHandlers;
 using WebService.Handlers.LogHandlers;
 using WebService.Handlers.ObjectHandlers;
@@ -14,8 +15,6 @@ using WebService.Helpers.Interfaces;
 using WebService.Middlewares;
 using WebService.Middlewares.Contexts;
 using WebService.Middlewares.Contexts.Interfaces;
-using WebService.Models;
-using WebService.ProjectConfigurations;
 using WebService.Queries.HealthQueries;
 using WebService.Repositories.Interfaces;
 using WebService.Repositories.Repositories;
@@ -23,25 +22,6 @@ using WebService.Repositories.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-
-EnvVariablesConfiguration variablesConfiguration = new EnvVariablesConfiguration();
-ElkConfiguration elkEnvVariables = variablesConfiguration.GetElkEnvVariables();
-RabbitMqConfiguration rabbitEnvVariables = variablesConfiguration.GetRabbitEnvVariables();
-MinioConfiguration minioEnvVariables = variablesConfiguration.GetMinioEnvVariables();
-
-Console.WriteLine($"RABBITMQ_HOST {rabbitEnvVariables.RabbitMqHost}");
-Console.WriteLine($"RABBITMQ_PORT {rabbitEnvVariables.RabbitMqPort}");
-Console.WriteLine($"RABBITMQ_USERNAME {rabbitEnvVariables.RabbitMqUsername}");
-Console.WriteLine($"RABBITMQ_PASSWORD {rabbitEnvVariables.RabbitMqPassword}");
-
-Console.WriteLine($"MINIO_HOST {minioEnvVariables.MinioHost}");
-Console.WriteLine($"MINIO_ACCESSKEY {minioEnvVariables.MinioAccessKey}");
-Console.WriteLine($"MINIO_SECRETKEY {minioEnvVariables.MinioSecretKey}");
-
-Console.WriteLine($"ELK_HOST {elkEnvVariables.ElkHost}");
-Console.WriteLine($"ELK_DEFAULT_INDEX {elkEnvVariables.ElkDefaultIndex}");
-Console.WriteLine($"ELK_USERNAME {elkEnvVariables.ElkUsername}");
-Console.WriteLine($"ELK_PASSWORD {elkEnvVariables.ElkPassword}");
 
 //Repository
 builder.Services.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
@@ -56,49 +36,40 @@ builder.Services.AddScoped<IPingHelper, PingHelper>();
 //Context
 builder.Services.AddScoped<IWebServiceContext, WebServiceContext>();
 
-ConnectionSettings? connection = new ConnectionSettings(new Uri(elkEnvVariables.ElkHost)).
-   DefaultIndex(elkEnvVariables.ElkDefaultIndex).
+ConnectionSettings? connection = new ConnectionSettings(new Uri(ProjectConstants.ElkHost)).
+   DefaultIndex(ProjectConstants.ElkDefaultIndexName).
    ServerCertificateValidationCallback(CertificateValidations.AllowAll).
-   ThrowExceptions(true).
+   ThrowExceptions(ProjectConstants.ElkExceptions).
    PrettyJson().
-   RequestTimeout(TimeSpan.FromSeconds(300)).
-   BasicAuthentication(elkEnvVariables.ElkUsername, elkEnvVariables.ElkPassword);
+   RequestTimeout(TimeSpan.FromSeconds(ProjectConstants.ElkRequestTimeout)).
+   BasicAuthentication(ProjectConstants.ElkUsername, ProjectConstants.ElkPassword);
 
 ElasticClient? elasticClient = new ElasticClient(connection);
 builder.Services.AddSingleton<IElasticClient>(elasticClient);
 
 var connectionFactory = new ConnectionFactory
 {
-    HostName = rabbitEnvVariables.RabbitMqHost,
-    Port = Convert.ToInt32(rabbitEnvVariables.RabbitMqPort),
-    UserName = rabbitEnvVariables.RabbitMqUsername,
-    Password = rabbitEnvVariables.RabbitMqPassword
+    HostName = ProjectConstants.RabbitmqHost,
+    Port = Convert.ToInt32(ProjectConstants.RabbitmqPort),
+    UserName = ProjectConstants.RabbitmqUsername,
+    Password = ProjectConstants.RabbitmqPassword
 };
 var rabbitConnection = connectionFactory.CreateConnection();
 builder.Services.AddSingleton<RabbitMQ.Client.IConnection>(rabbitConnection);
 
 MinioClient minioClient = new MinioClient()
-                                    .WithEndpoint(minioEnvVariables.MinioHost)
-                                    .WithCredentials(minioEnvVariables.MinioAccessKey, minioEnvVariables.MinioSecretKey)
+                                    .WithEndpoint(ProjectConstants.MinioHost)
+                                    .WithCredentials(ProjectConstants.MinioAccessKey, ProjectConstants.MinioSecretKey)
                                     .WithSSL(false);
 builder.Services.AddSingleton<IMinioClient>(minioClient);
 
-//new MediatRServiceConfiguration().RegisterServicesFromAssembly()
-//builder.Services.AddMediatR(typeof(Program));
-//builder.Services.AddMediatR(typeof(GetAllCustomersQuery).Assembly);
-//Assembly.GetExecutingAssembly()
-//AppDomain.CurrentDomain.GetAssemblies()
-
 builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
 {
-    //var Handlers = AppDomain.CurrentDomain.Load("WebService.Handlers");
-    //var Queries = AppDomain.CurrentDomain.Load("WebService.Queries");
-    //var Commands = AppDomain.CurrentDomain.Load("WebService.Commands");
 
     configuration.RegisterServicesFromAssemblies(
-        typeof(LogCommand).Assembly, 
-        typeof(ObjectCommand).Assembly, 
-        typeof(QueueCommand).Assembly, 
+        typeof(LogCommand).Assembly,
+        typeof(ObjectCommand).Assembly,
+        typeof(QueueCommand).Assembly,
         typeof(LogHandler).Assembly,
         typeof(ObjectHandler).Assembly,
         typeof(HealthHandler).Assembly,
@@ -127,10 +98,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
 
 app.MapControllers();
 

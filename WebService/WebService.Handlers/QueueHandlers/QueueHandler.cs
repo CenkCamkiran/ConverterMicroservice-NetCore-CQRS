@@ -15,7 +15,7 @@ namespace WebService.Handlers.QueueHandlers
 
         public async Task<bool> Handle(QueueCommand request, CancellationToken cancellationToken)
         {
-            return await _queueRepository.QueueMessageDirectAsync(request.Message, request.Queue, request.Exchange, request.RoutingKey, request.MessageTTL);
+            return await _queueRepository.QueueMessageDirectAsync(request.Message, request.Exchange, request.RoutingKey, request.MessageTTL);
         }
     }
 }

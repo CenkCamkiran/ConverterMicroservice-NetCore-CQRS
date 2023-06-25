@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System.Text.RegularExpressions;
 using WebService.Commands.LogCommands;
+using WebService.Common.Constants;
 using WebService.Middlewares.Contexts.Interfaces;
 
 namespace WebService.Middlewares
@@ -31,10 +32,7 @@ namespace WebService.Middlewares
             if (!string.IsNullOrEmpty(request.ContentType))
             {
                 if (formRegex.Match(request.ContentType).Success)
-                    await _mediator.Send(new LogCommand("webservice_requestresponse_logs", request, response, requestDate));
-
-                //if (jsonRegex.Match(request.ContentType).Success)
-                //    await loggingService.LogJsonBodyAsync("webservice_requestresponse_logs", request, response);
+                    await _mediator.Send(new LogCommand(ProjectConstants.RequestResponseLogsIndex, request, response, requestDate));
             }
 
         }

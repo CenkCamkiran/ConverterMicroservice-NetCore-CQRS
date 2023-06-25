@@ -22,7 +22,6 @@ namespace WebService.Repositories.Repositories
         {
             try
             {
-                //IndexResponse indexDocument = await _elasticClient.IndexDocumentAsync(model);
                 IndexResponse indexDocument = await _elasticClient.IndexAsync(model, elk => elk.Index(indexName));
 
                 string elkResponse = $"Doc ID: {indexDocument.Id} - Index: {indexDocument.Index} - Result: {indexDocument.Result} - Is Valid: {indexDocument.IsValid} - ApiCall.HttpStatusCode: {indexDocument.ApiCall.HttpStatusCode} - ApiCall.Success: {indexDocument.ApiCall.Success}";

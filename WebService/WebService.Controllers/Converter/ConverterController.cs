@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Net;
 using WebService.Commands.ObjectCommands;
 using WebService.Commands.QueueCommands;
+using WebService.Common.Constants;
 using WebService.Exceptions;
 using WebService.Models;
 
@@ -33,7 +34,7 @@ namespace WebService.Controllers.Converter
                 fileGuid = guid
             };
 
-            await _mediator.Send(new QueueCommand("converter", "converter_exchange.direct", "mp4_to_mp3", message, 43200000));
+            await _mediator.Send(new QueueCommand(ProjectConstants.ConverterServiceExchangeName, ProjectConstants.ConverterServiceRoutingKey, message, ProjectConstants.ConverterExchangeTtl));
 
             var stream = file.OpenReadStream();
             try
@@ -42,7 +43,7 @@ namespace WebService.Controllers.Converter
                 {
                     await stream.CopyToAsync(ms);
 
-                    await _mediator.Send(new ObjectCommand("videos", guid, ms, file.ContentType));
+                    await _mediator.Send(new ObjectCommand(ProjectConstants.MinioBucketName, guid, ms, file.ContentType));
                 }
             }
             catch (Exception exception)

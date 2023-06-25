@@ -1,4 +1,5 @@
-﻿using WebService.Models;
+﻿using WebService.Common.Constants;
+using WebService.Models;
 using WebService.Repositories.Interfaces;
 
 namespace WebService.Repositories.Repositories
@@ -18,7 +19,7 @@ namespace WebService.Repositories.Repositories
 
         public async Task LogQueueOther(QueueLog queueLog)
         {
-            await _loggingRepositoryQueue.IndexDocAsync("webservice_queue_logs", queueLog);
+            await _loggingRepositoryQueue.IndexDocAsync(ProjectConstants.QueueLogsIndex, queueLog);
 
             string logText = $"Exchange: {queueLog.ExchangeName} - Queue: {queueLog.QueueName} - Routing Key: {queueLog.RoutingKey} - Message: (fileGuid: {queueLog.Message.fileGuid} && email: {queueLog.Message.email})";
             _log4NetRepository.Info(logText);
@@ -26,7 +27,7 @@ namespace WebService.Repositories.Repositories
 
         public async Task LogStorageOther(ObjectStorageLog objectStorageLog)
         {
-            await _loggingRepositoryObjStorageLog.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
+            await _loggingRepositoryObjStorageLog.IndexDocAsync(ProjectConstants.ObjectStorageLogsIndex, objectStorageLog);
 
             string logText = $"BucketName: {objectStorageLog.BucketName} - ObjectName: {objectStorageLog.ObjectName} - Content Type: {objectStorageLog.ContentType}";
             _log4NetRepository.Info(logText);
