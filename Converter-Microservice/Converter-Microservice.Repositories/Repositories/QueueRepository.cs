@@ -1,4 +1,5 @@
 ﻿using Converter_Microservice.Commands.ConverterCommands;
+using Converter_Microservice.Common.Constants;
 using Converter_Microservice.Common.Events;
 using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Repositories.Interfaces;
@@ -8,7 +9,6 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
-using WebService.Common.Constants;
 
 namespace Converter_Microservice.Repositories.Repositories
 {

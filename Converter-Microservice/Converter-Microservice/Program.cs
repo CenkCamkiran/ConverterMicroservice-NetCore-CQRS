@@ -1,6 +1,7 @@
 ﻿using Converter_Microservice.Commands.ConverterCommands;
 using Converter_Microservice.Commands.ObjectCommands;
 using Converter_Microservice.Commands.QueueCommands;
+using Converter_Microservice.Common.Constants;
 using Converter_Microservice.Handlers.ConverterHandlers;
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
@@ -14,7 +15,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using RabbitMQ.Client;
-using WebService.Common.Constants;
 
 var serviceProvider = new ServiceCollection();
 

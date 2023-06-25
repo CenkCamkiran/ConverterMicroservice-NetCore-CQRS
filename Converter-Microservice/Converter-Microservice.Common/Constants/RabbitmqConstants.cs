@@ -1,6 +1,6 @@
 ﻿using RabbitMQ.Client;
 
-namespace WebService.Common.Constants
+namespace Converter_Microservice.Common.Constants
 {
     public static partial class ProjectConstants
     {
