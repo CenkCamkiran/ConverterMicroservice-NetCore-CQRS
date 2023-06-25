@@ -1,7 +1,7 @@
-﻿using Logger_Microservice.Repositories.Interfaces;
+﻿using Logger_Microservice.Common.Constants;
+using Logger_Microservice.Repositories.Interfaces;
 using LoggerMicroservice.Models;
 using Nest;
-using WebService.Common.Constants;
 
 namespace Logger_Microservice.Repositories.Repositories
 {

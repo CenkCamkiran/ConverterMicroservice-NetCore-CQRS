@@ -1,6 +1,7 @@
 ﻿using Elasticsearch.Net;
 using Logger_Microservice.Commands.LogCommands;
 using Logger_Microservice.Commands.QueueCommands;
+using Logger_Microservice.Common.Constants;
 using Logger_Microservice.Common.Events;
 using Logger_Microservice.Handlers.LogHandlers;
 using Logger_Microservice.Handlers.QueueHandlers;
@@ -13,7 +14,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Nest;
 using RabbitMQ.Client;
-using WebService.Common.Constants;
 using IConnection = RabbitMQ.Client.IConnection;
 
 var serviceProvider = new ServiceCollection();

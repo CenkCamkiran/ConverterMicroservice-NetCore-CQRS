@@ -1,4 +1,4 @@
-﻿namespace WebService.Common.Constants
+﻿namespace Logger_Microservice.Common.Constants
 {
     public static partial class ProjectConstants
     {
