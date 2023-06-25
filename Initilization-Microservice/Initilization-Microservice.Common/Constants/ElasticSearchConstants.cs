@@ -6,7 +6,7 @@
         public static string ElkDefaultIndexName { get; set; } = Environment.GetEnvironmentVariable("ELK_DEFAULT_INDEX_NAME");
         public static string ElkUsername { get; set; } = Environment.GetEnvironmentVariable("ELK_USERNAME");
         public static string ElkPassword { get; set; } = Environment.GetEnvironmentVariable("ELK_PASSWORD");
-        public static double ElkRequestTimeout { get; set; } = Convert.ToDouble(Environment.GetEnvironmentVariable("ELK_REQUEST_TIMEOUT"));
+        public static double ElkRequestTimeout { get; set; } = 300;
         public static bool ElkExceptions { get; set; } = true;
 
         public static string LoggerServiceErrorLogsIndex { get; set; } = "loggerservice_errorlogs";

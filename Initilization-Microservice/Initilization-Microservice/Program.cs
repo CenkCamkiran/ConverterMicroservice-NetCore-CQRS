@@ -81,7 +81,8 @@ var NotificationServiceQueueConfiguration = queueService.ConfigureExchangeAndQue
 var ErrorLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.LoggerServiceExchangeName, ProjectConstants.LoggerServiceExchange_Type, ProjectConstants.LoggerServiceExchangeIsDurable, ProjectConstants.LoggerServiceExchangeIsAutoDelete, ProjectConstants.ErrorLoggerServiceQueueName, ProjectConstants.LoggerServiceQueueIsDurable, ProjectConstants.LoggerServiceQueueIsExclusive, ProjectConstants.LoggerServiceQueueIsAutoDelete, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.LoggerServiceExchangeTtl, null);
 var OtherLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.LoggerServiceExchangeName, ProjectConstants.LoggerServiceExchange_Type, ProjectConstants.LoggerServiceExchangeIsDurable, ProjectConstants.LoggerServiceExchangeIsAutoDelete, ProjectConstants.OtherLoggerServiceQueueName, ProjectConstants.LoggerServiceQueueIsDurable, ProjectConstants.LoggerServiceQueueIsExclusive, ProjectConstants.LoggerServiceQueueIsAutoDelete, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.LoggerServiceExchangeTtl, null);
 
-var ConverterConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioBucketName);
+var ConverterAudioConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioAudioBucket);
+var ConverterVideoConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioVideoBucket);
 
 var ErrorLogsElkConfiguration = elkOperation.ConfigureIndex(ProjectConstants.LoggerServiceErrorLogsIndex, ProjectConstants.LoggerServiceErrorLogsNumberOfShards, ProjectConstants.LoggerServiceErrorLogsNumberOfReplicas);
 var OtherLogsElkConfiguration = elkOperation.ConfigureIndex(ProjectConstants.LoggerServiceOtherLogsIndex, ProjectConstants.LoggerServiceOtherLogsNumberOfShards, ProjectConstants.LoggerServiceErrorLogsNumberOfReplicas);
@@ -95,7 +96,8 @@ await Task.WhenAll(
     NotificationServiceQueueConfiguration,
     ErrorLoggerConfiguration,
     OtherLoggerConfiguration,
-    ConverterConfiguration,
+    ConverterAudioConfiguration,
+    ConverterVideoConfiguration,
     ErrorLogsElkConfiguration,
     OtherLogsElkConfiguration,
     WebServiceObjectStorageLogsElkConfiguration,
