@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using ChatAppStorageService.Common.Events;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.Net;
+using WebService.Common.Constants;
 using WebService.Exceptions;
 using WebService.Helpers.Helpers;
 using WebService.Models;
 
 namespace WebService.Middlewares
 {
-    // You may need to install the Microsoft.AspNetCore.Http.Abstractions package into your project
     public class RequestValidationMiddleware
     {
         private readonly RequestDelegate _next;
@@ -25,8 +26,8 @@ namespace WebService.Middlewares
             if (!request.HasFormContentType)
             {
                 UploadMp4Response error = new UploadMp4Response();
-                error.ErrorMessage = "Content-Type should be multipart/form-data!";
-                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+                error.ErrorMessage = LogEvents.FileUploadContentTypeMessage;
+                error.ErrorCode = LogEvents.FileUploadBadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
@@ -36,8 +37,8 @@ namespace WebService.Middlewares
             if (!formData.Files.Any())
             {
                 UploadMp4Response error = new UploadMp4Response();
-                error.ErrorMessage = "Request should contain form-data!";
-                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+                error.ErrorMessage = LogEvents.FileUploadContentDataMessage;
+                error.ErrorCode = LogEvents.FileUploadBadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
@@ -47,8 +48,8 @@ namespace WebService.Middlewares
             if (file.Length == 0)
             {
                 UploadMp4Response error = new UploadMp4Response();
-                error.ErrorMessage = "File must be exists!";
-                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+                error.ErrorMessage = LogEvents.FileUploadFileExistsMessage;
+                error.ErrorCode = LogEvents.FileUploadBadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
@@ -56,18 +57,18 @@ namespace WebService.Middlewares
             if (file.ContentType != "video/mp4")
             {
                 UploadMp4Response error = new UploadMp4Response();
-                error.ErrorMessage = "File format must be mp4!";
-                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+                error.ErrorMessage = LogEvents.FileUploadFileFormatMessage;
+                error.ErrorCode = LogEvents.FileUploadBadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
-            long fileLength = Convert.ToInt64(Environment.GetEnvironmentVariable("FILE_LENGTH_LIMIT"));
+            long fileLength = Convert.ToInt64(ProjectConstants.FileUploadSizeLinit);
             if (file.Length == fileLength)
             {
                 UploadMp4Response error = new UploadMp4Response();
-                error.ErrorMessage = $"File length must be less than {fileLength} byte!";
-                error.ErrorCode = (int)HttpStatusCode.BadRequest;
+                error.ErrorMessage = string.Format(LogEvents.FileUploadFileSizeMessage, fileLength);
+                error.ErrorCode = LogEvents.FileUploadBadRequest;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
@@ -80,7 +81,6 @@ namespace WebService.Middlewares
         }
     }
 
-    // Extension method used to add the middleware to the HTTP request pipeline.
     public static class RequestValidationMiddlewareExtensions
     {
         public static IApplicationBuilder UseRequestValidationMiddleware(this IApplicationBuilder builder)

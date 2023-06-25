@@ -1,4 +1,5 @@
-﻿using Nest;
+﻿using ChatAppStorageService.Common.Events;
+using Nest;
 using Newtonsoft.Json;
 using System.Net;
 using WebService.Exceptions;
@@ -34,7 +35,7 @@ namespace WebService.Repositories.Repositories
             {
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
-                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+                error.ErrorCode = LogEvents.FileUploadInternalServerError;
 
                 _log4NetRepository.Error(exception.Message.ToString());
 

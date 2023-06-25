@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ChatAppStorageService.Common.Events;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -50,13 +51,13 @@ namespace WebService.Controllers.Converter
             {
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
-                error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+                error.ErrorCode = LogEvents.FileUploadInternalServerError;
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }
 
-            response.ResponseCode = (int)HttpStatusCode.OK;
-            response.Message = "File uploaded!";
+            response.ResponseCode = LogEvents.FileUploadSuccess;
+            response.Message = LogEvents.FileUploadSuccessMessage;
 
             return response;
         }
