@@ -1,7 +1,6 @@
-﻿using ChatAppStorageService.Common.Events;
-using Nest;
+﻿using Nest;
 using Newtonsoft.Json;
-using System.Net;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 using WebService.Repositories.Interfaces;

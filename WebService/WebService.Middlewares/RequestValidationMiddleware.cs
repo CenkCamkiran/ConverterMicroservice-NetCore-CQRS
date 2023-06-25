@@ -1,9 +1,8 @@
-﻿using ChatAppStorageService.Common.Events;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.Net;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Helpers.Helpers;
 using WebService.Models;

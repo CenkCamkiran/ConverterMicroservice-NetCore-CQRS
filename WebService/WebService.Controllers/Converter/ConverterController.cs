@@ -1,12 +1,11 @@
-﻿using ChatAppStorageService.Common.Events;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
 using WebService.Commands.ObjectCommands;
 using WebService.Commands.QueueCommands;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 
