@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Initilization_Microservice.Repository</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Minio" Version="5.0.0" />
+    <PackageReference Include="NEST" Version="7.17.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Initilization-Microservice.Common\Initilization-Microservice.Common.csproj" />
+    <ProjectReference Include="..\Initilization-Microservice.Helpers\Initilization-Microservice.Helpers.csproj" />
+    <ProjectReference Include="..\Initilization-Microservice.Models\Initilization-Microservice.Models.csproj" />
+  </ItemGroup>
+
+</Project>
