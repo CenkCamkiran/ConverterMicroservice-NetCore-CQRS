@@ -3,7 +3,10 @@ using Converter_Microservice.Common.Constants;
 using Converter_Microservice.Common.Events;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
+using log4net.Core;
+using log4net.Repository.Hierarchy;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Xabe.FFmpeg;
 
@@ -13,15 +16,19 @@ namespace Converter_Microservice.Repositories.Repositories
     {
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IMediator _mediator;
+        private readonly ILogger<ConverterRepository> _logger;
 
-        public ConverterRepository(IObjectRepository objectStorageRepository, IMediator mediator)
+        public ConverterRepository(IObjectRepository objectStorageRepository, IMediator mediator, ILogger<ConverterRepository> logger)
         {
             _objectStorageRepository = objectStorageRepository;
             _mediator = mediator;
+            _logger = logger;
         }
 
         public async Task<QueueMessage> ConvertMP4_to_MP3_Async(ObjectData objDataModel, QueueMessage message)
         {
+            _logger.LogInformation(LogEvents.ConversionStartedEvent, LogEvents.ConversionStartedEventMessage);
+
             QueueMessage? msg = null;
 
             try
@@ -39,7 +46,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     using (MemoryStream ms = new MemoryStream())
                     {
                         await fs.CopyToAsync(ms);
-                        await _objectStorageRepository.StoreFileAsync(ProjectConstants.MinioAudioBucket, guid, ms, "audio/mp3");
+                        await _objectStorageRepository.PutObjectAsync(ProjectConstants.MinioAudioBucket, guid, ms, "audio/mp3");
 
                         msg = new QueueMessage()
                         {
@@ -60,7 +67,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 ConverterLog converterLog = new ConverterLog()
                 {
-                    Info = LogEvents.ConversionEvent,
+                    Info = LogEvents.ConversionFinishedEventMessage,
                     Date = DateTime.Now
                 };
                 OtherLog otherLog = new OtherLog()
@@ -68,8 +75,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     converterLog = converterLog
                 };
                 await _mediator.Send(new QueueCommand(otherLog, ProjectConstants.OtherLogsServiceQueueName, ProjectConstants.OtherLogsServiceExchangeName, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.OtherLogsServiceExchangeTtl));
-
-                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _logger.LogInformation(LogEvents.ConversionFinishedEvent, LogEvents.ConversionFinishedEventMessage);
 
                 return msg;
 
@@ -87,7 +93,7 @@ namespace Converter_Microservice.Repositories.Repositories
                 };
                 await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.ErrorLogsServiceExchangeTtl));
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _logger.LogError(LogEvents.ConversionFailureEvent, LogEvents.ConversionFailureEventMessage);
 
                 return msg;
             }

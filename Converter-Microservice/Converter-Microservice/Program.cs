@@ -2,6 +2,7 @@
 using Converter_Microservice.Commands.ObjectCommands;
 using Converter_Microservice.Commands.QueueCommands;
 using Converter_Microservice.Common.Constants;
+using Converter_Microservice.Common.Events;
 using Converter_Microservice.Handlers.ConverterHandlers;
 using Converter_Microservice.Handlers.LogHandlers;
 using Converter_Microservice.Handlers.ObjectHandlers;
@@ -79,6 +80,27 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 
 serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
+
+ILogger<Program>? logger = builder.GetService<ILogger<Program>>();
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_HOST: " + ProjectConstants.MinioHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_VIDEO_BUCKET_NAME " + ProjectConstants.MinioVideoBucket);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
 
 var _mediator = builder.GetService<IMediator>();
 await _mediator.Send(new QueueQuery(ProjectConstants.ConverterServiceQueueName, ProjectConstants.ConverterExchangeTtl));

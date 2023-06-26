@@ -2,6 +2,8 @@
 using Converter_Microservice.Common.Events;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
+using log4net.Core;
+using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel;
 using Newtonsoft.Json;
@@ -13,15 +15,17 @@ namespace Converter_Microservice.Repositories.Repositories
         private readonly IMinioClient _minioClient;
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
         private readonly Lazy<IQueueRepository> _queueOtherRepository;
+        private readonly ILogger<ObjectRepository> _logger;
 
-        public ObjectRepository(IMinioClient minioClient, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository)
+        public ObjectRepository(IMinioClient minioClient, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, ILogger<ObjectRepository> logger)
         {
             _minioClient = minioClient;
             _queueErrorRepository = queueErrorRepository;
             _queueOtherRepository = queueOtherRepository;
+            _logger = logger;
         }
 
-        public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
+        public async Task<bool> PutObjectAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
             IServerSideEncryption? sse = null;
             stream.Position = 0;
@@ -63,7 +67,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = LogEvents.PubObjectEvent,
+                    OperationType = LogEvents.PutObjectEventMessage,
                     BucketName = bucketName,
                     ContentLength = stream.Length,
                     ContentType = contentType,
@@ -75,8 +79,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     storageLog = objectStorageLog
                 };
                 _queueOtherRepository.Value.QueueMessageDirect(otherLog, ProjectConstants.OtherLogsServiceQueueName, ProjectConstants.OtherLogsServiceExchangeName, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.OtherLogsServiceExchangeTtl);
-
-                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _logger.LogInformation(LogEvents.PutObjectEvent, LogEvents.PutObjectEventMessage);
 
                 return await Task.FromResult(true);
 
@@ -85,7 +88,7 @@ namespace Converter_Microservice.Repositories.Repositories
             {
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = LogEvents.PubObjectEvent,
+                    OperationType = LogEvents.PutObjectEventMessage,
                     BucketName = bucketName,
                     ContentLength = stream.Length,
                     ContentType = contentType,
@@ -98,14 +101,13 @@ namespace Converter_Microservice.Repositories.Repositories
                     storageLog = objectStorageLog
                 };
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.ErrorLogsServiceExchangeTtl);
-
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _logger.LogError(LogEvents.PutObjectEvent, exception.Message.ToString());
 
                 throw;
             }
         }
 
-        public async Task<ObjectData> GetFileAsync(string bucketName, string objectName)
+        public async Task<ObjectData> GetObjectAsync(string bucketName, string objectName)
         {
             ObjectData? objDataModel = null;
 
@@ -137,7 +139,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = LogEvents.GetObjectEvent,
+                    OperationType = LogEvents.GetObjectEventMessage,
                     BucketName = bucketName,
                     ContentLength = objStat != null ? objStat.Size : 0,
                     ObjectName = objectName,
@@ -149,15 +151,14 @@ namespace Converter_Microservice.Repositories.Repositories
                     storageLog = objectStorageLog
                 };
                 _queueOtherRepository.Value.QueueMessageDirect(otherLog, ProjectConstants.OtherLogsServiceQueueName, ProjectConstants.OtherLogsServiceExchangeName, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.OtherLogsServiceExchangeTtl);
-
-                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _logger.LogInformation(LogEvents.GetObjectEvent, LogEvents.GetObjectEventMessage);
 
             }
             catch (Exception exception)
             {
                 ObjectStorageLog objectStorageLog = new ObjectStorageLog()
                 {
-                    OperationType = LogEvents.GetObjectEvent,
+                    OperationType = LogEvents.GetObjectEventMessage,
                     BucketName = bucketName,
                     ObjectName = objectName,
                     Date = DateTime.Now,
@@ -168,9 +169,9 @@ namespace Converter_Microservice.Repositories.Repositories
                     storageLog = objectStorageLog
                 };
                 _queueErrorRepository.Value.QueueMessageDirect(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.ErrorLogsServiceExchangeTtl);
+                _logger.LogError(LogEvents.GetObjectEvent, exception.Message.ToString());
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
-
+                throw;
             }
 
             return objDataModel;

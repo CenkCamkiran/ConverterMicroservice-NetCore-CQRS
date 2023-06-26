@@ -5,9 +5,11 @@ using Converter_Microservice.Queries.ObjectQueries;
 using Converter_Microservice.Repositories.Interfaces;
 using ConverterMicroservice.Models;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
 using System.Text;
 
 namespace Converter_Microservice.Repositories.Repositories
@@ -20,15 +22,17 @@ namespace Converter_Microservice.Repositories.Repositories
         private readonly IObjectRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
         private readonly IMediator _mediator;
+        private readonly ILogger<QueueRepository> _logger;
 
         uint msgCount = 0;
 
-        public QueueRepository(IConnection connection, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator)
+        public QueueRepository(IConnection connection, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator, ILogger<QueueRepository> logger)
         {
             _connection = connection;
             _objectStorageRepository = objectStorageRepository;
             _converterRepository = converterRepository;
             _mediator = mediator;
+            _logger = logger;
         }
 
         public void ConsumeQueue(string queue, long messageTtl = 0)
@@ -37,6 +41,7 @@ namespace Converter_Microservice.Repositories.Repositories
             {
                 using (var channel = _connection.CreateModel())
                 {
+                    _logger.LogInformation(LogEvents.BasicConsumeEvent, LogEvents.BasicConsumeEventMessage);
 
                     channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -57,7 +62,7 @@ namespace Converter_Microservice.Repositories.Repositories
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = LogEvents.BasicConsumeEvent,
+                    OperationType = LogEvents.BasicConsumeEventMessage,
                     Date = DateTime.Now,
                     QueueName = queue,
                     ExceptionMessage = exception.Message.ToString()
@@ -67,7 +72,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     queueLog = queueLog
                 };
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _logger.LogError(LogEvents.BasicConsumeEvent, exception.Message.ToString());
             }
         }
 
@@ -91,7 +96,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = LogEvents.BasicPublishEvent,
+                    OperationType = LogEvents.BasicPublishEventMessage,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -103,14 +108,14 @@ namespace Converter_Microservice.Repositories.Repositories
                     queueLog = queueLog
                 };
 
-                string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+                _logger.LogInformation(LogEvents.BasicPublishEvent, JsonConvert.SerializeObject(otherLog));
 
             }
             catch (Exception exception)
             {
                 QueueLog queueLog = new QueueLog()
                 {
-                    OperationType = LogEvents.BasicPublishEvent,
+                    OperationType = LogEvents.BasicPublishEventMessage,
                     Date = DateTime.Now,
                     ExchangeName = exchange,
                     Message = JsonConvert.SerializeObject(message),
@@ -123,7 +128,7 @@ namespace Converter_Microservice.Repositories.Repositories
                     queueLog = queueLog
                 };
 
-                string logText = $"Exception: {JsonConvert.SerializeObject(errorLog)}";
+                _logger.LogError(LogEvents.BasicPublishEvent, exception.Message.ToString());
             }
         }
 
@@ -151,7 +156,7 @@ namespace Converter_Microservice.Repositories.Repositories
 
             QueueLog queueLog = new QueueLog()
             {
-                OperationType = LogEvents.BasicConsumeEvent,
+                OperationType = LogEvents.BasicConsumeEventMessage,
                 Date = DateTime.Now,
                 ExchangeName = ea.Exchange,
                 Message = JsonConvert.SerializeObject(message),
@@ -163,7 +168,7 @@ namespace Converter_Microservice.Repositories.Repositories
                 queueLog = queueLog
             };
 
-            string logText = $"{JsonConvert.SerializeObject(otherLog)}";
+            _logger.LogInformation(LogEvents.BasicConsumeEvent, JsonConvert.SerializeObject(otherLog));
 
             if (msgCount == 0)
             {

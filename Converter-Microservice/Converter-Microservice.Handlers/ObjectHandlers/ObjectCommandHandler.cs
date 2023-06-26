@@ -15,7 +15,7 @@ namespace Converter_Microservice.Handlers.ObjectHandlers
 
         public async Task<bool> Handle(ObjectCommand request, CancellationToken cancellationToken)
         {
-            return await _objectRepository.StoreFileAsync(request.BucketName, request.ObjectName, request.Stream, request.ContentType);
+            return await _objectRepository.PutObjectAsync(request.BucketName, request.ObjectName, request.Stream, request.ContentType);
         }
     }
 }
