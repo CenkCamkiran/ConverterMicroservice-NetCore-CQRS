@@ -15,11 +15,13 @@ namespace WebService.Repositories.Repositories
     {
         private readonly IMinioClient _minioClient;
         private readonly ILogRepository<ObjectStorageLog> _loggingRepository;
+        private readonly ILogger<ObjectStorageRepository> _logger;
 
-        public ObjectStorageRepository(IMinioClient minioClient, ILogRepository<ObjectStorageLog> loggingRepository)
+        public ObjectStorageRepository(IMinioClient minioClient, ILogRepository<ObjectStorageLog> loggingRepository, ILogger<ObjectStorageRepository> logger)
         {
             _minioClient = minioClient;
             _loggingRepository = loggingRepository;
+            _logger = logger;
         }
 
         public async Task<bool> PutObjectAsync(string bucketName, string objectName, Stream stream, string contentType)
@@ -85,6 +87,8 @@ namespace WebService.Repositories.Repositories
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                _logger.LogError(error.ErrorCode, exception.Message.ToString());
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }

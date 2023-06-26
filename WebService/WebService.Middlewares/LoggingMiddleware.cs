@@ -12,6 +12,7 @@ using WebService.Common.Events;
 using WebService.Middlewares.Contexts;
 using WebService.Middlewares.Contexts.Interfaces;
 using WebService.Models;
+using WebService.Repositories.Interfaces;
 
 namespace WebService.Middlewares
 {
@@ -24,7 +25,7 @@ namespace WebService.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, IMediator _mediator, IWebServiceContext webServiceContext, ILogger<LoggingMiddleware> logger)
+        public async Task Invoke(HttpContext httpContext, IMediator _mediator, IWebServiceContext webServiceContext, ILogger<LoggingMiddleware> logger, ILogRepository<UploadMp4Response> logRepository)
         {
 
             logger.LogInformation(LogEvents.RequestReceived, LogEvents.RequestReceivedMessage);
@@ -51,9 +52,11 @@ namespace WebService.Middlewares
                 var response = httpContext.Response;
                 response.ContentType = MediaTypeNames.Application.Json;
 
-                WebServiceErrors error = JsonConvert.DeserializeObject<WebServiceErrors>(exception.Message.ToString());
+                UploadMp4Response error = JsonConvert.DeserializeObject<UploadMp4Response>(exception.Message.ToString());
                 logger.LogError(error.ErrorCode, exception.Message.ToString());
                 response.StatusCode = error.ErrorCode;
+
+                await logRepository.IndexDocAsync(ProjectConstants.WebServiceErrorLogs, error);
 
                 await response.WriteAsync(JsonConvert.SerializeObject(error));
             }

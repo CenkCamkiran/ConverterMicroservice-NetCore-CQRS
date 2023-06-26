@@ -11,5 +11,6 @@
         public static string RequestResponseLogsIndex { get; set; } = "webservice_requestresponse_logs";
         public static string QueueLogsIndex { get; set; } = "webservice_queue_logs";
         public static string ObjectStorageLogsIndex { get; set; } = "webservice_objstorage_logs";
+        public static string WebServiceErrorLogs { get; set; } = "webservice_error_logs";
     }
 }
