@@ -6,7 +6,7 @@ namespace WebService.Common.Events
     {
         public static readonly int FileUploadInternalServerError = (int)HttpStatusCode.InternalServerError;
         public static readonly int FileUploadBadRequest = (int)HttpStatusCode.BadRequest;
-        public static readonly int ServiceConfigurationPhase = 1;
+        public static readonly int ServiceConfigurationEvent = 1;
         public static readonly int UserNotFound = (int)HttpStatusCode.NotFound;
         public static readonly int UserCreated = (int)HttpStatusCode.Created;
         public static readonly int UserDeleted = (int)HttpStatusCode.NoContent;
