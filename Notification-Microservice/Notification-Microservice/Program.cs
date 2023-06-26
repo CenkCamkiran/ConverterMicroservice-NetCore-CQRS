@@ -5,6 +5,7 @@ using Minio;
 using Notification_Microservice.Commands.ObjectCommands;
 using Notification_Microservice.Commands.QueueCommands;
 using Notification_Microservice.Common.Constants;
+using Notification_Microservice.Common.Events;
 using Notification_Microservice.Handlers.ObjectHandlers;
 using Notification_Microservice.Handlers.QueueHandlers;
 using Notification_Microservice.Queries.ObjectQueries;
@@ -57,7 +58,7 @@ serviceProvider.AddScoped<IMailSenderRepository, MailSenderRepository>();
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
-serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
+serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
@@ -77,6 +78,32 @@ serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>
 serviceProvider.AddLazyResolution();
 
 var builder = serviceProvider.BuildServiceProvider();
+
+ILogger<Program>? logger = builder.GetService<ILogger<Program>>();
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, LogEvents.ServiceConfigurationPhaseMessage);
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_HOST: " + ProjectConstants.ElkHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_HOST: " + ProjectConstants.MinioHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_AUDIO_BUCKET_NAME " + ProjectConstants.MinioAudioBucket);
+
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
 
 var _mediator = builder.GetService<IMediator>();
 await _mediator.Send(new QueueQuery(ProjectConstants.NotificationServiceQueueName, ProjectConstants.NotificationServiceExchangeTtl));

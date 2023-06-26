@@ -2,7 +2,7 @@
 
 namespace Notification_Microservice.Repositories.Interfaces
 {
-    public interface IObjectRepository
+    public interface IObjectStorageRepository
     {
         Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType);
         Task<ObjectData> GetFileAsync(string bucketName, string objectName);
