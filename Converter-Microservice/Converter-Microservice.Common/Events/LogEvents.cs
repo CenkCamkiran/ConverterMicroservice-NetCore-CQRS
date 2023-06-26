@@ -11,13 +11,13 @@
         public static readonly int BasicPublishEvent = 7;
         public static readonly int BasicConsumeEvent = 8;
 
-        public static string ConversionFinishedEventMessage { get; set; } = "Conversion is finished";
-        public static string PutObjectEventMessage { get; set; } = "PutObjectAsync is finished";
-        public static string GetObjectEventMessage { get; set; } = "GetObjectAsync is finished";
-        public static string BasicPublishEventMessage { get; set; } = "Basic Publish is finished";
-        public static string BasicConsumeEventMessage { get; set; } = "Basic Consume is started";
-        public static string ConversionStartedEventMessage { get; set; } = "Conversion is started";
-        public static string ConversionFailureEventMessage { get; set; } = "Conversion is failed";
+        public static string ConversionFinishedEventMessage { get; set; } = "Conversion";
+        public static string PutObjectEventMessage { get; set; } = "PutObjectAsync";
+        public static string GetObjectEventMessage { get; set; } = "GetObjectAsync";
+        public static string BasicPublishEventMessage { get; set; } = "Basic Publish";
+        public static string BasicConsumeEventMessage { get; set; } = "Basic Consume";
+        public static string ConversionStartedEventMessage { get; set; } = "Conversion";
+        public static string ConversionFailureEventMessage { get; set; } = "Conversion";
         public static string ServiceConfigurationPhaseMessage { get; set; } = "Service is fetching configurations";
     }
 }
