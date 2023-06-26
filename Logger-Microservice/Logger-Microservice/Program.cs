@@ -84,23 +84,23 @@ var builder = serviceProvider.BuildServiceProvider();
 IMediator _mediator = builder.GetService<IMediator>();
 ILogger<Program>? logger = builder.GetService<ILogger<Program>>();
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, LogEvents.ServiceConfigurationPhaseMessage);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_HOST: " + ProjectConstants.ElkHost);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_HOST: " + ProjectConstants.ElkHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
 
 CancellationTokenSource cts = new CancellationTokenSource();
 CancellationToken ct = cts.Token;
