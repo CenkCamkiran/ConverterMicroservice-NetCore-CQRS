@@ -47,13 +47,6 @@ namespace Logger_Microservice.Repositories.Repositories
                                          autoAck: false,
                                          consumer: consumer);
 
-                    if (channel.MessageCount(queue) == 0)
-                    {
-                        errorLogsMsgsRecievedGate.Set();
-
-                        return;
-                    }
-
                     // Wait here until all messages are retrieved
                     errorLogsMsgsRecievedGate.Wait();
 
@@ -101,13 +94,6 @@ namespace Logger_Microservice.Repositories.Repositories
                     channel.BasicConsume(queue: queue,
                                          autoAck: false,
                                          consumer: consumer);
-
-                    if (channel.MessageCount(queue) == 0)
-                    {
-                        otherLogsMsgsRecievedGate.Set();
-
-                        return;
-                    }
 
                     // Wait here until all messages are retrieved
                     otherLogsMsgsRecievedGate.Wait();

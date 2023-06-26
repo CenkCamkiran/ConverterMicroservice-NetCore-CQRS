@@ -107,11 +107,15 @@ CancellationToken ct = cts.Token;
 
 try
 {
-    var errorLogsTask = _mediator.Send(new QueueErrorQuery(ProjectConstants.ErrorLogsServiceQueueName), ct);
-    var otherLogsTask = _mediator.Send(new QueueOtherQuery(ProjectConstants.OtherLogsServiceQueueName), ct);
+    await Task.Run(async () =>
+    {
+        await _mediator.Send(new QueueErrorQuery(ProjectConstants.ErrorLogsServiceQueueName), ct);
+    });
 
-    await Task.WhenAll(errorLogsTask, otherLogsTask);
-
+    await Task.Run(async () =>
+    {
+        await _mediator.Send(new QueueOtherQuery(ProjectConstants.OtherLogsServiceQueueName), ct);
+    });
 }
 catch (Exception exception)
 {
