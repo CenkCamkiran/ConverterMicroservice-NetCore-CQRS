@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Net;
 using WebService.Commands.LogCommands;
-using WebService.Common.Events;
 using WebService.Models;
 using WebService.Repositories.Interfaces;
 
