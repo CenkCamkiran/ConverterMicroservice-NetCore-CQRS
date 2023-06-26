@@ -1,4 +1,5 @@
 using Elasticsearch.Net;
+using Microsoft.Extensions.Logging;
 using Minio;
 using Nest;
 using RabbitMQ.Client;

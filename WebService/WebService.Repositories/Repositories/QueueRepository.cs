@@ -4,6 +4,7 @@ using RabbitMQ.Client;
 using System.Net;
 using System.Text;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 using WebService.Repositories.Interfaces;

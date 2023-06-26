@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Minio;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
 using WebService.Commands.LogCommands;
 using WebService.Common.Constants;
 using WebService.Common.Events;
+using WebService.Middlewares.Contexts;
 using WebService.Middlewares.Contexts.Interfaces;
 using WebService.Models;
 using WebService.Repositories.Interfaces;

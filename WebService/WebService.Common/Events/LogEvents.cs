@@ -22,18 +22,17 @@ namespace WebService.Common.Events
         public static readonly int HealthCheckRequestReceived = 14;
         public static readonly int PutObject = 15;
         public static readonly int QueuePublishing = 16;
-
         public static readonly int FileUploadSuccess = (int)HttpStatusCode.OK;
 
         public static string FileUploadInternalServerErrorMessage { get; set; } = "Server Error";
         public static string FileUploadSuccessMessage { get; set; } = "File uploaded successfully";
-        public static string FileUploadContentTypeMessage { get; set; } = "Content-Type should be multipart/form-data!";
+        public static string FileUploadContentTypeMessage { get; set; } = "Content-Type should be multipart/form-data";
         public static string FileUploadContentDataMessage { get; set; } = "Request should contain form-data";
-        public static string FileUploadFileExistsMessage { get; set; } = "File must be exists!";
-        public static string FileUploadFileFormatMessage { get; set; } = "File format must be mp4!";
-        public static string FileUploadFileSizeMessage { get; set; } = "File length must be less than {0} byte!";
+        public static string FileUploadFileExistsMessage { get; set; } = "File must be exists";
+        public static string FileUploadFileFormatMessage { get; set; } = "File format must be mp4";
+        public static string FileUploadFileSizeMessage { get; set; } = "File length must be less than {0} byte";
         public static string ServiceConfigurationPhaseMessage { get; set; } = "Service is fetching configurations";
-        public static string RequestReceivedMessage { get; set; } = "Request Received";
+        public static string RequestReceivedMessage { get; set; } = "Request is Received";
         public static string RequestBodyValidationMessage { get; set; } = "Request Body Validation is started";
         public static string FileUploadingRequestReceivedMessage { get; set; } = "File Upload request is received";
         public static string HealthCheckRequestReceivedMessage { get; set; } = "Health Check request is received";

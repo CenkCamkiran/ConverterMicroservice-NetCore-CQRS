@@ -4,6 +4,7 @@ using Minio.DataModel;
 using Newtonsoft.Json;
 using System.Net;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 using WebService.Repositories.Interfaces;
