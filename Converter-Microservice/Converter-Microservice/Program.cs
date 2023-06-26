@@ -83,24 +83,24 @@ var builder = serviceProvider.BuildServiceProvider();
 
 ILogger<Program>? logger = builder.GetService<ILogger<Program>>();
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, LogEvents.ServiceConfigurationPhaseMessage);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_HOST: " + ProjectConstants.MinioHost);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_VIDEO_BUCKET_NAME " + ProjectConstants.MinioVideoBucket);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_HOST: " + ProjectConstants.MinioHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_VIDEO_BUCKET_NAME " + ProjectConstants.MinioVideoBucket);
 
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
-logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "********************************************************************************");
 
 var _mediator = builder.GetService<IMediator>();
 await _mediator.Send(new QueueQuery(ProjectConstants.ConverterServiceQueueName, ProjectConstants.ConverterExchangeTtl));

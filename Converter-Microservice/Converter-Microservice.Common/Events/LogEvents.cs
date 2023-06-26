@@ -2,7 +2,7 @@
 {
     public static class LogEvents
     {
-        public static readonly int ServiceConfigurationPhase = 1;
+        public static readonly int ServiceConfigurationEvent = 1;
         public static readonly int ConversionStartedEvent = 2;
         public static readonly int ConversionFinishedEvent = 3;
         public static readonly int ConversionFailureEvent = 4;
