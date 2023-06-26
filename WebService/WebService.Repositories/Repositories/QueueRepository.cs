@@ -45,7 +45,7 @@ namespace WebService.Repositories.Repositories
                     {
                         Date = DateTime.Now,
                         ExchangeName = exchange,
-                        Message = message,
+                        Message = serializedObj,
                         QueueName = ProjectConstants.ConverterServiceQueueName,
                         RoutingKey = routingKey
                     };

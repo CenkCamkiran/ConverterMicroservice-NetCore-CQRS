@@ -81,6 +81,7 @@ var otherLogElkOperation = builder.GetService<IElkOperation<OtherLog>>();
 var objectStorageLogElkOperation = builder.GetService<IElkOperation<ObjectStorageLog>>();
 var requestResponseLogElkOperation = builder.GetService<IElkOperation<RequestResponseLog>>();
 var queueLogElkOperation = builder.GetService<IElkOperation<QueueLog>>();
+var webServiceErrorLogsOperation = builder.GetService<IElkOperation<UploadMp4Response>>();
 var logger = builder.GetService<ILogger<Program>>();
 
 
@@ -122,7 +123,7 @@ var OtherLogsElkConfiguration = otherLogElkOperation.ConfigureIndex(ProjectConst
 var WebServiceObjectStorageLogsElkConfiguration = objectStorageLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceObjectStorageLogs, ProjectConstants.WebServiceObjectStorageNumberOfShards, ProjectConstants.LoggerServiceOtherLogsNumberOfReplicas);
 var WebServiceRequestResponseLogsElkConfiguration = requestResponseLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceRequestResponseLogs, ProjectConstants.WebServiceRequestResponseNumberOfShards, ProjectConstants.WebServiceRequestResponseNumberOfReplicas);
 var WebServiceQueueLogsElkConfiguration = queueLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceQueueLogs, ProjectConstants.WebServiceQueueNumberOfShards, ProjectConstants.WebServiceQueueNumberOfReplicas);
-var WebServiceErrorLogsElkConfiguration = queueLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceErrorLogs, ProjectConstants.WebServiceErrorLogsNumberOfShards, ProjectConstants.WebServiceErrorLogsNumberOfReplicas);
+var WebServiceErrorLogsElkConfiguration = webServiceErrorLogsOperation.ConfigureIndex(ProjectConstants.WebServiceErrorLogs, ProjectConstants.WebServiceErrorLogsNumberOfShards, ProjectConstants.WebServiceErrorLogsNumberOfReplicas);
 
 
 await Task.WhenAll(
