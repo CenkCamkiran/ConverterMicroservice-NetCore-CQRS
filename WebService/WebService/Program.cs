@@ -101,8 +101,6 @@ app.UseReadableResponseStreamMiddleware();
 
 app.UseLoggingMiddleware();
 
-app.UseErrorHandlerMiddleware();
-
 app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/v1/main"), appBuilder =>  // The path must be started with '/'
 {
     appBuilder.UseRequestValidationMiddleware();
