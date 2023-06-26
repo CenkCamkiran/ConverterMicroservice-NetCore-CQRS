@@ -91,10 +91,11 @@ logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PORT: " + P
 logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
 logger.LogInformation(LogEvents.ServiceConfigurationEvent, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
 
-logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_HOST: " + ProjectConstants.ElkHost);
-logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
-logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
-logger.LogInformation(LogEvents.ServiceConfigurationEvent, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "SMTP_HOST: " + ProjectConstants.SmtpHost);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "SMTP_PORT: " + ProjectConstants.SmtpPort);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "SMTP_MAIL_FROM: " + ProjectConstants.SmtpMailFrom);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "SMTP_MAIL_PASSWORD " + ProjectConstants.SmtpMailPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationEvent, "SMTP_MAIL_USERNAME " + ProjectConstants.SmtpMailUsername);
 
 logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_HOST: " + ProjectConstants.MinioHost);
 logger.LogInformation(LogEvents.ServiceConfigurationEvent, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
