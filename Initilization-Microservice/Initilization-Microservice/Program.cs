@@ -1,5 +1,6 @@
 ﻿using Elasticsearch.Net;
 using Initilization_Microservice.Common;
+using Initilization_Microservice.Common.Events;
 using Initilization_Microservice.Models;
 using Initilization_Microservice.Operation.Interfaces;
 using Initilization_Microservice.Operation.Operations;
@@ -79,7 +80,33 @@ var otherLogElkOperation = builder.GetService<IElkOperation<OtherLog>>();
 var objectStorageLogElkOperation = builder.GetService<IElkOperation<ObjectStorageLog>>();
 var requestResponseLogElkOperation = builder.GetService<IElkOperation<RequestResponseLog>>();
 var queueLogElkOperation = builder.GetService<IElkOperation<QueueLog>>();
+var logger = builder.GetService<ILogger<Program>>();
 
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_HOST: " + ProjectConstants.ElkHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_HOST: " + ProjectConstants.MinioHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_AUDIO_BUCKET_NAME " + ProjectConstants.MinioAudioBucket);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_VIDEO_BUCKET_NAME " + ProjectConstants.MinioVideoBucket);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
 
 var ConverterServiceQueueConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.ConverterServiceExchangeName, ProjectConstants.ConverterServiceExchange_Type, ProjectConstants.ConverterServiceExchangeIsDurable, ProjectConstants.ConverterServiceExchangeIsAutoDelete, ProjectConstants.ConverterServiceQueueName, ProjectConstants.ConverterServiceQueueIsDurable, ProjectConstants.ConverterServiceQueueIsExclusive, ProjectConstants.ConverterServiceQueueIsAutoDelete, ProjectConstants.ConverterServiceRoutingKey, ProjectConstants.ConverterServiceExchangeTtl, null);
 var NotificationServiceQueueConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.NotificationServiceExchangeName, ProjectConstants.NotificationServiceExchange_Type, ProjectConstants.NotificationServiceExchangeIsDurable, ProjectConstants.NotificationServiceExchangeIsAutoDelete, ProjectConstants.NotificationServiceQueueName, ProjectConstants.NotificationServiceQueueIsDurable, ProjectConstants.NotificationServiceQueueIsExclusive, ProjectConstants.NotificationServiceQueueIsAutoDelete, ProjectConstants.NotificationServiceRoutingKey, ProjectConstants.NotificationServiceExchangeTtl, null);
@@ -87,7 +114,7 @@ var ErrorLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(Proje
 var OtherLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.LoggerServiceExchangeName, ProjectConstants.LoggerServiceExchange_Type, ProjectConstants.LoggerServiceExchangeIsDurable, ProjectConstants.LoggerServiceExchangeIsAutoDelete, ProjectConstants.OtherLoggerServiceQueueName, ProjectConstants.LoggerServiceQueueIsDurable, ProjectConstants.LoggerServiceQueueIsExclusive, ProjectConstants.LoggerServiceQueueIsAutoDelete, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.LoggerServiceExchangeTtl, null);
 
 var ConverterAudioConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioAudioBucket);
-var ConverterVideoConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioVideoBucketName);
+var ConverterVideoConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioVideoBucket);
 
 
 var ErrorLogsElkConfiguration = errorLogElkOperation.ConfigureIndex(ProjectConstants.LoggerServiceErrorLogsIndex, ProjectConstants.LoggerServiceErrorLogsNumberOfShards, ProjectConstants.LoggerServiceErrorLogsNumberOfReplicas);

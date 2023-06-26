@@ -6,7 +6,7 @@ namespace Initilization_Microservice.Common
     {
         public static string RabbitmqHost { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_HOST");
         public static string RabbitmqPort { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_PORT");
-        public static string RabbitmqUsername { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_ConverterNAME");
+        public static string RabbitmqUsername { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME");
         public static string RabbitmqPassword { get; set; } = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD");
 
         public static int ConverterServiceExchangeTtl { get; set; } = 43200000;

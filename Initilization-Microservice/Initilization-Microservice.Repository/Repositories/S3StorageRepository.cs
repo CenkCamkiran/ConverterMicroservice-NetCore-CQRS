@@ -31,6 +31,7 @@ namespace Initilization_Microservice.Repository.Repositories
                     await _minioClient.MakeBucketAsync(mbArgs).ConfigureAwait(false);
                 }
 
+                _logger.LogInformation(LogEvents.StorageBucketCreationPhase, LogEvents.StorageBucketCreationPhaseMessage);
                 return await Task.FromResult(true);
 
             }

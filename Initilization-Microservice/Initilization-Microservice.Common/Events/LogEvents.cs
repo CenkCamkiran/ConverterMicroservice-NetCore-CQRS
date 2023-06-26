@@ -9,6 +9,7 @@
         public static readonly int StorageBucketCreationPhase = 3;
         public static readonly int ElkIndexCreationPhase = 4;
         public static readonly int QueueExchangeBindingPhase = 5;
+        public static readonly int ServiceConfigurationPhase = 6;
 
         public static readonly int ExchangeCreationPhaseError = 11;
         public static readonly int QueueCreationPhaseError = 12;
@@ -20,5 +21,7 @@
         public static string ExchangeCreationPhaseMessage { get; set; } = "Exchange created in RabbitMQ";
         public static string QueueCreationPhaseMessage { get; set; } = "Queue created in RabbitMQ";
         public static string QueueExchangeBindingPhaseMessage { get; set; } = "Queue created in RabbitMQ";
+        public static string ServiceConfigurationPhaseMessage { get; set; } = "Service is fetching configurations";
+        public static string StorageBucketCreationPhaseMessage { get; set; } = "S3 Storage Bucket is created in AWS";
     }
 }
