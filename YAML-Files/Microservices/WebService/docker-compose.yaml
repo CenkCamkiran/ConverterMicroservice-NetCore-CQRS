@@ -22,7 +22,6 @@ services:
       ELK_USERNAME: ${ELKUSERNAME}
       ELK_PASSWORD: ${ELKPASSWORD}
       ELK_DEFAULT_INDEX: webservice_requestresponse_logs
-      FILE_LENGTH_LIMIT: 30000000
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:4080
     # ports:
