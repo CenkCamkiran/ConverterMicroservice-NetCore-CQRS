@@ -3,12 +3,12 @@ using Initilization_Microservice.Repository.Interfaces;
 
 namespace Initilization_Microservice.Operation.Operations
 {
-    public class ElkOperation : IElkOperation
+    public class ElkOperation<TModel> : IElkOperation<TModel> where TModel : class
     {
 
-        private readonly IElkRepository _elkRepository;
+        private readonly IElkRepository<TModel> _elkRepository;
 
-        public ElkOperation(IElkRepository elkRepository)
+        public ElkOperation(IElkRepository<TModel> elkRepository)
         {
             _elkRepository = elkRepository;
         }

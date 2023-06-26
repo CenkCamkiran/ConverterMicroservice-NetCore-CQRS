@@ -4,16 +4,17 @@ using Initilization_Microservice.Models;
 using Initilization_Microservice.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 using Nest;
+using System.Reflection;
 
 namespace Initilization_Microservice.Repository.Repositories
 {
-    public class ElkRepository : IElkRepository
+    public class ElkRepository<TModel> : IElkRepository<TModel> where TModel : class
     {
 
         private readonly IElasticClient _elasticClient;
-        private readonly ILogger<ElkRepository> _logger;
+        private readonly ILogger<ElkRepository<TModel>> _logger;
 
-        public ElkRepository(IElasticClient elasticClient, ILogger<ElkRepository> logger)
+        public ElkRepository(IElasticClient elasticClient, ILogger<ElkRepository<TModel>> logger)
         {
             _elasticClient = elasticClient;
             _logger = logger;
@@ -30,7 +31,7 @@ namespace Initilization_Microservice.Repository.Repositories
                                     .Settings(se => se
                                         .NumberOfReplicas(numberOfReplicas)
                                         .NumberOfShards(numberOfShards)
-                                        ).Map<ServiceError>(
+                                        ).Map<TModel>(
                                                     x => x.AutoMap().DateDetection(true)
                                                 ));
 
