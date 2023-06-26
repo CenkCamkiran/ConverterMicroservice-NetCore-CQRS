@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using CommunityToolkit.HighPerformance;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WebService.Commands.ObjectCommands;
 using WebService.Commands.QueueCommands;
@@ -16,15 +18,19 @@ namespace WebService.Controllers.Converter
     public class ConverterController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly ILogger<ConverterController> _logger;
 
-        public ConverterController(IMediator mediator)
+        public ConverterController(IMediator mediator, ILogger<ConverterController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         [HttpPost]
         public async Task<UploadMp4Response> UploadMP4Video([FromForm] IFormFile file, [FromForm] string email)
         {
+            _logger.LogInformation(LogEvents.FileUploadingRequestReceived, LogEvents.FileUploadingRequestReceivedMessage);
+
             UploadMp4Response response = new UploadMp4Response();
             string guid = Guid.NewGuid().ToString();
 
@@ -48,6 +54,8 @@ namespace WebService.Controllers.Converter
             }
             catch (Exception exception)
             {
+                _logger.LogError(LogEvents.FileUploadInternalServerError, LogEvents.FileUploadInternalServerErrorMessage);
+
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = LogEvents.FileUploadInternalServerError;

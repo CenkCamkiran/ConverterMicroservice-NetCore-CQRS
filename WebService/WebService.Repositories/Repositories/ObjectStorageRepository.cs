@@ -1,25 +1,28 @@
-﻿using Minio;
+﻿using Microsoft.Extensions.Logging;
+using Minio;
 using Minio.DataModel;
 using Newtonsoft.Json;
 using System.Net;
+using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 using WebService.Repositories.Interfaces;
 
 namespace WebService.Repositories.Repositories
 {
-    public class ObjectRepository : IObjectRepository
+    public class ObjectStorageRepository : IObjectStorageRepository
     {
         private readonly IMinioClient _minioClient;
         private readonly ILogRepository<ObjectStorageLog> _loggingRepository;
 
-        public ObjectRepository(IMinioClient minioClient, ILogRepository<ObjectStorageLog> loggingRepository)
+        public ObjectStorageRepository(IMinioClient minioClient, ILogRepository<ObjectStorageLog> loggingRepository)
         {
             _minioClient = minioClient;
             _loggingRepository = loggingRepository;
         }
 
-        public async Task<bool> StoreFileAsync(string bucketName, string objectName, Stream stream, string contentType)
+        public async Task<bool> PutObjectAsync(string bucketName, string objectName, Stream stream, string contentType)
         {
             IServerSideEncryption? sse = null;
             stream.Position = 0;
@@ -72,7 +75,7 @@ namespace WebService.Repositories.Repositories
                     Date = DateTime.Now
                 };
 
-                await LogStorage(objectStorageLog);
+                await _loggingRepository.IndexDocAsync(ProjectConstants.ObjectStorageLogsIndex, objectStorageLog);
 
                 return await Task.FromResult(true);
 
@@ -88,11 +91,5 @@ namespace WebService.Repositories.Repositories
 
         }
 
-        public async Task LogStorage(ObjectStorageLog objectStorageLog)
-        {
-            await _loggingRepository.IndexDocAsync("webservice_objstorage_logs", objectStorageLog);
-
-            string logText = $"BucketName: {objectStorageLog.BucketName} - ObjectName: {objectStorageLog.ObjectName} - Content Type: {objectStorageLog.ContentType}";
-        }
     }
 }

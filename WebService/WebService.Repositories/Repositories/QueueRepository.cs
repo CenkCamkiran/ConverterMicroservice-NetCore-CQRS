@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Net;
 using System.Text;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Exceptions;
 using WebService.Models;
 using WebService.Repositories.Interfaces;
@@ -12,12 +14,14 @@ namespace WebService.Repositories.Repositories
     public class QueueRepository : IQueueRepository
     {
         private readonly IConnection _rabbitConnection;
-        private readonly ILogOtherRepository _logOtherRepository;
+        private readonly ILogRepository<QueueLog> _logRepository;
+        private readonly ILogger<QueueRepository> _logger;
 
-        public QueueRepository(IConnection rabbitConnection, ILogOtherRepository logOtherRepository)
+        public QueueRepository(IConnection rabbitConnection, ILogRepository<QueueLog> logRepository, ILogger<QueueRepository> logger)
         {
             _rabbitConnection = rabbitConnection;
-            _logOtherRepository = logOtherRepository;
+            _logRepository = logRepository;
+            _logger = logger;
         }
 
         public async Task<bool> QueueMessageDirectAsync(QueueMessage message, string exchange, string routingKey, long messageTtl = 0)
@@ -45,7 +49,7 @@ namespace WebService.Repositories.Repositories
                         QueueName = ProjectConstants.ConverterServiceQueueName,
                         RoutingKey = routingKey
                     };
-                    await _logOtherRepository.LogQueueOther(queueLog);
+                    await _logRepository.IndexDocAsync(ProjectConstants.QueueLogsIndex, queueLog);
                 }
 
                 return await Task.FromResult(true);
@@ -56,6 +60,8 @@ namespace WebService.Repositories.Repositories
                 UploadMp4Response error = new UploadMp4Response();
                 error.ErrorMessage = exception.Message.ToString();
                 error.ErrorCode = (int)HttpStatusCode.InternalServerError;
+
+                _logger.LogError(error.ErrorCode, exception.Message.ToString());
 
                 throw new WebServiceException(JsonConvert.SerializeObject(error));
             }

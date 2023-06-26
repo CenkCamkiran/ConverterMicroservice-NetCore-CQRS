@@ -1,4 +1,5 @@
 using Elasticsearch.Net;
+using Microsoft.Extensions.Logging;
 using Minio;
 using Nest;
 using RabbitMQ.Client;
@@ -6,6 +7,7 @@ using WebService.Commands.LogCommands;
 using WebService.Commands.ObjectCommands;
 using WebService.Commands.QueueCommands;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Handlers.HealthHandlers;
 using WebService.Handlers.LogHandlers;
 using WebService.Handlers.ObjectHandlers;
@@ -41,9 +43,8 @@ builder.Services.AddLogging(logging =>
 
 //Repository
 builder.Services.AddScoped(typeof(ILogRepository<>), typeof(LogRepository<>));
-builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
+builder.Services.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 builder.Services.AddScoped<IQueueRepository, QueueRepository>();
-builder.Services.AddScoped<ILogOtherRepository, LogOtherRepository>();
 
 
 builder.Services.AddScoped<IPingHelper, PingHelper>();
@@ -94,6 +95,33 @@ builder.Services.AddMediatR((MediatRServiceConfiguration configuration) =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+ServiceProvider services = builder.Services.BuildServiceProvider();
+ILogger<Program>? logger = services.GetService<ILogger<Program>>();
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_HOST: " + ProjectConstants.ElkHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_HOST: " + ProjectConstants.MinioHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_USE_SSL: " + ProjectConstants.MinioUseSsl);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_ACCESS_KEY: " + ProjectConstants.MinioAccessKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_SECRET_KEY " + ProjectConstants.MinioSecretKey);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "MINIO_VIDEO_BUCKET_NAME " + ProjectConstants.MinioVideoBucket);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
 
 var app = builder.Build();
 

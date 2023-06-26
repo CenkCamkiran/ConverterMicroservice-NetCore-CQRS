@@ -1,11 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Minio;
 using Newtonsoft.Json;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
 using WebService.Commands.LogCommands;
 using WebService.Common.Constants;
+using WebService.Common.Events;
 using WebService.Middlewares.Contexts;
 using WebService.Middlewares.Contexts.Interfaces;
 using WebService.Models;
@@ -21,8 +24,10 @@ namespace WebService.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext, IMediator _mediator, IWebServiceContext webServiceContext)
+        public async Task Invoke(HttpContext httpContext, IMediator _mediator, IWebServiceContext webServiceContext, ILogger<LoggingMiddleware> logger)
         {
+
+            logger.LogInformation(LogEvents.RequestReceived, LogEvents.RequestReceivedMessage);
 
             try
             {
@@ -47,6 +52,7 @@ namespace WebService.Middlewares
                 response.ContentType = MediaTypeNames.Application.Json;
 
                 WebServiceErrors error = JsonConvert.DeserializeObject<WebServiceErrors>(exception.Message.ToString());
+                logger.LogError(error.ErrorCode, exception.Message.ToString());
                 response.StatusCode = error.ErrorCode;
 
                 await response.WriteAsync(JsonConvert.SerializeObject(error));

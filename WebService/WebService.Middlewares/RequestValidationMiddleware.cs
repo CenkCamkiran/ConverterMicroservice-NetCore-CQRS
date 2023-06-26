@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using WebService.Common.Constants;
 using WebService.Common.Events;
@@ -18,9 +19,11 @@ namespace WebService.Middlewares
             _next = next;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task Invoke(HttpContext httpContext, ILogger<RequestValidationMiddleware> logger)
         {
             HttpRequest request = httpContext.Request;
+
+            logger.LogInformation(LogEvents.RequestBodyValidation, LogEvents.RequestBodyValidationMessage);
 
             if (!request.HasFormContentType)
             {
