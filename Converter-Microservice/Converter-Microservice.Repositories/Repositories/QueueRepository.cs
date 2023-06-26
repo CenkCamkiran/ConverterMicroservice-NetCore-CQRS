@@ -19,14 +19,14 @@ namespace Converter_Microservice.Repositories.Repositories
         private ManualResetEventSlim msgsRecievedGate = new ManualResetEventSlim(false);
 
         private readonly IConnection _connection;
-        private readonly IObjectRepository _objectStorageRepository;
+        private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly IConverterRepository _converterRepository;
         private readonly IMediator _mediator;
         private readonly ILogger<QueueRepository> _logger;
 
         uint msgCount = 0;
 
-        public QueueRepository(IConnection connection, IObjectRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator, ILogger<QueueRepository> logger)
+        public QueueRepository(IConnection connection, IObjectStorageRepository objectStorageRepository, IConverterRepository converterRepository, IMediator mediator, ILogger<QueueRepository> logger)
         {
             _connection = connection;
             _objectStorageRepository = objectStorageRepository;

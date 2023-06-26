@@ -8,9 +8,9 @@ namespace Converter_Microservice.Handlers.ObjectHandlers
     public class ObjectQueryHandler : IRequestHandler<ObjectQuery, ObjectData>
     {
 
-        private readonly IObjectRepository _objectRepository;
+        private readonly IObjectStorageRepository _objectRepository;
 
-        public ObjectQueryHandler(IObjectRepository objectRepository)
+        public ObjectQueryHandler(IObjectStorageRepository objectRepository)
         {
             _objectRepository = objectRepository;
         }

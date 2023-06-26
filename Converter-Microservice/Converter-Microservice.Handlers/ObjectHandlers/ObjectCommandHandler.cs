@@ -6,9 +6,9 @@ namespace Converter_Microservice.Handlers.ObjectHandlers
 {
     public class ObjectCommandHandler : IRequestHandler<ObjectCommand, bool>
     {
-        private readonly IObjectRepository _objectRepository;
+        private readonly IObjectStorageRepository _objectRepository;
 
-        public ObjectCommandHandler(IObjectRepository objectRepository)
+        public ObjectCommandHandler(IObjectStorageRepository objectRepository)
         {
             _objectRepository = objectRepository;
         }

@@ -10,14 +10,14 @@ using Newtonsoft.Json;
 
 namespace Converter_Microservice.Repositories.Repositories
 {
-    public class ObjectRepository : IObjectRepository
+    public class ObjectStorageRepository : IObjectStorageRepository
     {
         private readonly IMinioClient _minioClient;
         private readonly Lazy<IQueueRepository> _queueErrorRepository;
         private readonly Lazy<IQueueRepository> _queueOtherRepository;
-        private readonly ILogger<ObjectRepository> _logger;
+        private readonly ILogger<ObjectStorageRepository> _logger;
 
-        public ObjectRepository(IMinioClient minioClient, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, ILogger<ObjectRepository> logger)
+        public ObjectStorageRepository(IMinioClient minioClient, Lazy<IQueueRepository> queueErrorRepository, Lazy<IQueueRepository> queueOtherRepository, ILogger<ObjectStorageRepository> logger)
         {
             _minioClient = minioClient;
             _queueErrorRepository = queueErrorRepository;

@@ -56,7 +56,7 @@ serviceProvider.AddSingleton(rabbitConnection);
 
 //Repositories
 serviceProvider.AddScoped(typeof(IQueueRepository), typeof(QueueRepository));
-serviceProvider.AddScoped<IObjectRepository, ObjectRepository>();
+serviceProvider.AddScoped<IObjectStorageRepository, ObjectStorageRepository>();
 serviceProvider.AddScoped<IConverterRepository, ConverterRepository>();
 
 serviceProvider.AddMediatR((MediatRServiceConfiguration configuration) =>

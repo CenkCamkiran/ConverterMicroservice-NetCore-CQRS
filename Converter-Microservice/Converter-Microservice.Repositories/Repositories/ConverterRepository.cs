@@ -14,11 +14,11 @@ namespace Converter_Microservice.Repositories.Repositories
 {
     public class ConverterRepository : IConverterRepository
     {
-        private readonly IObjectRepository _objectStorageRepository;
+        private readonly IObjectStorageRepository _objectStorageRepository;
         private readonly IMediator _mediator;
         private readonly ILogger<ConverterRepository> _logger;
 
-        public ConverterRepository(IObjectRepository objectStorageRepository, IMediator mediator, ILogger<ConverterRepository> logger)
+        public ConverterRepository(IObjectStorageRepository objectStorageRepository, IMediator mediator, ILogger<ConverterRepository> logger)
         {
             _objectStorageRepository = objectStorageRepository;
             _mediator = mediator;
