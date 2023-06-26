@@ -36,6 +36,5 @@ namespace WebService.Common.Events
         public static string RequestBodyValidationMessage { get; set; } = "Request Body Validation is started";
         public static string FileUploadingRequestReceivedMessage { get; set; } = "File Upload request is received";
         public static string HealthCheckRequestReceivedMessage { get; set; } = "Health Check request is received";
-        public static string PutObjectMessage { get; set; } = "PutObject Message";
     }
 }
