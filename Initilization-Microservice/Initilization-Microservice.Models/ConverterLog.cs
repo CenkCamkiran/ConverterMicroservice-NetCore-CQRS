@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Initilization_Microservice.Models
+﻿namespace Initilization_Microservice.Models
 {
     public class ConverterLog
     {

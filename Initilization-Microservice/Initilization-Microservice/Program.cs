@@ -60,7 +60,7 @@ services.AddSingleton<IConnection>(rabbitConnection);
 MinioClient minioClient = new MinioClient()
                         .WithEndpoint(ProjectConstants.MinioHost)
                         .WithCredentials(ProjectConstants.MinioAccessKey, ProjectConstants.MinioSecretKey)
-                        .WithSSL(ProjectConstants.MinioUseSsl);
+                        .WithSSL(ProjectConstants.MinioUseSsl).Build();
 services.AddSingleton<IMinioClient>(minioClient);
 
 
@@ -74,7 +74,8 @@ services.AddScoped(typeof(IElkOperation<>), typeof(ElkOperation<>));
 var builder = services.BuildServiceProvider();
 
 var queueService = builder.GetService<IQueueOperation>();
-var converterOperation = builder.GetService<IS3StorageOperation>();
+var converterOperation1 = builder.GetService<IS3StorageOperation>();
+var converterOperation2 = builder.GetService<IS3StorageOperation>();
 var errorLogElkOperation = builder.GetService<IElkOperation<ErrorLog>>();
 var otherLogElkOperation = builder.GetService<IElkOperation<OtherLog>>();
 var objectStorageLogElkOperation = builder.GetService<IElkOperation<ObjectStorageLog>>();
@@ -113,9 +114,8 @@ var NotificationServiceQueueConfiguration = queueService.ConfigureExchangeAndQue
 var ErrorLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.LoggerServiceExchangeName, ProjectConstants.LoggerServiceExchange_Type, ProjectConstants.LoggerServiceExchangeIsDurable, ProjectConstants.LoggerServiceExchangeIsAutoDelete, ProjectConstants.ErrorLoggerServiceQueueName, ProjectConstants.LoggerServiceQueueIsDurable, ProjectConstants.LoggerServiceQueueIsExclusive, ProjectConstants.LoggerServiceQueueIsAutoDelete, ProjectConstants.ErrorLogsServiceRoutingKey, ProjectConstants.LoggerServiceExchangeTtl, null);
 var OtherLoggerConfiguration = queueService.ConfigureExchangeAndQueueAsync(ProjectConstants.LoggerServiceExchangeName, ProjectConstants.LoggerServiceExchange_Type, ProjectConstants.LoggerServiceExchangeIsDurable, ProjectConstants.LoggerServiceExchangeIsAutoDelete, ProjectConstants.OtherLoggerServiceQueueName, ProjectConstants.LoggerServiceQueueIsDurable, ProjectConstants.LoggerServiceQueueIsExclusive, ProjectConstants.LoggerServiceQueueIsAutoDelete, ProjectConstants.OtherLogsServiceRoutingKey, ProjectConstants.LoggerServiceExchangeTtl, null);
 
-var ConverterAudioConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioAudioBucket);
-var ConverterVideoConfiguration = converterOperation.ConfigureS3Async(ProjectConstants.MinioVideoBucket);
-
+var ConverterAudioConfiguration = converterOperation1.ConfigureS3Async(ProjectConstants.MinioAudioBucket);
+var ConverterVideoConfiguration = converterOperation2.ConfigureS3Async(ProjectConstants.MinioVideoBucket);
 
 var ErrorLogsElkConfiguration = errorLogElkOperation.ConfigureIndex(ProjectConstants.LoggerServiceErrorLogsIndex, ProjectConstants.LoggerServiceErrorLogsNumberOfShards, ProjectConstants.LoggerServiceErrorLogsNumberOfReplicas);
 var OtherLogsElkConfiguration = otherLogElkOperation.ConfigureIndex(ProjectConstants.LoggerServiceOtherLogsIndex, ProjectConstants.LoggerServiceOtherLogsNumberOfShards, ProjectConstants.LoggerServiceErrorLogsNumberOfReplicas);
@@ -130,8 +130,8 @@ await Task.WhenAll(
     NotificationServiceQueueConfiguration,
     ErrorLoggerConfiguration,
     OtherLoggerConfiguration,
-    ConverterAudioConfiguration,
-    ConverterVideoConfiguration,
+    //ConverterAudioConfiguration,
+    //ConverterVideoConfiguration,
     ErrorLogsElkConfiguration,
     OtherLogsElkConfiguration,
     WebServiceObjectStorageLogsElkConfiguration,

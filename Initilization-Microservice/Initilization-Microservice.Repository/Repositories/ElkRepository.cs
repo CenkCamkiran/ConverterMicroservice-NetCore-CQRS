@@ -1,10 +1,8 @@
 ﻿using Initilization_Microservice.Common.Events;
 using Initilization_Microservice.Helpers;
-using Initilization_Microservice.Models;
 using Initilization_Microservice.Repository.Interfaces;
 using Microsoft.Extensions.Logging;
 using Nest;
-using System.Reflection;
 
 namespace Initilization_Microservice.Repository.Repositories
 {

@@ -12,9 +12,10 @@ namespace Initilization_Microservice.Repository.Repositories
         private readonly ILogger<S3StorageRepository> _logger;
         private readonly IMinioClient _minioClient;
 
-        public S3StorageRepository(ILogger<S3StorageRepository> logger)
+        public S3StorageRepository(ILogger<S3StorageRepository> logger, IMinioClient minioClient)
         {
             _logger = logger;
+            _minioClient = minioClient;
         }
 
         public async Task<bool> ConfigureS3Async(string bucketname)
