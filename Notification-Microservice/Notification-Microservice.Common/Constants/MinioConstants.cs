@@ -7,6 +7,5 @@
         public static string MinioAccessKey { get; set; } = Environment.GetEnvironmentVariable("MINIO_ACCESS_KEY");
         public static string MinioSecretKey { get; set; } = Environment.GetEnvironmentVariable("MINIO_SECRET_KEY");
         public static string MinioAudioBucket { get; set; } = Environment.GetEnvironmentVariable("MINIO_AUDIO_BUCKET_NAME");
-        public static string MinioVideoBucket { get; set; } = Environment.GetEnvironmentVariable("MINIO_VIDEO_BUCKET_NAME");
     }
 }
