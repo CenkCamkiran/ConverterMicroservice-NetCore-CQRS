@@ -35,10 +35,10 @@ namespace Notification_Microservice.Repositories.Repositories
                 client.UseDefaultCredentials = false;
                 client.EnableSsl = true;
                 client.Host = ProjectConstants.SmtpHost;
-                client.Credentials = new NetworkCredential(ProjectConstants.SmtpMailFrom, ProjectConstants.SmtpMailPassword);
+                client.Credentials = new NetworkCredential(ProjectConstants.SmtpMailUsername, ProjectConstants.SmtpMailPassword);
                 mail.IsBodyHtml = true;
                 mail.To.Add(email);
-                mail.From = new MailAddress(ProjectConstants.SmtpMailFrom, ProjectConstants.SmtpMailUsername);
+                mail.From = new MailAddress(ProjectConstants.SmtpMailUsername, ProjectConstants.SmtpMailFrom);
                 mail.Subject = ProjectConstants.MailSubject;
                 mail.Attachments.Add(new Attachment(attachmentFileStream, attachmentFile));
                 mail.Body = body;
