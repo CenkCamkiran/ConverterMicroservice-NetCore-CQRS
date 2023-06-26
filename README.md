@@ -403,10 +403,10 @@ At the root of project, there is a folder called **'YAML-Files'**. Each folder n
 
 To install the Microservices, go to **Microservices folder** and each Microservice are represented as folder name. Inside of that folders there is **docker-compose** file. Use them via creating **.env** file in your workspace or whatever you want!
 
-Install **InitilizationService** **first and the others!**
+Install **InitilizationService** **first and install the other services second!**
 
 > **Note** <br />
-> :exclamation: :exclamation: :exclamation: Install **InitilizationService** **first and the others!** :exclamation: :exclamation: :exclamation: <br />
+> :exclamation: :exclamation: :exclamation: Install **InitilizationService** **first and install the other services second!** :exclamation: :exclamation: :exclamation: <br />
 
 ## Contributing
 
