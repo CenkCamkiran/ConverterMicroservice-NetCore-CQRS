@@ -14,6 +14,7 @@
         public static string WebServiceObjectStorageLogs { get; set; } = "webservice_objstorage_logs";
         public static string WebServiceRequestResponseLogs { get; set; } = "webservice_requestresponse_logs";
         public static string WebServiceQueueLogs { get; set; } = "webservice_queue_logs";
+        public static string WebServiceErrorLogs { get; set; } = "webservice_error_logs";
 
 
         public static int LoggerServiceErrorLogsNumberOfShards { get; set; } = 1;
@@ -21,12 +22,14 @@
         public static int WebServiceObjectStorageNumberOfShards { get; set; } = 1;
         public static int WebServiceRequestResponseNumberOfShards { get; set; } = 1;
         public static int WebServiceQueueNumberOfShards { get; set; } = 1;
+        public static int WebServiceErrorLogsNumberOfShards { get; set; } = 1;
 
         public static int LoggerServiceErrorLogsNumberOfReplicas { get; set; } = 0;
         public static int LoggerServiceOtherLogsNumberOfReplicas { get; set; } = 0;
         public static int WebServiceObjectStorageNumberOfReplicas { get; set; } = 0;
         public static int WebServiceRequestResponseNumberOfReplicas { get; set; } = 0;
         public static int WebServiceQueueNumberOfReplicas { get; set; } = 0;
+        public static int WebServiceErrorLogsNumberOfReplicas { get; set; } = 0;
 
 
     }

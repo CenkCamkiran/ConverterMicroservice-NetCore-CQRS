@@ -122,6 +122,7 @@ var OtherLogsElkConfiguration = otherLogElkOperation.ConfigureIndex(ProjectConst
 var WebServiceObjectStorageLogsElkConfiguration = objectStorageLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceObjectStorageLogs, ProjectConstants.WebServiceObjectStorageNumberOfShards, ProjectConstants.LoggerServiceOtherLogsNumberOfReplicas);
 var WebServiceRequestResponseLogsElkConfiguration = requestResponseLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceRequestResponseLogs, ProjectConstants.WebServiceRequestResponseNumberOfShards, ProjectConstants.WebServiceRequestResponseNumberOfReplicas);
 var WebServiceQueueLogsElkConfiguration = queueLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceQueueLogs, ProjectConstants.WebServiceQueueNumberOfShards, ProjectConstants.WebServiceQueueNumberOfReplicas);
+var WebServiceErrorLogsElkConfiguration = queueLogElkOperation.ConfigureIndex(ProjectConstants.WebServiceErrorLogs, ProjectConstants.WebServiceErrorLogsNumberOfShards, ProjectConstants.WebServiceErrorLogsNumberOfReplicas);
 
 
 await Task.WhenAll(
@@ -135,6 +136,7 @@ await Task.WhenAll(
     OtherLogsElkConfiguration,
     WebServiceObjectStorageLogsElkConfiguration,
     WebServiceRequestResponseLogsElkConfiguration,
-    WebServiceQueueLogsElkConfiguration
+    WebServiceQueueLogsElkConfiguration,
+    WebServiceErrorLogsElkConfiguration
     );
 
