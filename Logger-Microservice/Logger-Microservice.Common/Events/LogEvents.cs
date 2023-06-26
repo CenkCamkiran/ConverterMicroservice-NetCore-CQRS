@@ -2,11 +2,24 @@
 {
     public static class LogEvents
     {
-        public static string ConversionEvent { get; set; } = "Conversion finished!";
-        public static string PubObjectEvent { get; set; } = "PutObjectAsync";
-        public static string GetObjectEvent { get; set; } = "GetObjectAsync";
-        public static string BasicPublishEvent { get; set; } = "BasicPublish";
-        public static string BasicConsumeEvent { get; set; } = "BasicConsume";
-        public static string ConsumeLogsEvent { get; set; } = "ConsumeLogs";
+        public static readonly int ServiceConfigurationPhase = 1;
+        public static readonly int ConversionStartedEvent = 2;
+        public static readonly int ConversionFinishedEvent = 3;
+        public static readonly int ConversionFailureEvent = 4;
+        public static readonly int PutObjectEvent = 5;
+        public static readonly int GetObjectEvent = 6;
+        public static readonly int BasicPublishEvent = 7;
+        public static readonly int BasicConsumeEvent = 8;
+        public static readonly int LogElkEvent = 9;
+
+        public static string ConversionFinishedEventMessage { get; set; } = "Conversion";
+        public static string PutObjectEventMessage { get; set; } = "PutObjectAsync";
+        public static string GetObjectEventMessage { get; set; } = "GetObjectAsync";
+        public static string BasicPublishEventMessage { get; set; } = "Basic Publish";
+        public static string BasicConsumeEventMessage { get; set; } = "Basic Consume";
+        public static string ConversionStartedEventMessage { get; set; } = "Conversion";
+        public static string ConversionFailureEventMessage { get; set; } = "Conversion";
+        public static string LogElkEventMessage { get; set; } = "Log ELK";
+        public static string ServiceConfigurationPhaseMessage { get; set; } = "Service is fetching configurations";
     }
 }

@@ -82,6 +82,25 @@ serviceProvider.AddLazyResolution();
 var builder = serviceProvider.BuildServiceProvider();
 
 IMediator _mediator = builder.GetService<IMediator>();
+ILogger<Program>? logger = builder.GetService<ILogger<Program>>();
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, LogEvents.ServiceConfigurationPhaseMessage);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_HOST: " + ProjectConstants.RabbitmqHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PORT: " + ProjectConstants.RabbitmqPort);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_USERNAME: " + ProjectConstants.RabbitmqUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "RABBITMQ_PASSWORD: " + ProjectConstants.RabbitmqPassword);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_HOST: " + ProjectConstants.ElkHost);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_DEFAULT_INDEX_NAME: " + ProjectConstants.ElkUsername);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_USERNAME: " + ProjectConstants.ElkPassword);
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "ELK_PASSWORD " + ProjectConstants.ElkDefaultIndexName);
+
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
+logger.LogInformation(LogEvents.ServiceConfigurationPhase, "********************************************************************************");
 
 CancellationTokenSource cts = new CancellationTokenSource();
 CancellationToken ct = cts.Token;
@@ -98,7 +117,7 @@ catch (Exception exception)
 {
     QueueLog queueLog = new QueueLog()
     {
-        OperationType = LogEvents.ConsumeLogsEvent,
+        OperationType = LogEvents.BasicConsumeEventMessage,
         Date = DateTime.Now,
         ExceptionMessage = exception.Message.ToString()
     };
@@ -107,5 +126,7 @@ catch (Exception exception)
         queueLog = queueLog
     };
     await _mediator.Send(new QueueCommand(errorLog, ProjectConstants.ErrorLogsServiceQueueName, ProjectConstants.ErrorLogsServiceExchangeName, ProjectConstants.ErrorLogsServiceRoutingKey));
+
+    logger.LogError(LogEvents.BasicConsumeEventMessage, exception.Message.ToString());
 
 }
